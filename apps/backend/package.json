@@ -1,0 +1,23 @@
+{
+  "name": "@LinkRec/backend",
+  "version": "1.0.0",
+  "description": "The backend for the LinkRec ",
+  "main": "server.ts",
+  "repository": "git@github.uni:SenneW-2158088/LinkRec.git",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "eslint": "^9.15.0",
+    "nodemon": "^3.1.7",
+    "tsx": "^4.19.2",
+    "typescript-eslint": "^8.16.0"
+  },
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "watch": "nodemon --watch 'src/**/*.ts' --exec tsx src/server.ts"
+  }
+}

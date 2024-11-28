@@ -2,6 +2,4 @@ fuseki-data/templates
 fuseki-data/system_files
 fuseki-data/system
 fuseki-data/logs
-fuseki-data/databases
-fuseki-data/configuration
 fuseki-data/backups

@@ -1,5 +1,5 @@
 {
-  "name": "LinkRec",
+  "name": "link-rec",
   "version": "1.0.0",
   "description": "A LinkedIn ripoff",
   "repository": "git@github.uni:SenneW-2158088/LinkRec.git",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "watch-backend": "yarn workspace @LinkRec/backend watch"
+    "watch-backend": "yarn workspace @link-rec/backend watch"
   },
   "workspaces": [
     "apps/*"

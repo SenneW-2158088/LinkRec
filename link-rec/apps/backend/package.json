@@ -1,5 +1,5 @@
 {
-  "name": "@LinkRec/backend",
+  "name": "@link-rec/backend",
   "version": "1.0.0",
   "description": "The backend for the LinkRec ",
   "main": "server.ts",

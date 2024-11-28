@@ -2,20 +2,25 @@ services:
   fuseki:
     image: stain/jena-fuseki
     ports:
-      - "3030:3030"
+      - 3030:3030
     environment:
       - ADMIN_PASSWORD=admin
     volumes:
       - database:/fuseki/databases
-      - ./config:/fuseki/configuration
-      - ./files:/fuseki/files
+      - ./fuseki:/fuseki
+    user: "root"
+    networks:
+      - internal-network
 
-  # backend:
-  #   build: ./link-rec/apps/backend
-  #   depends_on:
-  #     - fuseki
-  #   networks:
-  #     - internal-network
+  backend:
+    build: ./link-rec/apps/backend
+    volumes:
+      - ./link-rec/apps/backend/src:/app/src
+      - /app/node_modules
+    depends_on:
+      - fuseki
+    networks:
+      - internal-network
 
   # frontend:
   #   build: ./link-rec/apps/frontend

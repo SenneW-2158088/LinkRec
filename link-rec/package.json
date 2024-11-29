@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "docker:dev": "docker-compose up backend-prod -D",
     "watch-backend": "yarn workspace @link-rec/backend watch"
   },
   "workspaces": [

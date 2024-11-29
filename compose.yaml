@@ -1,26 +1,49 @@
+x-environment: &environment
+  environment:
+    # NODE_ENV: development
+    BACKEND-PORT: 3030
+
+x-base-backend: &base-backend
+  # depends_on:
+  # - fuseki
+  networks:
+    - internal-network
+
+x-fuseki: &base-fuseki
+  image: stain/jena-fuseki
+  volumes:
+    - database:/fuseki
+    - ./fuseki/configuration:/fuseki/configuration
+  networks:
+    - internal-network
+  environment:
+    - ADMIN_PASSWORD=admin
+
 services:
-  fuseki:
-    image: stain/jena-fuseki
+  fuseki-dev:
+    <<: *base-fuseki
     ports:
       - 3030:3030
-    environment:
-      - ADMIN_PASSWORD=admin
-    volumes:
-      - database:/fuseki/databases
-      - ./fuseki:/fuseki
-    user: "root"
-    networks:
-      - internal-network
 
-  backend:
-    build: ./link-rec/apps/backend
+  fuseki-prod:
+    <<: *base-fuseki
+
+  backend-dev:
+    <<: [*base-backend, *environment]
+    build:
+      context: ./link-rec/apps/backend
+      target: development
+    ports:
+      - 3030:3030
     volumes:
       - ./link-rec/apps/backend/src:/app/src
       - /app/node_modules
-    depends_on:
-      - fuseki
-    networks:
-      - internal-network
+
+  backend-prod:
+    <<: [*base-backend, *environment]
+    build:
+      context: ./link-rec/apps/backend
+      target: production
 
   # frontend:
   #   build: ./link-rec/apps/frontend

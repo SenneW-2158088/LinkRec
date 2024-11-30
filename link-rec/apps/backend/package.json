@@ -19,7 +19,9 @@
     "typescript-eslint": "^8.16.0"
   },
   "scripts": {
-    "dev": "tsx src/server.ts",
-    "watch": "nodemon --watch 'src/**/*.ts' --exec tsx src/server.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prod": "yarn build && yarn start"
   }
 }

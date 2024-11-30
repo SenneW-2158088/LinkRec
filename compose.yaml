@@ -3,12 +3,6 @@ x-environment: &environment
     # NODE_ENV: development
     BACKEND_PORT: 8080
 
-x-base-backend: &base-backend
-  # depends_on:
-  # - fuseki
-  networks:
-    - internal-network
-
 x-fuseki: &base-fuseki
   image: stain/jena-fuseki
   volumes:
@@ -20,17 +14,22 @@ x-fuseki: &base-fuseki
     # - ./jena-fuseki/config.ttl:/fuseki/config.ttl
   user: root:root
   networks:
-    - internal-network
+    - internal
   environment:
     - ADMIN_PASSWORD=admin
   command: ["./load.sh"]
+
+x-backend: &base-backend
+  networks:
+    - internal
+  ports:
+    - 8080:8080
 
 services:
   fuseki-dev:
     <<: *base-fuseki
     ports:
       - 3030:3030
-
   fuseki-prod:
     <<: *base-fuseki
 
@@ -39,8 +38,6 @@ services:
     build:
       context: ./link-rec/apps/backend
       target: development
-    ports:
-      - 8080:8080
     volumes:
       - ./link-rec/apps/backend/src:/app/src
       - /app/node_modules
@@ -62,8 +59,9 @@ services:
   #     - public-network
 
 networks:
-  internal-network:
-  public-network:
+  internal:
+    driver: bridge
+  public: {}
 
 volumes:
   fuseki-data:

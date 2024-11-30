@@ -1,0 +1,19 @@
+{
+  "name": "link-rec",
+  "version": "1.0.0",
+  "description": "A LinkedIn ripoff",
+  "repository": "git@github.uni:SenneW-2158088/LinkRec.git",
+  "author": "Zenneh, Amadeus, Wernah",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "docker:fuseki:dev": "docker-compose up fuseki-dev",
+    "docker:fuseki:prod": "docker-compose up fuseki-prod",
+    "docker:backend:dev": "docker-compose up backend-dev",
+    "docker:backend:prod": "docker-compose up backend-prod"
+  },
+  "workspaces": [
+    "apps/backend",
+    "apps/frontend"
+  ]
+}

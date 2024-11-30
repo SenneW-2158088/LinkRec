@@ -7,27 +7,14 @@ x-fuseki: &base-fuseki
   build:
     context: ./fuseki
   volumes:
-    # - ./fuseki/fuseki-data:/fuseki
     - ./fuseki/staging:/staging
-    - fuseki-data:/jena-fuseki/databases
-    # - ./jena-fuseki/configuration:/fuseki/configuration
-    # - ./jena-fuseki/shiro.ini:/fuseki/shiro.ini
-    # - ./jena-fuseki/config.ttl:/fuseki/config.ttl
+    # - fuseki_data:/jena-fuseki/databases
   user: root:root
   networks:
     - internal
   environment:
     - ADMIN_PASSWORD=admin
     - FUSEKI_DATASET_1=linkrec
-    # - FUSEKI_DATASET_2=test
-  command: [
-      "/jena-fuseki/fuseki-server",
-      # "--loc=/databases/linkrec",
-      # "/linkrec",
-      # "--mem",
-      # "--file=/staging/obese.rdf",
-      # "/test",
-    ]
 
 x-backend: &base-backend
   networks:
@@ -74,4 +61,4 @@ networks:
   public: {}
 
 volumes:
-  fuseki-data:
+  fuseki_data:

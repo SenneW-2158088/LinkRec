@@ -11,6 +11,8 @@ const server = new ApolloServer({
 
 const PORT = Number(process.env.BACKEND_PORT)
 
+console.log(PORT)
+
 async function startServer() {
   const { url } = await startStandaloneServer(server, {
     listen: { port: PORT }

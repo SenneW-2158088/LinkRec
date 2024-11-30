@@ -1,7 +1,7 @@
 x-environment: &environment
   environment:
     # NODE_ENV: development
-    BACKEND-PORT: 8080
+    BACKEND_PORT: 8080
 
 x-base-backend: &base-backend
   # depends_on:

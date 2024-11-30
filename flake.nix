@@ -24,10 +24,15 @@
       };
     }
     // flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;  # Allow unfree packages
+      };
     in {
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
+          postman
+
           nodejs_22
           nodePackages.yarn
           nodePackages.typescript-language-server

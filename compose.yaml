@@ -12,7 +12,8 @@ x-base-backend: &base-backend
 x-fuseki: &base-fuseki
   image: stain/jena-fuseki
   volumes:
-    - ./fuseki:/fuseki
+    - ./fuseki/fuseki-data:/fuseki
+    - ./fuseki/staging:/staging
     # - fuseki-data:/fuseki/databases
     # - ./jena-fuseki/configuration:/fuseki/configuration
     # - ./jena-fuseki/shiro.ini:/fuseki/shiro.ini
@@ -22,6 +23,7 @@ x-fuseki: &base-fuseki
     - internal-network
   environment:
     - ADMIN_PASSWORD=admin
+  command: ["./load.sh"]
 
 services:
   fuseki-dev:

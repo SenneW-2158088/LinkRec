@@ -1,19 +1,17 @@
 import { ApolloServer } from "@apollo/server"
-import { GraphQLID, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { UserField } from "./types/user";
 import { linkRecSchema } from "./schema";
-import { env } from "process";
 
-const server = new ApolloServer({
-  schema: linkRecSchema
-})
+import { Context } from "./types/context";
+import { resolvers } from "./schema/resolvers";
+import { typeDefs } from "./schema/typeDefs";
 
-const PORT = Number(process.env.BACKEND_PORT)
+const server: ApolloServer<Context> = new ApolloServer({ resolvers, typeDefs });
 
-console.log(PORT)
+const PORT = Number(process.env.BACKEND_PORT) || 4000;
 
 async function startServer() {
+
   const { url } = await startStandaloneServer(server, {
     listen: { port: PORT }
   })

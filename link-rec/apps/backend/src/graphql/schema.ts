@@ -1,11 +1,17 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
-import { UserField } from "./types/user";
+import { AddUserField, QueryUserField } from "./types/user";
 
 export const linkRecSchema = new GraphQLSchema({
     query: new GraphQLObjectType({
       name: 'Query',
       fields: {
-        user: UserField
+        user: QueryUserField
       }
     }),
+    mutation: new GraphQLObjectType({
+      name: 'Mutation',
+      fields: {
+        addUser: AddUserField
+      }
+    })
   });

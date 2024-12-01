@@ -2,9 +2,6 @@ import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { linkRecSchema } from "./schema";
 
-import { Context } from "./types/context";
-import { resolvers } from "./schema/resolvers";
-import { typeDefs } from "./schema/typeDefs";
 import { CONFIG } from "./config/config";
 
 const server: ApolloServer<Context> = new ApolloServer({ resolvers, typeDefs });

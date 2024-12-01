@@ -1,8 +1,8 @@
 import { ApolloServer } from '@apollo/server';
 import express from 'express'
 import { expressMiddleware } from '@apollo/server/express4';
-import { graphqlRouter } from './rest/graphql_router';
-import { createApolloServer } from './graphql/apollo_server';
+import { graphqlRouter } from './rest/graphql-router';
+import { createApolloServer } from './graphql/apollo-server';
 
 const PORT = Number(process.env.BACKEND_PORT)
 

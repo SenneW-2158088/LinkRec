@@ -1,15 +1,7 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLFieldResolver, GraphQLFieldConfig } from "graphql";
-
-const users: User[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phoneNumber: '123-456-7890',
-    webPage: 'http://johndoe.com',
-    location: 'New York',
-  },
-];
+import { db } from "../../db/database";
+import { userTable } from "../../db/user-table";
+import { eq } from "drizzle-orm";
 
 export type User = {
   id: string,
@@ -42,6 +34,7 @@ export const UserField: GraphQLFieldConfig<any, any> = {
     id: { type: GraphQLID }
   },
   resolve: async (_source, args: { id: User["id"] }, _context, _info) => {
-    return users.find(user => user.id === args.id);
+    const user = await db.select().from(userTable).where(eq(userTable.id, Number(args.id)))
+    return user[0]
   }
 }

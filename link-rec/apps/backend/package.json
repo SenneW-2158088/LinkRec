@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "@apollo/server": "^4.11.1",
+    "express": "^4.21.1",
     "graphql": "^16.9.0"
   },
   "devDependencies": {

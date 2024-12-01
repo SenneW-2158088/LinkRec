@@ -1,24 +1,31 @@
-import { ApolloServer } from "@apollo/server"
-import { GraphQLID, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { UserField } from "./types/user";
-import { linkRecSchema } from "./schema";
-import { env } from "process";
-
-const server = new ApolloServer({
-  schema: linkRecSchema
-})
+import { ApolloServer } from '@apollo/server';
+import express from 'express'
+import { expressMiddleware } from '@apollo/server/express4';
+import { graphqlRouter } from './rest/graphql_router';
+import { createApolloServer } from './graphql/apollo_server';
 
 const PORT = Number(process.env.BACKEND_PORT)
 
-console.log(PORT)
+const app =  express()
 
-async function startServer() {
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: PORT }
-  })
-
-  console.log(`🚀  Server ready at: ${url}`);
+function setupRoutes(apolloServer: ApolloServer) {
+    app.use("/user", graphqlRouter(apolloServer))
 }
 
-startServer()
+app.listen(PORT, async () => {
+  // Note you must call `start()` on the `ApolloServer`
+  // instance before passing the instance to `expressMiddleware`
+  const apolloServer = createApolloServer()
+  await apolloServer.start()
+
+  app.use(
+    '/graphql',
+    express.json(),
+    expressMiddleware(apolloServer)
+  )
+
+  setupRoutes(apolloServer)
+
+  console.log(`Server is running on http://localhost:${PORT}`)
+  console.log(`The GraphQL endpoint is http://localhost:${PORT}/graphql`)
+})

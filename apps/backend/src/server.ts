@@ -1,10 +1,9 @@
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { linkRecSchema } from "./schema";
 
 import { CONFIG } from "./config/config";
 
-const server: ApolloServer<Context> = new ApolloServer({ resolvers, typeDefs });
+const server: ApolloServer<Context> = new ApolloServer({schema: schema });
 
 async function startServer() {
 
@@ -12,7 +11,7 @@ async function startServer() {
     listen: { port: CONFIG.PORT }
   })
 
-  console.log(`🚀  Server ready at: ${url}`);
+  console.log(`🚀 Server ready at: ${url}`);
 }
 
 startServer()

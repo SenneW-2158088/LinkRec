@@ -22,6 +22,7 @@ x-fuseki: &base-fuseki
   volumes:
     # - ./fuseki/fuseki-data:/fuseki
     - ./fuseki/staging:/staging
+    - ./fuseki/configuration:/fuseki/configuration
     - fuseki-data:/jena-fuseki/databases
     # - ./jena-fuseki/configuration:/fuseki/configuration
     # - ./jena-fuseki/shiro.ini:/fuseki/shiro.ini

@@ -60,10 +60,10 @@ services:
   backend-dev:
     <<: [*base-backend, *environment]
     build:
-      context: ./link-rec/apps/backend
+      context: ./link-rec
       target: development
     volumes:
-      - ./link-rec/apps/backend:/app
+      - ./link-rec:/app
       - /app/node_modules
 
   fuseki-prod:

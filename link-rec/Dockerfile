@@ -2,17 +2,19 @@ FROM node:20-alpine as development
 
 WORKDIR /app
 
-COPY ./package.json ./
+COPY package.json .
 
-RUN mkdir -p node_modules && chown -R node:node /app
+RUN mkdir -p node_modules && mkdir -p apps/backend/node_modules && chown -R node:node /app/apps/backend/node_modules && chown -R node:node /app
 
-USER node
+USER root
 
-RUN yarn install && yarn cache clean
+COPY . .
+
+RUN yarn install
 
 EXPOSE 3030
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "backend-dev"]
 
 #########################################
 

@@ -1,4 +1,5 @@
 import { defineConfig } from 'drizzle-kit';;
+import 'dotenv/config';
 
 console.log("DATABASE_URL", process.env.DATABASE_URL!)
 
@@ -7,11 +8,7 @@ export default defineConfig({
   schema: './src/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    host: "localhost",
     url: process.env.DATABASE_URL!,
-    user: "admin",
-    password: "admin",
-    database: "linkrec_database",
     ssl: false,
   },
 });

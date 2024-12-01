@@ -3,6 +3,7 @@ import express from 'express'
 import { expressMiddleware } from '@apollo/server/express4';
 import { graphqlRouter } from './rest/graphql-router';
 import { createApolloServer } from './graphql/apollo-server';
+import 'dotenv/config'
 
 const PORT = Number(process.env.BACKEND_PORT)
 

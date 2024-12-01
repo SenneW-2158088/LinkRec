@@ -2,12 +2,6 @@ FROM node:20-alpine as development
 
 WORKDIR /app
 
-COPY package.json .
-
-RUN mkdir -p node_modules && mkdir -p apps/backend/node_modules && chown -R node:node /app/apps/backend/node_modules && chown -R node:node /app
-
-USER root
-
 COPY . .
 
 RUN yarn install
@@ -23,17 +17,11 @@ FROM node:20-alpine AS builder
 # Set up our working directory
 WORKDIR /app
 
-# Copy package.json first for better caching
-COPY package.json tsconfig.json ./
-
-RUN mkdir -p node_modules
+COPY . .
 
 RUN yarn install
 
-# Copy all source files
-COPY ./src ./src
-
-RUN yarn build
+RUN yarn backend-build
 
 #########################################
 
@@ -41,16 +29,12 @@ FROM node:20-alpine as production
 
 WORKDIR /app
 
-COPY --chown=node:node ./package.json ./
-
-RUN mkdir -p node_modules && chown -R node:node /app
-
-USER node
+COPY . .
 
 RUN yarn install && yarn cache clean
 
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
 EXPOSE 3030
 
-CMD ["yarn", "start"]
+CMD ["yarn", "backend-start"]

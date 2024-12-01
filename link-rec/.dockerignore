@@ -2,5 +2,4 @@
 .dockerignore
 .env*
 docker-compose.override.yml
-node_modules
 .dist

@@ -2,7 +2,7 @@ x-environment: &environment
   environment:
     # NODE_ENV: development
     BACKEND_PORT: 8080
-    DATABASSE_PORT: 5432
+    DATABASE_URL: "postgres://admin:admin@db:5432/linkrec_database"
 
 x-postgres: &base-postgres
   image: postgres:latest
@@ -13,6 +13,8 @@ x-postgres: &base-postgres
     POSTGRES_DB: linkrec_database
   volumes:
     - pgdata:/var/lib/postgresql/data  # Persist data
+  networks:
+    - internal
 
 x-fuseki: &base-fuseki
   build:
@@ -52,7 +54,7 @@ services:
     ports:
       - 3030:3030
 
-  postgres:
+  db:
     <<: *base-postgres
     ports:
       - "5432:5432"
@@ -72,7 +74,7 @@ services:
   backend-prod:
     <<: [*base-backend, *environment]
     build:
-      context: ./link-rec/apps/backend
+      context: ./link-rec
       target: production
 
   # frontend:

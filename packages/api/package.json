@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Api for the fuseki rdf database",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "scripts": {
+    "start": "tsc && node ./dist/index.js",
+    "test": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/sparqljs": "^3.1.12",
+    "axios": "^1.7.8",
+    "sparqljs": "^3.7.3"
+  }
+}

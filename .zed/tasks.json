@@ -1,11 +1,92 @@
 [
   {
-    "label": "Dev Backend",
-    "command": "yarn watch-backend",
+    "label": "Run Development Environment",
+    "command": "docker-compose up fuseki-dev backend-dev",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
     "hide": "never",
-    "shell": "system"
+    "shell": "system",
+    "description": "Starts the development containers in detached mode"
+  },
+  {
+    "label": "Clean Docker System",
+    "command": "docker system prune -af && docker volume prune -f",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Removes all unused containers, networks, images, and volumes"
+  },
+  {
+    "label": "Stop All Containers",
+    "command": "docker-compose down",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Stops and removes all running containers"
+  },
+  {
+    "label": "View Container Logs",
+    "command": "docker-compose logs -f",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Shows and follows logs from all containers"
+  },
+  {
+    "label": "Rebuild and Start",
+    "command": "docker-compose up --build fuseki-dev backend-dev -d",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Rebuilds and starts the development containers"
+  },
+  {
+    "label": "Check Container Status",
+    "command": "docker-compose ps",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Shows the status of all containers"
+  },
+  {
+    "label": "Start Production Environment",
+    "command": "docker-compose up fuseki-prod backend-prod -d",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Starts the production environment containers"
+  },
+  {
+    "label": "Backend Dev Shell",
+    "command": "docker-compose exec backend-dev sh",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Opens a shell in the backend development container"
+  },
+  {
+    "label": "Add default data",
+    "command": "docker run -v ./fuseki/staging:/staging --volumes-from linkrec-fuseki-dev-1 --rm -u root:root linkrec-fuseki-dev ./load.sh linkrec",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "description": "Opens a shell in the backend development container"
   }
 ]

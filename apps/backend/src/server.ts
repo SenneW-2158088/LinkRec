@@ -5,15 +5,14 @@ import { linkRecSchema } from "./schema";
 import { Context } from "./types/context";
 import { resolvers } from "./schema/resolvers";
 import { typeDefs } from "./schema/typeDefs";
+import { CONFIG } from "./config/config";
 
 const server: ApolloServer<Context> = new ApolloServer({ resolvers, typeDefs });
-
-const PORT = Number(process.env.BACKEND_PORT) || 4000;
 
 async function startServer() {
 
   const { url } = await startStandaloneServer(server, {
-    listen: { port: PORT }
+    listen: { port: CONFIG.PORT }
   })
 
   console.log(`🚀  Server ready at: ${url}`);

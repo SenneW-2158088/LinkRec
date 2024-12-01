@@ -1,5 +1,5 @@
 .git/
 .env*
 docker-compose.override.yml
-.dist
+dist
 node_modules

@@ -5,6 +5,7 @@ import { Database } from "../../db/database";
 import { userTable } from "../../db/schema/userSchema";
 import { User, UserInput } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
+import { eq } from "drizzle-orm";
 
 export class UserService{
   private TABLE = userTable
@@ -21,21 +22,33 @@ export class UserService{
       connections: [], // You'll need to handle this separately
     };
 
-    this.context.sparql.update(SparqlBuilder.defaultPrefixes()
-      .build(`
-        INSERT DATA {
-            users:${inserted.id} a lro:User ;
-                       foaf:name "${input.firstName} ${input.lastName}" .
-        }
-      `))
+    await this.updateRdfUser(user)
 
     return user;
   }
 
-  async createConnection() {
-    SparqlBuilder.defaultPrefixes()
-      .build(`
+  async getUserById(id: number): Promise<User | null> {
+    this.db.query.users.findFirst({ id: id });
+    const user = await this.db.select().from(userTable).find(eq(userTable.id, id))
+    return user
+  }
 
-      `)
+  async updateRdfUser(user: User) {
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
+      .build(`
+        INSERT DATA {
+            lr_users:${user.id} a lro:User ;
+                       foaf:name "${user.firstName} ${user.lastName}" .
+        }
+      `))
+  }
+
+  async createConnection(user1: User, user2: User) {
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
+      .build(`
+        INSERT DATA {
+          linkrec:${user1.id} lro:Connection linkrec:${user2.id} .
+        }
+      `))
   }
 }

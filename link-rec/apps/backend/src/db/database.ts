@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import 'dotenv/config';
 import process from 'process';
 import * as schema from './schema';
@@ -16,7 +16,9 @@ export interface DatabaseConfig {
 
 export class Database {
   private pool: Pool;
-  public db: ReturnType<typeof drizzle>;
+  public db: NodePgDatabase<typeof schema> & {
+    $client: Pool
+  };
 
   constructor(config: DatabaseConfig) {
     this.pool = new Pool({

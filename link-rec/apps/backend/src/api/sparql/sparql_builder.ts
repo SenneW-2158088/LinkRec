@@ -15,8 +15,7 @@ export class SparqlBuilder {
     this.addPrefix("rdf","<http://www.w3.org/1999/02/22-rdf-syntax-ns#>")
     this.addPrefix("foaf","<http://xmlns.com/foaf/0.1/>")
 
-    this.addPrefix("linkrec_user","<http://linkrec:8080/users/>")
-    this.addPrefix("linkrec","<http://linkrec:8080/>")
+    this.addPrefix("lr_users","<http://linkrec:8080/users/>")
     this.addPrefix("lro","<#>") // empty prefix for the LinkRec ontology
     return this
   }

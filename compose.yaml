@@ -65,7 +65,7 @@ services:
       - db
       - fuseki-dev
     volumes:
-      - ./link-rec:/app
+      - ./link-rec/apps/backend/src:/app/apps/backend/src
       - /app/node_modules
 
   fuseki-prod:

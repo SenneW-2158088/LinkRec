@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 export interface Education {
   id: string;
@@ -20,3 +20,22 @@ export const EducationType: GraphQLObjectType = new GraphQLObjectType({
     endDate: { type: GraphQLString },
   }),
 });
+
+export interface EducationInput {
+  institution: string;
+  degree: string;
+  fieldOfStudy?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export const EducationInputType: GraphQLInputObjectType  = new GraphQLInputObjectType({
+  name: "EducationInput",
+  fields: () => ({
+    institution: { type: new GraphQLNonNull(GraphQLString) },
+    degree: { type: new GraphQLNonNull(GraphQLString) },
+    fieldOfStudy: { type: GraphQLString },
+    startDate: { type: GraphQLString },
+    endDate: { type: GraphQLString },
+  })
+})

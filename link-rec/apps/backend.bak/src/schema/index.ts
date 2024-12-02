@@ -3,7 +3,7 @@ import { userQueries } from "./types/user/queries";
 import { userMutations } from "./types/user/mutations";
 import { educationMutations } from "./types/education/mutations";
 import { educationQueries } from "./types/education/queries";
-import { employerMutations, employerQueries, experienceMutations, experienceQueries } from "./types";
+import { employerMutations, employerQueries, experienceMutations, experienceQueries, jobMutations, jobQueries } from "./types";
 
 export function createRootMutationType(fields: Record<string, GraphQLFieldConfig<any, any>>) {
   return new GraphQLObjectType({
@@ -24,6 +24,7 @@ export const rootQuery = createRootQueryType({
   ...educationQueries,
   ...employerQueries,
   ...experienceQueries,
+  ...jobQueries,
 })
 
 export const rootMutation = createRootMutationType({
@@ -31,6 +32,7 @@ export const rootMutation = createRootMutationType({
   ...educationMutations,
   ...employerMutations,
   ...experienceMutations,
+  ...jobMutations,
 })
 
 export const linkRecSchema = new GraphQLSchema({

@@ -52,7 +52,6 @@ export class UserService{
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(`
         INSERT DATA {
-            ${user.id} a lro:User .
             lr_users:${user.id} a lro:User ;
                        foaf:name "${user.firstName} ${user.lastName}" .
         }

@@ -92,7 +92,7 @@ async function insertUser() {
     }
   `;
 
-  const client = new SimpleClient({updateUrl: fusekiEndpoint})
+  const client = new SimpleClient({endpointUrl: 'http://localhost:303/linkrec/query', updateUrl: fusekiEndpoint})
 
   const parsingClient = new ParsingClient(client)
 

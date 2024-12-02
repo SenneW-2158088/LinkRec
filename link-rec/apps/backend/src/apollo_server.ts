@@ -34,8 +34,8 @@ export function createApolloContext() {
       api: new LinkRecAPI({
         db: db,
         sparql: new SparqlAPI({
-          updateUrl: "http://localhost:3030/linkrec/update",
-          queryUrl: "http://localhost:3030/linkrec/query"
+          updateUrl: "http://fuseki-dev:3030/linkrec/update",
+          queryUrl: "http://fuseki-dev:3030/linkrec/query"
         })
       })
     })

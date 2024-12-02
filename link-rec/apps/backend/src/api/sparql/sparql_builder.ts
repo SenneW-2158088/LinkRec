@@ -9,10 +9,8 @@ export class SparqlBuilder {
   }
 
   private defaultPrefixes() {
-    this.addPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-    this.addPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+    this.addPrefix("rdf", "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>")
     this.addPrefix("owl","<http://www.w3.org/2002/07/owl#>")
-    this.addPrefix("rdf","<http://www.w3.org/1999/02/22-rdf-syntax-ns#>")
     this.addPrefix("foaf","<http://xmlns.com/foaf/0.1/>")
 
     this.addPrefix("lr_users","<http://linkrec:8080/users/>")
@@ -21,7 +19,7 @@ export class SparqlBuilder {
   }
 
   addPrefix(prefix: string, uri: string) {
-    this.prefixes.push(`PREFIX ${prefix}: <${uri}>`)
+    this.prefixes.push(`PREFIX ${prefix}: ${uri}`)
     return this
   }
 

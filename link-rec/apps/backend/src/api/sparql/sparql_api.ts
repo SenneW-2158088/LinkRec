@@ -6,21 +6,21 @@ export type SparqlConfig = {
 }
 
 export class SparqlAPI {
-  private updateParser: ParsingClient
-  private queryParser: ParsingClient
+  private parser: ParsingClient
 
   constructor(config: SparqlConfig) {
-    const simpleUpdateClient = new SimpleClient({endpointUrl: config.updateUrl})
-    const simpleQueryClient = new SimpleClient({endpointUrl: config.queryUrl})
-    this.updateParser = new ParsingClient(simpleUpdateClient)
-    this.queryParser = new ParsingClient(simpleQueryClient)
+    const simpleClient = new SimpleClient({
+      endpointUrl: config.queryUrl,
+      updateUrl: config.updateUrl
+    })
+    this.parser = new ParsingClient(simpleClient)
   }
 
   async query(query: string) {
-    return await this.queryParser.query.select(query)
+    return await this.parser.query.select(query)
   }
 
   async update(query: string) {
-    await this.updateParser.query.update(query)
+    await this.parser.query.update(query)
   }
 }

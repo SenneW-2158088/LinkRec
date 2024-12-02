@@ -1,6 +1,40 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import 'dotenv/config';
+import process from 'process';
+import * as schema from './schema';
+import { Pool } from 'pg';
 
-console.log("DATABASE_URL", process.env.DATABASE_URL!)
+export interface DatabaseConfig {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+  ssl?: boolean;
+  max?: number; // maximum number of clients in the pool
+}
 
-export const db = drizzle(process.env.DATABASE_URL);
+export class Database {
+  private pool: Pool;
+  public db: ReturnType<typeof drizzle>;
+
+  constructor(config: DatabaseConfig) {
+    this.pool = new Pool({
+      ...config,
+      ssl: false,
+      max: 20,
+    });
+
+    this.db = drizzle(this.pool, { schema });
+  }
+
+  public async healthCheck(): Promise<boolean> {
+    try {
+        await this.pool.query('SELECT 1');
+        return true;
+      } catch (error) {
+        console.error('Database health check failed:', error);
+        return false;
+    }
+  }
+}

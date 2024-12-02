@@ -12,7 +12,7 @@ x-postgres: &base-postgres
     POSTGRES_PASSWORD: admin
     POSTGRES_DB: linkrec_database
   volumes:
-    - pgdata:/var/lib/postgresql/data  # Persist data
+    - pgdata:/var/lib/postgresql/data # Persist data
   networks:
     - internal
 
@@ -35,8 +35,8 @@ x-fuseki: &base-fuseki
     - FUSEKI_DATASET_1=linkrec
     # - FUSEKI_DATASET_2=test
   command: bash -c "
-      ./load.sh linkrec
-      && /jena-fuseki/fuseki-server
+    ./load.sh linkrec
+    && /jena-fuseki/fuseki-server
     "
 
 x-backend: &base-backend
@@ -61,6 +61,8 @@ services:
     build:
       context: ./link-rec
       target: development
+    depends_on:
+      - db
     volumes:
       - ./link-rec:/app
       - /app/node_modules

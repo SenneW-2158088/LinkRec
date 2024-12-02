@@ -8,8 +8,14 @@ export const userQuery: GraphQLFieldConfig<any, any> = {
     id: { type: GraphQLID }
   },
   resolve: async (_source, args: { id: User["id"] }, _context, _info) : Promise<User> => {
+    try {
+
+    }
+    catch {
+
+    }
     return {
-      id: "0",
+      id: 0,
       firstName: "Bugo",
       lastName: "Janssen",
       phoneNumber: "12903812903",

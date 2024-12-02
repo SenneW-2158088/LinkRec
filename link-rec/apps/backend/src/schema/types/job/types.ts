@@ -13,7 +13,7 @@ export interface Job {
 }
 
 export const JobType: GraphQLObjectType = new GraphQLObjectType({
-  name: "Job",
+  name: "JobInput",
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },

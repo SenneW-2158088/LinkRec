@@ -30,7 +30,7 @@ export interface ExperienceInput {
 }
 
 export const ExperienceInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
-  name: "Experience",
+  name: "ExperienceInput",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },

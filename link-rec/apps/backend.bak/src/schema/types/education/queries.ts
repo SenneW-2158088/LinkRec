@@ -15,6 +15,6 @@ export const educationQuery: GraphQLFieldConfig<any, any> = {
   }
 }
 
-export const EducationQueries = {
+export const educationQueries = {
   "education": educationQuery
 }

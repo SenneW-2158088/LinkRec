@@ -1,7 +1,7 @@
 import { GraphQLFieldConfig, GraphQLNonNull } from "graphql"
 import { Education, EducationInput, EducationInputType, EducationType } from "./types"
 
-export const userMutation: GraphQLFieldConfig<any, any> = {
+export const educationMutation: GraphQLFieldConfig<any, any> = {
   type: EducationType,
   args: {
     input: { type: new GraphQLNonNull(EducationInputType) }
@@ -18,6 +18,6 @@ export const userMutation: GraphQLFieldConfig<any, any> = {
   }
 }
 
-export const userMutations = {
-  "user": userMutation,
+export const educationMutations = {
+  "education": educationMutation,
 }

@@ -6,16 +6,8 @@ export const userMutation: GraphQLFieldConfig<any, any> = {
   args: {
     input: { type: new GraphQLNonNull(UserInputType) }
   },
-  resolve: async (_source, args: { input: UserInput }, _context, _info) : Promise<User> => {
-    return {
-      id: "99",
-      firstName: args.input.firstName,
-      lastName: args.input.lastName,
-      phoneNumber: args.input.phoneNumber,
-      email: args.input.email,
-      education: [],
-      connections: [],
-    }
+  resolve: async (_source, args: { input: UserInput }, context, _info) : Promise<User> => {
+    return await context.api.userService.createUser();
   }
 }
 

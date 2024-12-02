@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { Education, EducationType } from "../education";
 
 export interface User {
@@ -38,4 +38,27 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
       }
     },
   }),
+});
+
+export type UserInput = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  webPage?: string;
+  location?: string;
+  bio?: string;
+}
+
+export const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInput',
+  fields: {
+    firstName: { type: new GraphQLNonNull(GraphQLString) },
+    lastName: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
+    webPage: { type: GraphQLString },
+    location: { type: GraphQLString },
+    bio: { type: GraphQLString },
+  },
 });

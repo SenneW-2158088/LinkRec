@@ -4,7 +4,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { CONFIG } from "./config/config";
 import { linkRecSchema } from "./schema";
 
-const server: ApolloServer = new ApolloServer({schema: linkRecSchema });
+const server: ApolloServer = new ApolloServer({ schema: linkRecSchema });
 
 async function startServer() {
 

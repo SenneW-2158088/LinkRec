@@ -10,6 +10,7 @@
     "@apollo/server": "^4.11.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.4",
+    "express": "^4.21.1",
     "graphql": "^16.9.0",
     "pg": "^8.13.1",
     "sparql-http-client": "^3.0.1"

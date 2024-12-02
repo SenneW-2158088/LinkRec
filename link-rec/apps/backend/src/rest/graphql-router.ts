@@ -1,7 +1,8 @@
 import { ApolloServer } from "@apollo/server";
 import express from 'express';
+import { ApolloContext } from "../apollo_server";
 
-export const graphqlRouter = (apolloServer: ApolloServer) => {
+export const graphqlRouter = (apolloServer: ApolloServer<ApolloContext>) => {
   const graphqlRouter = express.Router();
   graphqlRouter.get('/:id', async (req, res) => {
     const userId = req.params.id;
@@ -18,7 +19,6 @@ export const graphqlRouter = (apolloServer: ApolloServer) => {
 
     const result = await apolloServer.executeOperation(
       { query },
-      { contextValue: { userId: 'test' }, } // TODO: pass proper contextValuue
     );
 
     res.json(result.body)

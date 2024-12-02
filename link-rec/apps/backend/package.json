@@ -12,7 +12,8 @@
     "drizzle-orm": "^0.36.4",
     "express": "^4.21.1",
     "graphql": "^16.9.0",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "sparql-http-client": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

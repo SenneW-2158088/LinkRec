@@ -3,3 +3,4 @@
 .dockerignore
 .env*
 docker-compose.override.yml
+drizzle/

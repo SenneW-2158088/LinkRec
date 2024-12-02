@@ -7,9 +7,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "sparql-http-client": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/sparql-http-client": "^3.0.4",
     "drizzle-kit": "^0.28.1",
     "eslint": "^9.15.0",
     "nodemon": "^3.1.7",

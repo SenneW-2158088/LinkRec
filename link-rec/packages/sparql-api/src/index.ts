@@ -1,4 +1,4 @@
-
+import SparqlClient, { ParsingClient, SimpleClient } from 'sparql-http-client';
 
 async function getAll() {
   const fusekiEndpoint = 'http://localhost:3030/linkrec/query'; // Replace with your Fuseki endpoint
@@ -10,20 +10,25 @@ async function getAll() {
       LIMIT 25
   `;
 
-  const response = await fetch(fusekiEndpoint, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/sparql-query',
-      },
-      body: query,
-  });
+  // const response = await fetch(fusekiEndpoint, {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/sparql-query',
+  //     },
+  //     body: query,
+  // });
 
-  if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-  }
+  // if (!response.ok) {
+  //     throw new Error(`Error: ${response.statusText}`);
+  // }
 
-  const results = await response.json();
-  console.log(results.results.bindings);
+  // const results = await response.json();
+  // console.log(results.results.bindings);
+  const client = new SimpleClient({endpointUrl: fusekiEndpoint})
+
+  const parsingClient = new ParsingClient(client)
+
+  console.log("result:", await parsingClient.query.select(query));
 }
 
 async function getConnections() {
@@ -39,20 +44,35 @@ async function getConnections() {
     }
   `;
 
-  const response = await fetch(fusekiEndpoint, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/sparql-query',
-      },
-      body: query,
-  });
+  const client = new SimpleClient({endpointUrl: fusekiEndpoint})
 
-  if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+  const parsingClient = new ParsingClient(client)
+
+  const result = await parsingClient.query.select(query)
+
+  for (const row of result) {
+    for (const [key, value] of Object.entries(row)) {
+      if (value.termType === 'NamedNode') {
+        console.log(value.value)
+      }
+    }
   }
 
-  const results = await response.json();
-  console.log("CONNECTIONS", results.results.bindings);
+
+  // const response = await fetch(fusekiEndpoint, {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/sparql-query',
+  //     },
+  //     body: query,
+  // });
+
+  // if (!response.ok) {
+  //     throw new Error(`Error: ${response.statusText}`);
+  // }
+
+  // const results = await response.json();
+  // console.log("CONNECTIONS", results.results.bindings);
 }
 
 async function insertUser() {
@@ -85,14 +105,14 @@ async function insertUser() {
   }
 
   console.log("RESPONSE UPDATE", response)
-  // const results = await response.json();
-  // console.log(results.results.bindings);
+  const results = await response.json();
+  console.log(results.results.bindings);
 }
 
 
 async function run(){
-  await insertUser()
-  await getConnections()
+  // await insertUser()
+  // await getConnections()
   await getAll()
 }
 

@@ -27,7 +27,7 @@
   },
   "scripts": {
     "migrate": "drizzle-kit generate && drizzle-kit migrate",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec tsx src/server.ts",
+    "dev": "nodemon -L --watch 'src/**/*' --ext 'ts,json' --exec \"yarn migrate && tsx src/server.ts\"",
     "build": "tsc",
     "start": "node dist/server.js",
     "prod": "yarn build && yarn start"

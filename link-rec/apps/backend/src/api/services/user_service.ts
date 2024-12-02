@@ -1,6 +1,7 @@
 import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
+import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
 import { User, UserInput } from "../../schema/types";
@@ -12,7 +13,25 @@ export class UserService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async createUser(input: typeof userTable.$inferInsert): Promise<User> {
+  async getUser(id: number): Promise<User | null> {
+    const [user] = await this.db
+      .select()
+      .from(this.TABLE)
+      .where(eq(this.TABLE.id, id))
+      .limit(1);
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      ...user,
+      education: [], // Fetch education if needed
+      connections: [] // Fetch connections if needed
+    };
+  }
+
+  async createUser(input: UserInput): Promise<User> {
     const [inserted] = await this.db.insert(this.TABLE).values(input).returning();
 
     const user: User = {

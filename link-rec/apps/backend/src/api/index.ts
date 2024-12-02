@@ -27,5 +27,4 @@ export class LinkRecAPI {
 
     this.userService = new UserService(this.context)
   }
-
 }

@@ -1,16 +1,41 @@
-export * from "./types"
+import { GraphQLFieldConfig, GraphQLObjectType, GraphQLSchema } from "graphql";
+import { userQueries } from "./types/user/queries";
+import { userMutations } from "./types/user/mutations";
+import { educationMutations } from "./types/education/mutations";
+import { educationQueries } from "./types/education/queries";
+import { employerMutations, employerQueries, experienceMutations, experienceQueries, jobMutations, jobQueries } from "./types";
 
-import { GraphQLObjectType, GraphQLSchema } from "graphql";
+export function createRootMutationType(fields: Record<string, GraphQLFieldConfig<any, any>>) {
+  return new GraphQLObjectType({
+    name: 'Mutation',
+    fields: () => fields
+  });
+}
+
+export function createRootQueryType(fields: Record<string, GraphQLFieldConfig<any, any>>) {
+  return new GraphQLObjectType({
+    name: 'Query',
+    fields: () => fields
+  });
+}
+
+export const rootQuery = createRootQueryType({
+  ...userQueries,
+  ...educationQueries,
+  ...employerQueries,
+  ...experienceQueries,
+  ...jobQueries,
+})
+
+export const rootMutation = createRootMutationType({
+  ...userMutations,
+  ...educationMutations,
+  ...employerMutations,
+  ...experienceMutations,
+  ...jobMutations,
+})
 
 export const linkRecSchema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-      name: 'Query',
-      fields: {
-      }
-    }),
-    mutation: new GraphQLObjectType({
-      name: 'Mutation',
-      fields: {
-      }
-    })
-  });
+    query: rootQuery,
+    mutation: rootMutation,
+});

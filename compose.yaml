@@ -63,6 +63,7 @@ services:
       target: development
     depends_on:
       - db
+      - fuseki-dev
     volumes:
       - ./link-rec:/app
       - /app/node_modules

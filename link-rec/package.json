@@ -13,6 +13,7 @@
     "watch-backend": "yarn workspace @link-rec/backend watch"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ]
 }

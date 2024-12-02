@@ -12,7 +12,7 @@ x-postgres: &base-postgres
     POSTGRES_PASSWORD: admin
     POSTGRES_DB: linkrec_database
   volumes:
-    - pgdata:/var/lib/postgresql/data # Persist data
+    - pgdata:/var/lib/postgresql/data  # Persist data
   networks:
     - internal
 
@@ -22,8 +22,8 @@ x-fuseki: &base-fuseki
   volumes:
     # - ./fuseki/fuseki-data:/fuseki
     - ./fuseki/staging:/staging
-    - ./fuseki/configuration:/fuseki/configuration
-    - fuseki-data:/fuseki/databases
+    - ./fuseki/fuseki-data:/fuseki
+    # - fuseki-data:/jena-fuseki/databases
     # - ./jena-fuseki/configuration:/fuseki/configuration
     # - ./jena-fuseki/shiro.ini:/fuseki/shiro.ini
     # - ./jena-fuseki/config.ttl:/fuseki/config.ttl
@@ -34,14 +34,10 @@ x-fuseki: &base-fuseki
     - ADMIN_PASSWORD=admin
     - FUSEKI_DATASET_1=linkrec
     # - FUSEKI_DATASET_2=test
-  command: [
-      "/jena-fuseki/fuseki-server",
-      # "--loc=/databases/linkrec",
-      # "/linkrec",
-      # "--mem",
-      # "--file=/staging/obese.rdf",
-      # "/test",
-    ]
+  command: bash -c "
+      ./load.sh linkrec
+      && /jena-fuseki/fuseki-server
+    "
 
 x-backend: &base-backend
   networks:
@@ -62,8 +58,6 @@ services:
 
   backend-dev:
     <<: [*base-backend, *environment]
-    depends_on:
-      - db
     build:
       context: ./link-rec
       target: development

@@ -2,14 +2,14 @@ import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQL
 import { Education, EducationType } from "../education";
 
 export interface User {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
-  webPage?: string;
-  location?: string;
-  bio?: string;
+  phoneNumber?: string | null;
+  webPage?: string | null;
+  location?: string | null;
+  bio?: string | null;
   education: Education[]
   connections: User[]
 }
@@ -44,10 +44,10 @@ export type UserInput = {
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
-  webPage?: string;
-  location?: string;
-  bio?: string;
+  phoneNumber: string | null;
+  webPage?: string | null;
+  location?: string | null;
+  bio?: string | null;
 }
 
 export const UserInputType = new GraphQLInputObjectType({

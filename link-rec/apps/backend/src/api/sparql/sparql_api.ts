@@ -1,22 +1,26 @@
 import { ParsingClient, SimpleClient } from "sparql-http-client"
 
 export type SparqlConfig = {
-  endpointUrl: string,
+  updateUrl: string,
+  queryUrl: string,
 }
 
 export class SparqlAPI {
-  private parser: ParsingClient
+  private updateParser: ParsingClient
+  private queryParser: ParsingClient
 
   constructor(config: SparqlConfig) {
-    const simpleClient = new SimpleClient({endpointUrl: config.endpointUrl})
-    this.parser = new ParsingClient(simpleClient)
+    const simpleUpdateClient = new SimpleClient({endpointUrl: config.updateUrl})
+    const simpleQueryClient = new SimpleClient({endpointUrl: config.queryUrl})
+    this.updateParser = new ParsingClient(simpleUpdateClient)
+    this.queryParser = new ParsingClient(simpleQueryClient)
   }
 
   async query(query: string) {
-    return await this.parser.query.select(query)
+    return await this.queryParser.query.select(query)
   }
 
   async update(query: string) {
-    await this.parser.query.update(query)
+    await this.updateParser.query.update(query)
   }
 }

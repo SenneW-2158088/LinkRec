@@ -35,13 +35,15 @@ export class UserService{
     console.log("input, ", input)
     const [inserted] = await this.db.insert(this.TABLE).values(input).returning();
 
+
+
     const user: User = {
       ...inserted,
       education: [], // You'll need to handle this separately
       connections: [], // You'll need to handle this separately
     };
 
-    // await this.updateRdfUser(user)
+    await this.updateRdfUser(user)
 
     return user;
   }
@@ -50,6 +52,7 @@ export class UserService{
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(`
         INSERT DATA {
+            ${user.id} a lro:User .
             lr_users:${user.id} a lro:User ;
                        foaf:name "${user.firstName} ${user.lastName}" .
         }
@@ -60,7 +63,7 @@ export class UserService{
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(`
         INSERT DATA {
-          linkrec:${user1.id} lro:Connection linkrec:${user2.id} .
+          lr_users:${user1.id} lro:Connection lr_users:${user2.id} .
         }
       `))
   }

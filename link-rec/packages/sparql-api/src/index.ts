@@ -92,28 +92,34 @@ async function insertUser() {
     }
   `;
 
-  const response = await fetch(fusekiEndpoint, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/sparql-update',
-      },
-      body: update,
-  });
+  const client = new SimpleClient({updateUrl: fusekiEndpoint})
 
-  if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-  }
+  const parsingClient = new ParsingClient(client)
 
-  console.log("RESPONSE UPDATE", response)
-  const results = await response.json();
-  console.log(results.results.bindings);
+  const result = await parsingClient.query.update(update)
+
+  // const response = await fetch(fusekiEndpoint, {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/sparql-update',
+  //     },
+  //     body: update,
+  // });
+
+  // if (!response.ok) {
+  //     throw new Error(`Error: ${response.statusText}`);
+  // }
+
+  // console.log("RESPONSE UPDATE", response)
+  // const results = await response.json();
+  // console.log(results.results.bindings);
 }
 
 
 async function run(){
-  // await insertUser()
-  // await getConnections()
-  await getAll()
+  await insertUser()
+  await getConnections()
+  // await getAll()
 }
 
 run()

@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import { userTable } from "../../db/schema/userSchema";
 import { User, UserInput } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
-import { eq } from "drizzle-orm";
 
 export class UserService{
   private TABLE = userTable
@@ -33,6 +32,7 @@ export class UserService{
   }
 
   async createUser(input: UserInput): Promise<User> {
+    console.log("input, ", input)
     const [inserted] = await this.db.insert(this.TABLE).values(input).returning();
 
     const user: User = {
@@ -41,15 +41,9 @@ export class UserService{
       connections: [], // You'll need to handle this separately
     };
 
-    await this.updateRdfUser(user)
+    // await this.updateRdfUser(user)
 
     return user;
-  }
-
-  async getUserById(id: number): Promise<User | null> {
-    this.db.query.users.findFirst({ id: id });
-    const user = await this.db.select().from(userTable).find(eq(userTable.id, id))
-    return user
   }
 
   async updateRdfUser(user: User) {

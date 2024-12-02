@@ -26,6 +26,7 @@ app.listen(CONFIG.PORT, async () => {
 
   setupRoutes(apolloServer)
 
-  console.log(`Server is running on http://localhost:${CONFIG.PORT}`)
-  console.log(`The GraphQL endpoint is http://localhost:${CONFIG.PORT}/graphql`)
+  console.log(`😳 Server is running on http://localhost:${CONFIG.PORT}`)
+  console.log(`💀 The GraphQL endpoint is http://localhost:${CONFIG.PORT}/graphql`)
+  console.log(`🍆 Enjoy...`)
 })

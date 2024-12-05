@@ -70,6 +70,7 @@ RUN  $FUSEKI_HOME/fuseki-server & \
 # we'll enable basic-auth with a random admin password
 # (which we'll generate on start-up)
 COPY shiro.ini $FUSEKI_HOME/shiro.ini
+COPY config.ttl $FUSEKI_HOME/config.ttl
 COPY docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 

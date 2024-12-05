@@ -16,7 +16,7 @@
 
 set -e
 
-if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
+# if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
   # First time
   echo "###################################"
   echo "Initializing Apache Jena Fuseki"
@@ -30,11 +30,17 @@ if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
   fi
   echo ""
   echo "###################################"
-fi
+# fi
 
 if [ -d "/fuseki-extra" ] && [ ! -d "$FUSEKI_BASE/extra" ] ; then
   ln -s "/fuseki-extra" "$FUSEKI_BASE/extra"
 fi
+
+# if [ ! -f "$FUSEKI_BASE/config.ttl" ] ; then
+    echo "###################################"
+    echo "Initializing Config file"
+    cp "$FUSEKI_HOME/config.ttl" "$FUSEKI_BASE/config.ttl"
+# fi
 
 # $ADMIN_PASSWORD only modifies if ${ADMIN_PASSWORD}
 # is in shiro.ini

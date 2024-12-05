@@ -32,7 +32,7 @@ x-fuseki: &base-fuseki
     - internal
   environment:
     - ADMIN_PASSWORD=admin
-    - FUSEKI_DATASET_1=linkrec
+    # - FUSEKI_DATASET_1=linkrec
     # - FUSEKI_DATASET_2=test
   command: bash -c "
     ./load.sh linkrec

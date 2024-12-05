@@ -71,6 +71,7 @@ RUN  $FUSEKI_HOME/fuseki-server & \
 # (which we'll generate on start-up)
 COPY shiro.ini $FUSEKI_HOME/shiro.ini
 COPY config.ttl $FUSEKI_HOME/config.ttl
+COPY reasoner_rules $FUSEKI_HOME/reasoner_rules
 COPY docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 

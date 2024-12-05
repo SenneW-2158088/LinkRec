@@ -1,9 +1,63 @@
-PREFIX owl:         <http://www.w3.org/2002/07/owl#>
-PREFIX rdf:         <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-# see specification: http://xmlns.com/foaf/spec/
-PREFIX foaf:        <http://xmlns.com/foaf/0.1/>
-PREFIX linkrec:     <http://linkrec:8080/>
-PREFIX lro:         <#> # empty prefix for the LinkRec ontology
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix job:  <http://example.org/job/> .
+@prefix skill: <http://example.org/skill/> .
+@prefix user: <http://example.org/user/> .
+@prefix rule: <http://example.org/rules/> .
+@prefix wd:  <http://www.wikidata.org/entity/> .
 
-lro:Connection a owl:ObjectProperty .
-lro:User a foaf:Person .
+# Skill Hierarchy Definitions
+skill:ProgrammingLanguage a job:SkillCategory .
+skill:Python rdfs:subClassOf skill:ProgrammingLanguage .
+skill:Java rdfs:subClassOf skill:ProgrammingLanguage .
+skill:JavaScript rdfs:subClassOf skill:ProgrammingLanguage .
+
+skill:CloudPlatform a job:SkillCategory .
+skill:AWS rdfs:subClassOf skill:CloudPlatform .
+skill:Azure rdfs:subClassOf skill:CloudPlatform .
+skill:GCP rdfs:subClassOf skill:CloudPlatform .
+
+# Job Title Hierarchy
+job:SoftwareEngineer a job:JobTitle .
+job:SeniorSoftwareEngineer rdfs:subClassOf job:SoftwareEngineer .
+job:LeadSoftwareEngineer rdfs:subClassOf job:SeniorSoftwareEngineer .
+
+# Experience Level Definitions
+job:ExperienceLevel a rdfs:Class .
+job:Entry a job:ExperienceLevel ;
+    job:minYears 0 ;
+    job:maxYears 2 .
+job:Mid a job:ExperienceLevel ;
+    job:minYears 2 ;
+    job:maxYears 5 .
+job:Senior a job:ExperienceLevel ;
+    job:minYears 5 ;
+    job:maxYears 8 .
+job:Lead a job:ExperienceLevel ;
+    job:minYears 8 .
+
+# Skill Equivalence Rules
+skill:ReactJS job:equivalentTo skill:React .
+skill:NodeJS job:equivalentTo skill:Node .
+
+# Add a user that has React skill
+user:User123 user:hasSkill skill:ReactJS .
+
+# USE WIKIDATA
+
+
+# JobTile is a subclass of Profession
+job:JobTitle rdfs:subClassOf wd:Q28640 .
+
+# TODO:
+# - rdfs:subClassOf is equal to wd:P279
+# Skills are:
+# - programming languages: wd:Q9143
+# - cloud platforms: wd:Q1073
+# - software framework: wd:Q7397
+# - Skills for TODO other proficiencies?
+# Education ( or academic degree: Q189533)
+
+# TODO: FOAF
+
+# TODO: Locations

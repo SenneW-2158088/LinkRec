@@ -2,7 +2,7 @@ import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQL
 import { Education, EducationType } from "../education";
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -49,6 +49,7 @@ export type UserInput = {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phoneNumber: string | null;
   webPage?: string | null;
   location?: string | null;
@@ -60,6 +61,7 @@ export const UserInputType = new GraphQLInputObjectType({
   fields: {
     firstName: { type: new GraphQLNonNull(GraphQLString) },
     lastName: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
     webPage: { type: GraphQLString },

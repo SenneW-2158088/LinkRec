@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { userTable } from "../../db/schema/userSchema";
 import { User, UserInput } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
+import { hash } from "bcrypt";
 
 export class UserService{
   private TABLE = userTable
@@ -13,7 +14,7 @@ export class UserService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async getUser(id: number): Promise<User | null> {
+  async getUser(id: string): Promise<User | null> {
     const [user] = await this.db
       .select()
       .from(this.TABLE)
@@ -24,26 +25,29 @@ export class UserService{
       return null;
     }
 
-    return {
-      ...user,
-      education: [], // Fetch education if needed
-      connections: [] // Fetch connections if needed
-    };
+    return null;
   }
 
   async createUser(input: UserInput): Promise<User> {
     console.log("input, ", input)
-    const [inserted] = await this.db.insert(this.TABLE).values(input).returning();
 
+    const [inserted] = await this.db.insert(this.TABLE).values({
+      email: input.email,
+      password: await hash(input.password, 4)
+    }).returning();
 
+    // TODO: insert into rdf and refetch + add data to struct
 
     const user: User = {
-      ...inserted,
-      education: [], // You'll need to handle this separately
-      connections: [], // You'll need to handle this separately
+      id: inserted.id,
+      email: inserted.email,
+      firstName: "",
+      lastName: "",
+      education: [],
+      connections: [],
     };
 
-    await this.updateRdfUser(user)
+    // await this.updateRdfUser(user)
 
     return user;
   }

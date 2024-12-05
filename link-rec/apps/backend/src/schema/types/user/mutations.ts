@@ -2,7 +2,7 @@ import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { User, UserInput, UserInputType, UserType } from "./types";
 import { ApolloContext } from "../../../apollo_server";
 
-export const userMutation: GraphQLFieldConfig<any, any> = {
+export const createUserMutation: GraphQLFieldConfig<any, any> = {
   type: UserType,
   args: {
     input: { type: new GraphQLNonNull(UserInputType) }
@@ -13,5 +13,5 @@ export const userMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const userMutations = {
-  "user": userMutation,
+  "createUser": createUserMutation,
 }

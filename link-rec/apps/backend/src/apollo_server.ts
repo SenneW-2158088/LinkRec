@@ -45,13 +45,10 @@ const authenticateJWT = async (req: Request) => {
     if(token == undefined) {
       return;
     }
-    console.log("help")
     try {
       const user = verifyJwt(token, "testing");
-      console.log("success: ", user)
       return { user };
     } catch (error) {
-      console.log("error: ")
       return { user: null };
     }
   }

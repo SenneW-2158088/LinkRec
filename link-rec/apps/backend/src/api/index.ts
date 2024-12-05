@@ -1,5 +1,6 @@
 import { Database } from "../db/database";
 import { UserService } from "./services";
+import { AuthenticationService } from "./services/authentication_service";
 import { SparqlAPI } from "./sparql/sparql_api";
 
 export * from "./services"
@@ -18,6 +19,7 @@ export class LinkRecAPI {
   private context: Context;
 
   public userService: UserService;
+  public authenticationService: AuthenticationService;
 
   constructor(config: ApiConfig) {
     this.context = {
@@ -26,5 +28,6 @@ export class LinkRecAPI {
     }
 
     this.userService = new UserService(this.context)
+    this.authenticationService = new AuthenticationService(this.context)
   }
 }

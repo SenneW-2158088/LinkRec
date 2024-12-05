@@ -1,5 +1,6 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql"
 import { User, UserType } from "../user"
+import { sign } from "jsonwebtoken";
 
 
 export const userQuery: GraphQLFieldConfig<any, any> = {

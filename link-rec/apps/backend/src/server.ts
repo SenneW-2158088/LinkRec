@@ -4,7 +4,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServer } from '@apollo/server'
 import { ApolloContext, createApolloContext, createApolloServer } from './apollo_server'
 import { CONFIG } from "./config/config";
-import { createContext } from 'vm';
+import jwt from 'jsonwebtoken'
 
 const app = express()
 
@@ -15,13 +15,13 @@ function setupRoutes(apolloServer: ApolloServer<ApolloContext>) {
 app.listen(CONFIG.PORT, async () => {
   // Note you must call `start()` on the `ApolloServer`
   // instance before passing the instance to `expressMiddleware`
-  const apolloServer = createApolloServer()
-  await apolloServer.start()
+  const apolloServer = createApolloServer();
+  await apolloServer.start();
 
   app.use(
     '/graphql',
     express.json(),
-    expressMiddleware(apolloServer, createApolloContext())
+    expressMiddleware(apolloServer, createApolloContext()),
   )
 
   setupRoutes(apolloServer)

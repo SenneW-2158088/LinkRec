@@ -4,6 +4,7 @@ import { userMutations } from "./types/user/mutations";
 import { educationMutations } from "./types/education/mutations";
 import { educationQueries } from "./types/education/queries";
 import { employerMutations, employerQueries, experienceMutations, experienceQueries, jobMutations, jobQueries } from "./types";
+import { roleDirective, userDirective } from "./directives";
 
 export function createRootMutationType(fields: Record<string, GraphQLFieldConfig<any, any>>) {
   return new GraphQLObjectType({
@@ -38,4 +39,8 @@ export const rootMutation = createRootMutationType({
 export const linkRecSchema = new GraphQLSchema({
     query: rootQuery,
     mutation: rootMutation,
+    directives: [
+      roleDirective,
+      userDirective,
+    ]
 });

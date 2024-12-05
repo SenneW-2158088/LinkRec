@@ -17,7 +17,12 @@ export interface User {
 export const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: { type: GraphQLID },
+    id: {
+      type: GraphQLID,
+      extensions: {
+        directives: { user: {} }
+      },
+    },
     firstName: { type: new GraphQLNonNull(GraphQLString) },
     lastName: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },

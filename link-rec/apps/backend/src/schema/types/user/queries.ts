@@ -9,7 +9,6 @@ export const userQuery: GraphQLFieldConfig<any, any> = {
     id: { type: new GraphQLNonNull(GraphQLID) }
   },
   resolve: async (_source, args: { id: User["id"] }, context, _info) : Promise<User> => {
-    console.log(sign({user: "nigga"}, "testing"))
     return await context.api.userService.getUser(args.id);
   }
 }

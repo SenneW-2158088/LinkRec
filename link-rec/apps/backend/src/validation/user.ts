@@ -6,8 +6,14 @@ const BIO_MAX_LENGTH = 500;
 const PASSWORD_MIN_LENGTH = 8;
 
 export const loginInputSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+  email: z.string({
+    required_error: "Email is required",
+    invalid_type_error: "Email name must be a string",
+  }),
+  password: z.string({
+    required_error: "Password is required",
+    invalid_type_error: "Password must be a string",
+  }),
 });
 
 export type loginInput = z.infer<typeof loginInputSchema>;
@@ -54,7 +60,6 @@ export const userInputSchema = z.object({
     .max(320, "Email address is too long")
     .transform(email => email.toLowerCase().trim()),
 
-  // Phone number validation with optional formatting
   phoneNumber: z
     .string({
       required_error: "Phone number is required",

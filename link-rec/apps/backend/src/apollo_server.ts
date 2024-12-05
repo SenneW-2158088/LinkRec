@@ -10,6 +10,8 @@ import { userDirectiveTransformer } from "./schema/transformers/userDirectiveTra
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import { sign as signJwt, verify as verifyJwt } from "jsonwebtoken";
 import { Request } from "express";
+import { User } from "./schema/types";
+import { jwtMiddleware } from "./middleware/jwtMiddleware";
 
 const dbConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -24,43 +26,23 @@ const dbConfig: DatabaseConfig = {
 const db = new Database(dbConfig);
 
 export interface ApolloContext {
-  api: LinkRecAPI
+  api: LinkRecAPI,
+  user?: User | null,
 }
 
 export function createApolloServer() {
 
-  // const schema = schemaTransform(linkRecSchema, [
-  //   userDirectiveTransformer
-  // ]);
-  const schema = userDirectiveTransformer(linkRecSchema);
+  const schema = schemaTransform(linkRecSchema, [
+    userDirectiveTransformer
+  ]);
 
   return new ApolloServer<ApolloContext>({ schema: schema });
 }
 
-const authenticateJWT = async (req: Request) => {
-  const authHeader = req.headers.authorization
-
-  if (authHeader) {
-    let token = req.headers.authorization;
-    if(token == undefined) {
-      return;
-    }
-    try {
-      const user = verifyJwt(token, "testing");
-      return { user };
-    } catch (error) {
-      return { user: null };
-    }
-  }
-
-  return { user: null };
-};
-
 export function createApolloContext() {
   return {
     context: async ({req}: ExpressContextFunctionArgument): Promise<ApolloContext> => {
-      await authenticateJWT(req);
-      return {
+      let context: ApolloContext = {
         api: new LinkRecAPI({
           db: db,
           sparql: new SparqlAPI({
@@ -69,6 +51,10 @@ export function createApolloContext() {
           })
         })
       };
+
+      await jwtMiddleware(context, req);
+
+      return context
     }
   }
 }

@@ -1,63 +1,105 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix job:  <http://example.org/job/> .
-@prefix skill: <http://example.org/skill/> .
-@prefix user: <http://example.org/user/> .
-@prefix rule: <http://example.org/rules/> .
+
+@prefix foaf:        <http://xmlns.com/foaf/0.1/>
 @prefix wd:  <http://www.wikidata.org/entity/> .
+@prefix gn:  <https://www.geonames.org/ontology#> .
+@prefix vcard: http://www.w3.org/2006/vcard/ns#
 
-# Skill Hierarchy Definitions
-skill:ProgrammingLanguage a job:SkillCategory .
-skill:Python rdfs:subClassOf skill:ProgrammingLanguage .
-skill:Java rdfs:subClassOf skill:ProgrammingLanguage .
-skill:JavaScript rdfs:subClassOf skill:ProgrammingLanguage .
+@prefix user: <http://linkrec:8080/ontology/user/> .
+@prefix experience: <http://linkrec:8080/ontology/experience/> .
+@prefix requirement: <http://linkrec:8080/ontology/requirement/> .
+@prefix education: <http://linkrec:8080/ontology/education/> .
+@prefix job:  <http://linkrec:8080/ontology/job/> .
+@prefix skill:  <http://linkrec:8080/ontology/skill/> .
+@prefix lr_user: <http://linkrec:8080/user/> .
+@prefix lr_experience: <http://linkrec:8080/experience/> .
+@prefix lr_requirement: <http://linkrec:8080/requirement/> .
+@prefix lr_education: <http://linkrec:8080/education/> .
+@prefix lr_job:  <http://linkrec:8080/job/> .
+@prefix lr_skill:  <http://linkrec:8080/skill/> .
 
-skill:CloudPlatform a job:SkillCategory .
-skill:AWS rdfs:subClassOf skill:CloudPlatform .
-skill:Azure rdfs:subClassOf skill:CloudPlatform .
-skill:GCP rdfs:subClassOf skill:CloudPlatform .
+# TODOS:
+# Include following ontologies in staging:
+#  - https://github.com/lanthaler/vCardOntology/blob/master/Vcard.rdf
 
-# Job Title Hierarchy
-job:SoftwareEngineer a job:JobTitle .
-job:SeniorSoftwareEngineer rdfs:subClassOf job:SoftwareEngineer .
-job:LeadSoftwareEngineer rdfs:subClassOf job:SeniorSoftwareEngineer .
+# USERS
+user:User a vcard:Individual ;
+    a foaf::Person .
+user:hasEmail a rdf:Property ;
+    owl:sameAs vcard:hasEmail ;
+    owl:sameAs foaf::mbox .
+user:hasName a rdf:Property ;
+    owl:sameAs vcard:hasName ;
+    owl:sameAs foaf::name .
+user:hasPhoneNumber a rdf:Property ;
+    owl:sameAs vcard:hasTelephone ;
+    owl:sameAs foaf::phone .
+user:hasWebPage a rdf:Property ;
+    owl:sameAs foaf::page .
+user:hasGender a rdf:Property ;
+    owl:sameAs vcard:hasGender ;
+    owl:sameAs foaf:gender .
+# see http://www.geonames.org/ontology/documentation.html
+user:hasLocation a rdf:Property # -> gn:name
+    owl:sameAs vcard:hasGeo ;
+    owl:sameAs foaf:based_near .
+user:knows a rdf:Property ;
+    owl:sameAs foaf:knows .
+user:hasLanguage a rdf:Property ;
+    owl:sameAs vcard:hasLanguage .
+user:hasExperience a rdf:Property . # -> experience:experience
 
-# Experience Level Definitions
-job:ExperienceLevel a rdfs:Class .
-job:Entry a job:ExperienceLevel ;
-    job:minYears 0 ;
-    job:maxYears 2 .
-job:Mid a job:ExperienceLevel ;
-    job:minYears 2 ;
-    job:maxYears 5 .
-job:Senior a job:ExperienceLevel ;
-    job:minYears 5 ;
-    job:maxYears 8 .
-job:Lead a job:ExperienceLevel ;
-    job:minYears 8 .
+# EXPERIENCE
+experience:Experience a rdf:Class .
+experience:hasTitle a rdf:Property ;
+    owl:sameAs vcard:hasTitle . # wd:Q28640 or Profession
+experience:hasDescription a rdf:Property ;
+    owl:sameAs vcard:hasNote .
+experience:hasYears a rdf:Property .
+experience:hasCompany a rdf:Property .
 
-# Skill Equivalence Rules
-skill:ReactJS job:equivalentTo skill:React .
-skill:NodeJS job:equivalentTo skill:Node .
+# REQUIREMENT
+requirement:Requirement a rdf:Class .
+requirement:hasTitle a rdf:Property ;
+    owl:sameAs vcard:hasTitle . # wd:Q28640 or Profession
+requirement:hasDescription a rdf:Property ;
+    owl:sameAs vcard:hasNote .
+requirement:hasMinYears a rdf:Property .
+requirement:hasMaxYears a rdf:Property .
+requirement:hasExperienceLevel a rdf:Property . ->
 
-# Add a user that has React skill
-user:User123 user:hasSkill skill:ReactJS .
+requirement:Entry a requirement:ExperienceLevel ;
+    requirement:hasMinYears 0 ;
+    requirement:hasMaxYears 2 .
+requirement:Mid a requirement:ExperienceLevel ;
+    requirement:hasMinYears 2 ;
+    requirement:hasMaxYears 5 .
+requirement:Senior a requirement:ExperienceLevel ;
+    requirement:hasMinYears 5 ;
+    requirement:hasMaxYears 8 .
+requirement:Lead a requirement:ExperienceLevel ;
+    requirement:hasMinYears 8 .
 
-# USE WIKIDATA
+# JOB/VACANCY POST
+job:Job a rdf:Class .
+job:hasTitle a rdf:Property ;
+    owl:sameAs foaf:title .
+job:hasRequirement a rdf:Property ; # -> requirement:Requirement
+job:hasLocation a rdf:Property ; -> gn:name
+    owl:sameAs foaf:based_near .
+job:isActive a rdf:Property . # -> boolean
+job:hasEmployer a rdf:Property . # -> user:User
 
+# SKILLS
+skill:Skill a wd:Q28640 . # skills are professions!
+skill:subSkillOf owl:sameAs wd:P279 . # subclass of
 
-# JobTile is a subclass of Profession
-job:JobTitle rdfs:subClassOf wd:Q28640 .
+# EXAMPLES
+wd:Q6859454 a skill:Skill ;
+    skill:subSkillOf wd:Q183888 ;
+    rdfs:label "Software Developer" .
 
-# TODO:
-# - rdfs:subClassOf is equal to wd:P279
-# Skills are:
-# - programming languages: wd:Q9143
-# - cloud platforms: wd:Q1073
-# - software framework: wd:Q7397
-# - Skills for TODO other proficiencies?
-# Education ( or academic degree: Q189533)
-
-# TODO: FOAF
-
-# TODO: Locations
+wd:Q183888 a skill:Skill ;
+    skill:subSkillOf wd:Q1709010 ;
+    rdfs:label "Software Engineer" .

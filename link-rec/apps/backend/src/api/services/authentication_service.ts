@@ -4,9 +4,11 @@ import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
-import { User, UserInput } from "../../schema/types";
+import { User } from "../../schema/types";
 import { compare, hash } from "bcrypt";
 import { log } from "console";
+import { GraphQLError } from "graphql";
+import { loginInput, loginInputSchema } from "../../validation/user";
 
 export class AuthenticationService{
   private TABLE = userTable
@@ -14,12 +16,14 @@ export class AuthenticationService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async login(email: string, password: string): Promise<User> {
+  async login(input: loginInput): Promise<User> {
+
+    loginInputSchema.parse(input);
 
     const [user] = await this.db
       .select()
       .from(this.TABLE)
-      .where(eq(this.TABLE.email, email))
+      .where(eq(this.TABLE.email, input.email))
       .limit(1);
 
     if (!user) {
@@ -27,9 +31,8 @@ export class AuthenticationService{
       throw new Error("No user found");
     }
 
-    if(!await compare(password, user.password)){
-      console.log("invalid password")
-      throw new Error("invalid password");
+    if(!await compare(input.password, user.password)){
+      throw new GraphQLError("invalid password");
     }
 
     return {

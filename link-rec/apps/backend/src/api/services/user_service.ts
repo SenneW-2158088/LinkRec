@@ -4,9 +4,10 @@ import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
-import { User, UserInput } from "../../schema/types";
+import { User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
+import { UserInput, userInputSchema } from "../../validation/user";
 
 export class UserService{
   private TABLE = userTable
@@ -30,6 +31,8 @@ export class UserService{
 
   async createUser(input: UserInput): Promise<User> {
     console.log("input, ", input)
+
+    userInputSchema.parse(input);
 
     const [inserted] = await this.db.insert(this.TABLE).values({
       email: input.email,

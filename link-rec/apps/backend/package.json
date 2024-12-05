@@ -20,7 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "sparql-http-client": "^3.0.1",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

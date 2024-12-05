@@ -1,6 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql"
-import { User, UserType } from "../user"
+import { LoginInputType, User, UserType } from "../user"
 import { ApolloContext } from "../../../apollo_server";
+import { loginInput } from "../../../validation/user";
 
 export const userQuery: GraphQLFieldConfig<any, any> = {
   type: UserType,
@@ -15,11 +16,10 @@ export const userQuery: GraphQLFieldConfig<any, any> = {
 export const loginQuery: GraphQLFieldConfig<any, any> = {
   type: UserType,
   args: {
-    email: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: new GraphQLNonNull(GraphQLString) },
+    input: { type: new GraphQLNonNull(LoginInputType) }
   },
-  resolve: async (source, args: { email: string, password: string }, context: ApolloContext, info): Promise<User> => {
-    return await context.api.authenticationService.login(args.email, args.password);
+  resolve: async (source, args: { input: loginInput }, context: ApolloContext, info): Promise<User> => {
+    return await context.api.authenticationService.login(args.input);
   }
 }
 

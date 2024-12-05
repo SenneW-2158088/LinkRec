@@ -45,17 +45,15 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
   }),
 });
 
-export type UserInput = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phoneNumber: string | null;
-  webPage?: string | null;
-  location?: string | null;
-  bio?: string | null;
-}
+export const LoginInputType = new GraphQLInputObjectType({
+  name: "LoginInput",
+  fields: {
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) },
+  }
+});
 
+// Type for creating users
 export const UserInputType = new GraphQLInputObjectType({
   name: 'UserInput',
   fields: {

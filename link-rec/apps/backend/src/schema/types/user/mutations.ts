@@ -1,6 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
-import { User, UserInput, UserInputType, UserType } from "./types";
+import { User, UserInputType, UserType } from "./types";
 import { ApolloContext } from "../../../apollo_server";
+import { UserInput } from "../../../validation/user";
 
 export const createUserMutation: GraphQLFieldConfig<any, any> = {
   type: UserType,

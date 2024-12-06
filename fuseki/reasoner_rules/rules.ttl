@@ -43,7 +43,7 @@
 ]
 
 # [userLocationInference:
-# if use lives in a city, then the user lives in the country of the city (parentFeature)
+# if user lives in a city, then the user lives in the country of the city (parentFeature)
 # ]
 
 # Education Inference

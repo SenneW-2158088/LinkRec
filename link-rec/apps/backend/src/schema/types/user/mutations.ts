@@ -33,6 +33,6 @@ export const createUserMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const userMutations = {
-  "login": loginMutation,
-  "register": createUserMutation,
+  "userLogin": loginMutation,
+  "userRegister": createUserMutation,
 }

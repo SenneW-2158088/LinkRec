@@ -13,12 +13,16 @@
 @prefix education: <http://linkrec:8080/ontology/education/> .
 @prefix job:  <http://linkrec:8080/ontology/job/> .
 @prefix skill:  <http://linkrec:8080/ontology/skill/> .
+@prefix language: <http://linkrec:8080/ontology/language/> .
+@prefix languageLevel: <http://linkrec:8080/ontology/languageLevel/> .
 @prefix lr_user: <http://linkrec:8080/user/> .
 @prefix lr_experience: <http://linkrec:8080/experience/> .
 @prefix lr_requirement: <http://linkrec:8080/requirement/> .
 @prefix lr_education: <http://linkrec:8080/education/> .
 @prefix lr_job:  <http://linkrec:8080/job/> .
 @prefix lr_skill:  <http://linkrec:8080/skill/> .
+@prefix lr_language: <http://linkrec:8080/language/> .
+@prefix lr_languageLevel: <http://linkrec:8080/languageLevel/> .
 
 # TODOS:
 # Include following ontologies in staging:
@@ -97,6 +101,11 @@ job:hasEmployer a rdf:Property . # -> user:User
 # SKILLS
 skill:Skill a wd:Q28640 . # skills are professions!
 skill:subSkillOf owl:sameAs wd:P279 . # subclass of
+
+# Language
+language:Language a rdf:Class .
+language:hasName a rdf:Property ;
+    owl:sameAs vcard:hasLanguage .
 
 # EXAMPLES
 wd:Q6859454 a skill:Skill ;

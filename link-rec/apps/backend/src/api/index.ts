@@ -6,6 +6,7 @@ import { SparqlAPI } from "./sparql/sparql_api";
 import { LinkRecError } from "./errors/error";
 import { z } from "zod";
 import { ValidationError } from "./errors/validationError";
+import { EmployerService } from "./services/employer_service";
 
 export * from "./services"
 
@@ -23,6 +24,7 @@ export class LinkRecAPI {
   private context: Context;
 
   public userService: UserService;
+  public employerService: EmployerService;
   public authenticationService: AuthenticationService;
 
   constructor(config: ApiConfig) {
@@ -32,6 +34,7 @@ export class LinkRecAPI {
     }
 
     this.userService = new UserService(this.context)
+    this.employerService = new EmployerService(this.context)
     this.authenticationService = new AuthenticationService(this.context)
   }
 

@@ -42,10 +42,6 @@
     (?experience experience:hasTitle ?skill)
 ]
 
-# [userLocationInference:
-# if user lives in a city, then the user lives in the country of the city (parentFeature)
-# ]
-
 # Education Inference
 # TODO
 
@@ -67,4 +63,14 @@
     le(?years, ?max)
     ->
     (?requirement experience:hasExperienceLevel ?level)
+]
+
+[userJobMatchingInference:
+    (?user user:hasExperience ?experience)
+    (?experience experience:hasTitle ?skill)
+    (?job job:requiresSkill ?skill)
+    (?job job:requiresExperienceLevel ?level)
+    (?experience experience:hasExperienceLevel ?level)
+    ->
+    (?user user:matchesJob ?job)
 ]

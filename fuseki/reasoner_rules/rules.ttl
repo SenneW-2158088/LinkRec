@@ -73,15 +73,16 @@
 ]
 
 [userEducationInference:
-    (?user user:hasEducation ?educationName)
+    (?user user:hasEducation ?userEducation)
+    (?userEducation education:hasTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
-    (?user user:hasEducation ?education)
+    (?userEducation education:hasTitle ?education)
 ]
 
 [requirementProfessionInference:
     (?requirement requirement:hasProfession ?requirementProfession)
-    (?requirementProfession profession:subProfessionOf ?profession)
+    (?profession rdfs:label ?requirementProfession)
     ->
     (?requirement requirement:hasProfession ?profession)
 ]
@@ -94,10 +95,10 @@
 ]
 
 [requirementEducationInference:
-    (?requirement requirement:hasEducation ?educationName)
+    (?requirement requirement:hasEducationTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
-    (?requirement requirement:hasEducation ?education)
+    (?requirement requirement:hasEducationTitle ?education)
 ]
 
 # Experience level inference
@@ -146,15 +147,26 @@
     ->
     (?user user:matchesRequirement ?requirement)
 ]
-[userJobMatchingEducationInference:
-# Location matches
+[usrJobMatchingEducationInference:
     (?user user:hasLocation ?userLocation)
     (?job job:hasLocation ?jobLocation)
 
-# Education matches
     (?job job:hasRequirement ?requirement)
-    (?requirement requirement:hasEducation ?education)
-    (?user user:hasEducation ?education)
+    (?requirement requirement:hasEducationTitel ?educationTitle)
+    (?user user:hasEducation ?userEducation)
+    (?userEducation education:hasTitle ?educationTitle)
+    ->
+    (?user user:matchesRequirement ?requirement)
+]
+
+[userJobMatchingEducationInference:
+    (?user user:hasLocation ?userLocation)
+    (?job job:hasLocation ?jobLocation)
+
+    (?job job:hasRequirement ?requirement)
+    (?requirement requirement:hasDegree ?educationDegree)
+    (?user user:hasEducation ?userEducation)
+    (?userEducation education:hasDegree ?educationDegree)
     ->
     (?user user:matchesRequirement ?requirement)
 ]

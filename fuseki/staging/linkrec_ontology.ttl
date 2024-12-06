@@ -51,11 +51,17 @@ user:hasGender a rdf:Property ;
 user:hasLocation a rdf:Property . # -> location:Location
 user:knows a rdf:Property ;
     owl:sameAs foaf:knows .
+user:hasJobSeekingStatus a rdf:Property .
 user:hasLanguage a rdf:Property ;
     owl:sameAs vcard:hasLanguage .
 user:hasExperience a rdf:Property . # -> experience:Experience
 user:hasEducation a rdf:Property . # -> education:Education
 user:matchesRequirement a rdf:Property . # -> requirement:Requirement
+
+user:JobSeekingStatus a rdfs:Class .
+user:ActivelyLooking rdfs:subClassOf user:JobSeekingStatus .
+user:OpenToOffers rdfs:subClassOf user:JobSeekingStatus .
+user:NotLooking rdfs:subClassOf user:JobSeekingStatus .
 
 # EMPLOYERS
 employer:Employer a vcard:Individual ;
@@ -88,12 +94,19 @@ experience:hasExperienceLevel a rdf:Property . # -> experience:ExperienceLevel
 requirement:Requirement a rdf:Class .
 requirement:hasProfession a rdf:Property ;
     owl:sameAs vcard:hasTitle . # wd:Q28640 or Profession
+requirement:requiredYears a rdf:Property . # only useful for professions
 requirement:hasLanguage a rdf:Property . # -> language:Language
-requirement:hasEducation a rdf:Property . # -> education:Education
+requirement:hasEducationTitle a rdf:Property .
+requirement:hasDegree a rdf:Property . # education degree
 requirement:hasDescription a rdf:Property ;
     owl:sameAs vcard:hasNote .
-requirement:requiredYears a rdf:Property .
-# you can also use experience:hasExperienceLevel for required level
+
+# EDUCATION
+education:Education a rdf:Class .
+education:hasInstitution a rdf:Property .
+education:hasTitle a rdf:Property ;
+    owl:sameAs vcard:hasTitle .
+education:hasDegree a rdf:Property .
 
 experience:Entry a experience:ExperienceLevel ;
     experience:hasMinYears 0 ;
@@ -121,7 +134,6 @@ job:hasTitle a rdf:Property ;
 job:hasRequirement a rdf:Property . # -> requirement:Requirement
 job:hasLocation a rdf:Property . # -> location:Location
 job:isActive a rdf:Property . # -> boolean
-job:hasEmployer a rdf:Property . # -> user:User
 
 # PROFESSIONS
 profession:Profession a wd:Q28640 . # professions are professions!

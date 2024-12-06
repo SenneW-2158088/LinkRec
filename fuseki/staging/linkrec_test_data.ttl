@@ -1,0 +1,104 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix wd:   <http://www.wikidata.org/entity/> .
+@prefix gn:   <https://www.geonames.org/ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+@prefix user: <http://linkrec:8080/ontology/user/> .
+@prefix employer: <http://linkrec:8080/ontology/employer/> .
+@prefix experience: <http://linkrec:8080/ontology/experience/> .
+@prefix requirement: <http://linkrec:8080/ontology/requirement/> .
+@prefix education: <http://linkrec:8080/ontology/education/> .
+@prefix job: <http://linkrec:8080/ontology/job/> .
+@prefix profession: <http://linkrec:8080/ontology/profession/> .
+@prefix language: <http://linkrec:8080/ontology/language/> .
+@prefix location: <http://linkrec:8080/ontology/location/> .
+@prefix lr_user: <http://linkrec:8080/user/> .
+@prefix lr_experience: <http://linkrec:8080/experience/> .
+@prefix lr_requirement: <http://linkrec:8080/requirement/> .
+@prefix lr_education: <http://linkrec:8080/education/> .
+@prefix lr_job: <http://linkrec:8080/job/> .
+@prefix lr_profession: <http://linkrec:8080/profession/> .
+@prefix lr_language: <http://linkrec:8080/language/> .
+@prefix lr_languageLevel: <http://linkrec:8080/languageLevel/> .
+@prefix lr_employer: <http://linkrec:8080/employer/> .
+
+# Users
+lr_user:JohnDoe a user:User ;
+    user:hasName "John Doe" ;
+    user:hasEmail <mailto:johndoe@example.com> ;
+    user:hasPhoneNumber "+1234567890" ;
+    user:hasLocation "Hasselt" ;
+    user:hasExperience lr_experience:Experience1 ;
+    user:hasEducation "master in diplomacy" ;
+    user:hasLanguage "English" ;
+    user:hasJobSeekingStatus user:ActivelyLooking .
+
+lr_user:JaneSmith a user:User ;
+    user:hasName "Jane Smith" ;
+    user:hasEmail <mailto:janesmith@example.com> ;
+    user:hasPhoneNumber "+0987654321" ;
+    user:hasLocation "Antwerpen" ;
+    user:hasExperience lr_experience:Experience2 ;
+    user:hasEducation "master in diplomacy" ;
+    user:hasLanguage "Spanish" ;
+    user:hasJobSeekingStatus user:ActivelyLooking .
+
+# Employers
+lr_employer:TechCorp a employer:Employer ;
+    employer:hasName "Tech Corp" ;
+    employer:hasEmail <mailto:contact@techcorp.com> ;
+    employer:hasPhoneNumber "+1122334455" ;
+    employer:hasWebPage <http://www.techcorp.com> ;
+    employer:hasJob lr_job:Job1 .
+
+# Experiences
+lr_experience:Experience1 a experience:Experience ;
+    experience:hasProfession "Web Developer" ;
+    experience:hasDescription "Developed web applications." ;
+    experience:hasYears 3 ;
+    experience:hasCompany "Web Solutions Inc." .
+
+lr_experience:Experience2 a experience:Experience ;
+    experience:hasProfession "Software Developer" ;
+    experience:hasDescription "Worked on mobile applications." ;
+    experience:hasYears 4 ;
+    experience:hasCompany "Mobile Innovations LLC" .
+
+# Requirements
+lr_requirement:Requirement1 a requirement:Requirement ;
+    requirement:hasProfession "Software Developer" ;
+    requirement:hasDescription "Looking for a skilled software developer." ;
+    requirement:requiredYears 2 .
+
+lr_requirement:Requirement2 a requirement:Requirement ;
+    requirement:hasEducationTitle "master in diplomacy" .
+
+lr_requirement:Requirement3 a requirement:Requirement ;
+    requirement:hasLanguage "English" .
+
+# Jobs
+lr_job:Job1 a job:Job ;
+    job:hasTitle "Software Developer" ;
+    job:hasRequirement lr_requirement:Requirement1 ;
+    job:hasLocation "Hasselt" ;
+    job:isActive true .
+
+lr_job:Job2 a job:Job ;
+    job:hasTitle "Software Engineer" ;
+    job:hasRequirement lr_requirement:Requirement2 ;
+    job:hasLocation "Hasselt" ;
+    job:isActive true .
+
+# Education
+lr_education:Education1 a education:Education ;
+    education:hasDegree "Bachelor of Science in Computer Science" ;
+    education:hasInstitution "University of Technology" ;
+    education:hasDegree "Bachelor" .
+
+lr_education:Education2 a education:Education ;
+    education:hasDegree "Master of Science in Software Engineering" ;
+    education:hasInstitution "Institute of Advanced Studies" ;
+    education:hasDegree "Master" .

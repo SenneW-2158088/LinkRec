@@ -7,7 +7,7 @@ import { userTable } from "../../db/schema/userSchema";
 import { User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
-import { UserInput, userInputSchema } from "../../validation/user";
+import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 
 export class UserService{
@@ -37,7 +37,7 @@ export class UserService{
     };
   }
 
-  async createUser(input: UserInput): Promise<User> {
+  async createUser(input: RegisterInput): Promise<User> {
     console.log("input, ", input)
 
     userInputSchema.parse(input);

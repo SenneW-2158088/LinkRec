@@ -18,6 +18,8 @@ export const loginInputSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
 
+export const JobSeekingStatus = z.enum(['Red', 'Green', 'Blue']);
+
 export const userInputSchema = z.object({
   firstName: z
     .string({
@@ -59,6 +61,8 @@ export const userInputSchema = z.object({
     .email("Please enter a valid email address")
     .max(320, "Email address is too long")
     .transform(email => email.toLowerCase().trim()),
+
+  status: JobSeekingStatus,
 
   phoneNumber: z
     .string({

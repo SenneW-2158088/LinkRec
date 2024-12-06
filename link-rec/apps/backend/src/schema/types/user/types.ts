@@ -1,6 +1,7 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { Education, EducationType } from "../education";
 import { ApolloContext } from "../../../apollo_server";
+import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking";
 
 export interface User {
   id: string;
@@ -9,6 +10,7 @@ export interface User {
   email: string;
   phoneNumber?: string | null;
   webPage?: string | null;
+  status: JobSeekingStatus,
   location?: string | null;
   bio?: string | null;
   education: Education[]
@@ -58,6 +60,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
       // extensions: { directives: { user: {} } },
     },
     bio: { type: GraphQLString },
+    status: { type: new GraphQLNonNull(JobSeekingStatusType) },
     education: {
       type: new GraphQLList(EducationType),
       resolve: (parent) => {
@@ -69,32 +72,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       resolve: async (_source, _args, context: ApolloContext, _info): Promise<User[]> => {
         // Implement education resolver
-        return [
-          {
-            id: "usr_03HKPQ4V5N6W7X8Y9Z0",
-            firstName: "Sofia",
-            lastName: "Garcia",
-            email: "sofia.garcia@example.com",
-            phoneNumber: null,
-            webPage: "https://sofiagarcia.io",
-            location: null,
-            bio: null,
-            education: [],
-            connections: [] // Will be populated later
-          },
-          {
-            id: "usr_02HKPQ3W4M5X6Y7Z8A9",
-            firstName: "James",
-            lastName: "Chen",
-            email: "james.chen@example.com",
-            phoneNumber: "+1 (555) 234-5678",
-            webPage: null,
-            location: "Seattle, WA",
-            bio: "Software architect with 10 years of experience",
-            education: [],
-            connections: [] // Will be populated later
-          }
-        ]
+        return []
       }
     },
   }),

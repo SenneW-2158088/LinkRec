@@ -44,12 +44,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),
-      extensions: {
-        directives: {
-          user: { id: "zemmel" },
-          test: { id: "zemmel" }
-        },
-      },
+      extensions: { directives: { user: { }, }, },
     },
     phoneNumber: {
       type: new GraphQLNonNull(GraphQLString),

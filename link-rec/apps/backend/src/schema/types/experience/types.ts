@@ -1,12 +1,30 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql"
+import { GraphQLEnumType, GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql"
+
+export enum ExperienceLevel {
+  ENTRY,
+  MID,
+  SENIOR,
+  LEAD,
+}
 
 export interface Experience {
   id: string,
   title: string,
   company: string,
-  description?: string,
+  description?: string | null,
   years: number,
+  level: ExperienceLevel,
 }
+
+export const ExperienceLevelType = new GraphQLEnumType({
+  name: "ExperienceLevel",
+  values: {
+    entry: { value: "ENTRY" },
+    mid: { value: "MID" },
+    senior: { value: "SENIOR" },
+    lead: { value: "LEAD" },
+  }
+})
 
 export const ExperienceType: GraphQLObjectType = new GraphQLObjectType({
   name: "Experience",
@@ -14,27 +32,18 @@ export const ExperienceType: GraphQLObjectType = new GraphQLObjectType({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },
-    startDate: { type: GraphQLString },
-    endDate: { type: GraphQLString },
     description: { type: GraphQLString },
+    years: { type: new GraphQLNonNull(GraphQLInt) },
+    level: { type: new GraphQLNonNull(ExperienceLevelType) }
   })
 });
-
-export interface ExperienceInput {
-  title: string,
-  company: string,
-  startDate?: string
-  endDate?: string
-  description?: string
-}
 
 export const ExperienceInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: "ExperienceInput",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },
-    startDate: { type: GraphQLString },
-    endDate: { type: GraphQLString },
     description: { type: GraphQLString },
+    years: { type: new GraphQLNonNull(GraphQLInt) },
   })
 });

@@ -5,8 +5,8 @@ import { Database } from "../../db/database";
 import { Employer, User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
-import { EmployerInput, employerInputSchema } from "../../validation/employer";
 import { employerTable } from "../../db/schema/employerSchema";
+import { Validation } from "../../validation";
 
 export class EmployerService{
   private TABLE = employerTable
@@ -14,9 +14,9 @@ export class EmployerService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async create_employer(input: EmployerInput): Promise<Employer> {
+  async create_employer(input: Validation.Employer.Register): Promise<Employer> {
 
-    employerInputSchema.parse(input);
+    Validation.Employer.registerSchema.parse(input);
 
     const [inserted] = await this.db.insert(this.TABLE).values({
       email: input.email,

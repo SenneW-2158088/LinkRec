@@ -5,7 +5,7 @@ const NAME_MAX_LENGTH = 50;
 const BIO_MAX_LENGTH = 500;
 const PASSWORD_MIN_LENGTH = 8;
 
-export const employerloginInputSchema = z.object({
+export const employerloginSchema = z.object({
   email: z.string({
     required_error: "Email is required",
     invalid_type_error: "Email name must be a string",
@@ -16,9 +16,9 @@ export const employerloginInputSchema = z.object({
   }),
 });
 
-export type EmployerLoginInput = z.infer<typeof employerloginInputSchema>;
+export type EmployerLogin = z.infer<typeof employerloginSchema>;
 
-export const employerInputSchema = z.object({
+export const employerRegisterSchema = z.object({
   name: z
     .string({
       required_error: "Company name is required",
@@ -78,4 +78,4 @@ export const employerInputSchema = z.object({
     .transform(loc => loc?.trim() || null),
 });
 
-export type EmployerInput = z.infer<typeof employerInputSchema>;
+export type EmployerRegister = z.infer<typeof employerRegisterSchema>;

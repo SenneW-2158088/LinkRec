@@ -1,7 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql"
 import { LoginInputType, User, UserType } from "../user"
 import { ApolloContext } from "../../../apollo_server";
-import { loginInput } from "../../../validation/user";
+import { LoginInput } from "../../../validation/user";
 
 export const userQuery: GraphQLFieldConfig<any, any> = {
   type: UserType,

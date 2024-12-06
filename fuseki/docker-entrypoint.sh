@@ -42,7 +42,7 @@ fi
     cp "$FUSEKI_HOME/config.ttl" "$FUSEKI_BASE/config.ttl"
 # fi
 
-cp -r -n "$FUSEKI_HOME/reasoner_rules" "$FUSEKI_BASE/"
+cp -r "$FUSEKI_HOME/reasoner_rules" "$FUSEKI_BASE/"
 
 # $ADMIN_PASSWORD only modifies if ${ADMIN_PASSWORD}
 # is in shiro.ini

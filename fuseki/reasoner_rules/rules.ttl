@@ -1,39 +1,70 @@
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-@prefix job:  <http://example.org/job/>
-@prefix skill: <http://example.org/skill/>
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:         <http://www.w3.org/2002/07/owl#>
+
+@prefix foaf:        <http://xmlns.com/foaf/0.1/>
+@prefix wd:  <http://www.wikidata.org/entity/> .
+@prefix gn:  <https://www.geonames.org/ontology#> .
+@prefix vcard: http://www.w3.org/2006/vcard/ns#
+
+@prefix user: <http://linkrec:8080/ontology/user/> .
+@prefix experience: <http://linkrec:8080/ontology/experience/> .
+@prefix requirement: <http://linkrec:8080/ontology/requirement/> .
+@prefix education: <http://linkrec:8080/ontology/education/> .
+@prefix job:  <http://linkrec:8080/ontology/job/> .
+@prefix skill:  <http://linkrec:8080/ontology/skill/> .
+@prefix lr_user: <http://linkrec:8080/user/> .
+@prefix lr_experience: <http://linkrec:8080/experience/> .
+@prefix lr_requirement: <http://linkrec:8080/requirement/> .
+@prefix lr_education: <http://linkrec:8080/education/> .
+@prefix lr_job:  <http://linkrec:8080/job/> .
+@prefix lr_skill:  <http://linkrec:8080/skill/> .
+
+# OWL inferencing
+[owlSameAsInference:
+    (?x owl:sameAs ?y)
+    (?s ?y ?o)
+    ->
+    (?s ?x ?o)
+]
 
 # Skill hierarchy inference
-[skillInference:
-    (?skill1 rdfs:subClassOf ?category)
-    (?job job:requiresSkill ?skill1)
+# Example: If a Web Developer is a subSkillOf a Software Developer,
+# and a Software Developer is a subSkillOf a Developer,
+# then a Web Developer is a subSkillOf a Developer
+#
+# We can now find all users that have a skill which is
+# a subSkillOf developer (even Web Developer)
+[userSkillInference:
+    (?experience experience:hasTitle ?experienceSkill)
+    (?experienceSkill skill:subSkillOf ?skill)
     ->
-    (?job job:requiresSkill ?category)
+    (?experience user:hasSkill ?skill)
 ]
+
+#[userLocationInference:
+    # if use lives in a city, then the user lives in the country of the city (parentFeature)
+#]
+
+# Education Inference
+# TODO
 
 # Experience level inference
 [experienceLevelInference:
-    (?job job:yearsRequired ?years)
-    (?level job:minYears ?min)
-    (?level job:maxYears ?max)
+    (?experience experience:hasYears ?years)
+    (?level experience:hasMinYears ?min)
+    (?level experience:hasMaxYears ?max)
     ge(?years, ?min)
     le(?years, ?max)
     ->
-    (?job job:experienceLevel ?level)
+    (?experience experience:hasExperienceLevel ?level)
 ]
-
-# Skill equivalence inference
-[skillEquivalence:
-    (?skill1 job:equivalentTo ?skill2)
-    (?job job:requiresSkill ?skill1)
+[requirementExperienceLevelInference:
+    (?requirement requirement:requiredYears ?years)
+    (?level experience:hasMinYears ?min)
+    (?level experience:hasMaxYears ?max)
+    ge(?years, ?min)
+    le(?years, ?max)
     ->
-    (?job job:requiresSkill ?skill2)
-]
-
-# If a job requires a skill, it also requires all of the skill's subskills
-[titleHierarchy:
-    (?title1 rdfs:subClassOf ?title2)
-    (?job job:requiresTitle ?title2)
-    ->
-    (?job job:requiresTitle ?title1)
+    (?requirement experience:hasExperienceLevel ?level)
 ]

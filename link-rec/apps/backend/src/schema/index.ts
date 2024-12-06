@@ -1,4 +1,4 @@
-import { GraphQLFieldConfig, GraphQLObjectType, GraphQLSchema } from "graphql";
+import { GraphQLDirective, GraphQLFieldConfig, GraphQLObjectType, GraphQLSchema } from "graphql";
 import { userQueries } from "./types/user/queries";
 import { userMutations } from "./types/user/mutations";
 import { educationMutations } from "./types/education/mutations";

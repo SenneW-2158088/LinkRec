@@ -35,17 +35,33 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
   fields: () => ({
     id: {
       type: GraphQLID,
-      extensions: { directives: { user: {} } },
     },
-    firstName: { type: new GraphQLNonNull(GraphQLString) },
-    lastName: { type: new GraphQLNonNull(GraphQLString) },
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
     email: {
       type: new GraphQLNonNull(GraphQLString),
-      extensions: { directives: { user: {} } },
+      extensions: {
+        directives: {
+          user: { id: "zemmel" },
+          test: { id: "zemmel" }
+        },
+      },
     },
-    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
-    webPage: { type: GraphQLString },
-    location: { type: GraphQLString },
+    phoneNumber: {
+      type: new GraphQLNonNull(GraphQLString),
+      // extensions: { directives: { user: {} } },
+    },
+    webPage: {
+      type: GraphQLString
+    },
+    location: {
+      type: GraphQLString,
+      // extensions: { directives: { user: {} } },
+    },
     bio: { type: GraphQLString },
     education: {
       type: new GraphQLList(EducationType),

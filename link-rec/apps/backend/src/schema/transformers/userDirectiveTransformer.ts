@@ -2,8 +2,8 @@ import { getDirective, getDirectives, MapperKind, mapSchema } from "@graphql-too
 import { defaultFieldResolver, GraphQLSchema } from "graphql"
 import { ApolloContext } from "../../apollo_server";
 import { User } from "../types";
-import { UserNotFoundError } from "../../api/errors/userNotFoundError";
-import { UnAuthorizedFieldError } from "../../api/errors/unAuthorizedFieldError";
+import { UnAuthorizedFieldError } from "../../api/errors/authorization";
+import { UserNotFoundError } from "../../api/errors/user";
 
 export interface DirectiveExtensions {
   directives: {
@@ -14,10 +14,15 @@ export interface DirectiveExtensions {
 export const userDirectiveTransformer = (schema: GraphQLSchema) => {
   return mapSchema(schema, {
     [MapperKind.OBJECT_FIELD](fieldConfig, fieldName, typeName, schema) {
-      const directives = fieldConfig.extensions?.directives as DirectiveExtensions["directives"];
+      // const directives = fieldConfig.extensions?.directives as DirectiveExtensions["directives"];
       const defaultResolver = fieldConfig.resolve || defaultFieldResolver;
 
-      if(directives?.user) {
+      const directive = getDirective(schema, fieldConfig, 'user');
+      console.log(fieldName)
+      console.log(directive)
+      console.log("=============================")
+
+      if(directive) {
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
           if (typeName != "User") return fieldConfig;
           if(!context.userId){ throw new UserNotFoundError("jwt"); }
@@ -29,7 +34,9 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
             return result
           }
 
-          throw new UnAuthorizedFieldError();
+          throw new UnAuthorizedFieldError(
+            { field: fieldName }
+          );
 
         }
         return fieldConfig;

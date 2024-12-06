@@ -8,7 +8,7 @@ import { User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { UserInput, userInputSchema } from "../../validation/user";
-import { UserNotFoundError } from "../errors/userNotFoundError";
+import { UserNotFoundError } from "../errors/user";
 
 export class UserService{
   private TABLE = userTable

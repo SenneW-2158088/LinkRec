@@ -1,3 +1,4 @@
+import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 
@@ -29,7 +30,7 @@ export class EmployerService{
       email: inserted.email,
       name: "",
       phoneNumber: "",
-      location: "",
+      jobs: []
     };
 
     // await this.updateRdfUser(user)

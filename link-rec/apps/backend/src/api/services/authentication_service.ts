@@ -1,4 +1,3 @@
-import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
@@ -6,13 +5,11 @@ import { eq } from "drizzle-orm";
 import { userTable } from "../../db/schema/userSchema";
 import { Employer, User } from "../../schema/types";
 import { compare, hash } from "bcrypt";
-import { log } from "console";
-import { GraphQLError } from "graphql";
 import { loginInput, loginInputSchema } from "../../validation/user";
-import { UserNotFoundError } from "../errors/userNotFoundError";
-import { InvalidCredentialsError } from "../errors/invalidCredentialsError";
-import { EmployerInput, EmployerLoginInput, employerloginInputSchema } from "../../validation/employer";
+import { EmployerLoginInput, employerloginInputSchema } from "../../validation/employer";
 import { employerTable } from "../../db/schema/employerSchema";
+import { UserNotFoundError } from "../errors/user";
+import { InvalidCredentialsError } from "../errors/authorization";
 
 export class AuthenticationService{
   private USER_TABLE = userTable
@@ -44,7 +41,7 @@ export class AuthenticationService{
       email: user.email,
       name: "",
       phoneNumber: "",
-      location: "",
+      jobs: [],
     }
   }
 

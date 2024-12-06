@@ -4,9 +4,8 @@ export interface Experience {
   id: string,
   title: string,
   company: string,
-  startDate?: string
-  endDate?: string
-  description?: string
+  description?: string,
+  years: number,
 }
 
 export const ExperienceType: GraphQLObjectType = new GraphQLObjectType({

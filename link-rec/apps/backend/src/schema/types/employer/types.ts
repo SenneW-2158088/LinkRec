@@ -1,4 +1,5 @@
 import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { Job } from "../job";
 
 export interface Employer {
   id: string;
@@ -6,7 +7,7 @@ export interface Employer {
   email: string;
   phoneNumber: string;
   webPage?: string | null;
-  location?: string | null;
+  jobs: Job[];
 }
 
 export interface EmployerAuthPayload {

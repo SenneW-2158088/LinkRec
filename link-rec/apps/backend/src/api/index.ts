@@ -3,10 +3,10 @@ import { Database } from "../db/database";
 import { UserService } from "./services";
 import { AuthenticationService } from "./services/authentication_service";
 import { SparqlAPI } from "./sparql/sparql_api";
-import { LinkRecError } from "./errors/error";
 import { z } from "zod";
-import { ValidationError } from "./errors/validationError";
 import { EmployerService } from "./services/employer_service";
+import { LinkRecError } from "./errors";
+import { ValidationError } from "./errors/validation";
 
 export * from "./services"
 

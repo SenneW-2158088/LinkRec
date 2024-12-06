@@ -89,6 +89,22 @@ class Dataset:
         for item in bachelor_degrees:
             self.dataset += f"<{item['degree']['value']}> wd:P31 wd:wd:Q253440 .\n"
             self.dataset += f"<{item['degree']['value']}> rdfs:label \"{item['degreeLabel']['value']}\".\n"
+    
+    def languages(self):
+        global dataset
+        languages_query = """
+        SELECT ?language ?languageLabel
+        WHERE {
+        ?language wdt:P31 wd:Q33742 ;
+            rdfs:label ?languageLabel 
+            FILTER(LANG(?languageLabel) = "en") .
+        }
+        ORDER BY ?languageLabel
+        """
+        languages = query_wd(languages_query)
+        for item in languages:
+            self.dataset += f"<{item['language']['value']}> rdf:type language:Language .\n"
+            self.dataset += f"<{item['language']['value']}> rdfs:label \"{item['languageLabel']['value']}\".\n"
 
 
 with open("wikidata_subsets.ttl", "w") as file:

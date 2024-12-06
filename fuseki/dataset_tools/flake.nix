@@ -15,7 +15,10 @@
     {
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = with pkgs; [ python311 ] ++
+          packages = with pkgs; [
+            python311
+            librdf_raptor2
+          ] ++
             (with pkgs.python311Packages; [
               requests
             ]);

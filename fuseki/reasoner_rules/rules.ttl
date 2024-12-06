@@ -39,12 +39,12 @@
     (?experience experience:hasTitle ?experienceSkill)
     (?experienceSkill skill:subSkillOf ?skill)
     ->
-    (?experience user:hasSkill ?skill)
+    (?experience experience:hasTitle ?skill)
 ]
 
-#[userLocationInference:
-    # if use lives in a city, then the user lives in the country of the city (parentFeature)
-#]
+# [userLocationInference:
+# if use lives in a city, then the user lives in the country of the city (parentFeature)
+# ]
 
 # Education Inference
 # TODO

@@ -1,9 +1,0 @@
-PREFIX owl:         <http://www.w3.org/2002/07/owl#>
-PREFIX rdf:         <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-# see specification: http://xmlns.com/foaf/spec/
-PREFIX foaf:        <http://xmlns.com/foaf/0.1/>
-PREFIX linkrec:     <http://linkrec:8080/>
-PREFIX lro:         <#> # empty prefix for the LinkRec ontology
-
-lro:Connection a owl:ObjectProperty .
-lro:User a foaf:Person .

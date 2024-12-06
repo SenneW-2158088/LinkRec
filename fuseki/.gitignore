@@ -5,3 +5,5 @@ logs
 backups
 databases
 fuseki-data
+
+wikidata_subsets.ttl

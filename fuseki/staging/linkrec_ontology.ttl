@@ -75,7 +75,7 @@ employer:hasJob a rdf:Property ; # -> job:Job
 
 # EXPERIENCE
 experience:Experience a rdf:Class .
-experience:hasTitle a rdf:Property ;
+experience:hasProfession a rdf:Property ;
     owl:sameAs vcard:hasTitle . # wd:Q28640 or Profession
 experience:hasDescription a rdf:Property ;
     owl:sameAs vcard:hasNote .
@@ -86,8 +86,10 @@ experience:hasExperienceLevel a rdf:Property . # -> experience:ExperienceLevel
 
 # REQUIREMENT
 requirement:Requirement a rdf:Class .
-requirement:hasTitle a rdf:Property ;
+requirement:hasProfession a rdf:Property ;
     owl:sameAs vcard:hasTitle . # wd:Q28640 or Profession
+requirement:hasLanguage a rdf:Property . # -> language:Language
+requirement:hasEducation a rdf:Property . # -> education:Education
 requirement:hasDescription a rdf:Property ;
     owl:sameAs vcard:hasNote .
 requirement:requiredYears a rdf:Property .

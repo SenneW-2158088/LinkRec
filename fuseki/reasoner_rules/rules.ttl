@@ -36,10 +36,10 @@
 # We can now find all users that have a profession which is
 # a subProfessionOf developer (even Web Developer)
 [userProfessionInference:
-    (?experience experience:hasTitle ?experienceProfession)
+    (?experience experience:hasProfession ?experienceProfession)
     (?experienceProfession profession:subProfessionOf ?profession)
     ->
-    (?experience experience:hasTitle ?profession)
+    (?experience experience:hasProfession ?profession)
 ]
 
 # Education Inference
@@ -66,11 +66,15 @@
 ]
 
 [userJobMatchingInference:
-    (?user user:hasExperience ?experience)
-    (?experience experience:hasTitle ?skill)
-    (?job job:requiresSkill ?skill)
-    (?job job:requiresExperienceLevel ?level)
-    (?experience experience:hasExperienceLevel ?level)
+    # Location matches
+    (?user user:hasLocation ?userLocation)
+    (?job job:requiresLocation ?jobLocation)
+
+    (?job job:hasRequirement ?requirement)
+    (?requirement requirement:hasLanguage ?language)
+    (?user user:hasLanguage ?language)
+
+    (?requirement requirement:hasEducation ?education)
     ->
-    (?user user:matchesJob ?job)
+    (?user user:matchesRequirement ?requirementh)
 ]

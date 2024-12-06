@@ -12,13 +12,13 @@
 @prefix requirement: <http://linkrec:8080/ontology/requirement/> .
 @prefix education: <http://linkrec:8080/ontology/education/> .
 @prefix job:  <http://linkrec:8080/ontology/job/> .
-@prefix skill:  <http://linkrec:8080/ontology/skill/> .
+@prefix profession:  <http://linkrec:8080/ontology/profession/> .
 @prefix lr_user: <http://linkrec:8080/user/> .
 @prefix lr_experience: <http://linkrec:8080/experience/> .
 @prefix lr_requirement: <http://linkrec:8080/requirement/> .
 @prefix lr_education: <http://linkrec:8080/education/> .
 @prefix lr_job:  <http://linkrec:8080/job/> .
-@prefix lr_skill:  <http://linkrec:8080/skill/> .
+@prefix lr_profession:  <http://linkrec:8080/profession/> .
 
 # OWL inferencing
 [owlSameAsInference:
@@ -28,18 +28,18 @@
     (?s ?x ?o)
 ]
 
-# Skill hierarchy inference
-# Example: If a Web Developer is a subSkillOf a Software Developer,
-# and a Software Developer is a subSkillOf a Developer,
-# then a Web Developer is a subSkillOf a Developer
+# Profession hierarchy inference
+# Example: If a Web Developer is a subProfessionOf a Software Developer,
+# and a Software Developer is a subProfessionOf a Developer,
+# then a Web Developer is a subProfessionOf a Developer
 #
-# We can now find all users that have a skill which is
-# a subSkillOf developer (even Web Developer)
-[userSkillInference:
-    (?experience experience:hasTitle ?experienceSkill)
-    (?experienceSkill skill:subSkillOf ?skill)
+# We can now find all users that have a profession which is
+# a subProfessionOf developer (even Web Developer)
+[userProfessionInference:
+    (?experience experience:hasTitle ?experienceProfession)
+    (?experienceProfession profession:subProfessionOf ?profession)
     ->
-    (?experience experience:hasTitle ?skill)
+    (?experience experience:hasTitle ?profession)
 ]
 
 # [userLocationInference:

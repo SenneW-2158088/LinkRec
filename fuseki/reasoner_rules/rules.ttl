@@ -65,16 +65,40 @@
     (?requirement experience:hasExperienceLevel ?level)
 ]
 
-[userJobMatchingInference:
+[userJobMatchingProfessionInference:
     # Location matches
     (?user user:hasLocation ?userLocation)
     (?job job:requiresLocation ?jobLocation)
 
+    # Experience matches
+    (?job job:hasRequirement ?requirement)
+    (?requirement requirement:hasProfession ?profession)
+    (?user user:hasExperience ?experience)
+    (?experience experience:hasProfession ?profession)
+    ->
+    (?user user:matchesRequirement ?requirement)
+]
+[userJobMatchingLanguageInference:
+    # Location matches
+    (?user user:hasLocation ?userLocation)
+    (?job job:requiresLocation ?jobLocation)
+
+    # Language matches
     (?job job:hasRequirement ?requirement)
     (?requirement requirement:hasLanguage ?language)
     (?user user:hasLanguage ?language)
-
-    (?requirement requirement:hasEducation ?education)
     ->
-    (?user user:matchesRequirement ?requirementh)
+    (?user user:matchesRequirement ?requirement)
+]
+[userJobMatchingEducationInference:
+    # Location matches
+    (?user user:hasLocation ?userLocation)
+    (?job job:requiresLocation ?jobLocation)
+
+    # Education matches
+    (?job job:hasRequirement ?requirement)
+    (?requirement requirement:hasEducation ?education)
+    (?user user:hasEducation ?education)
+    ->
+    (?user user:matchesRequirement ?requirement)
 ]

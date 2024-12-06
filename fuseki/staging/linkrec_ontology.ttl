@@ -53,9 +53,9 @@ user:knows a rdf:Property ;
     owl:sameAs foaf:knows .
 user:hasLanguage a rdf:Property ;
     owl:sameAs vcard:hasLanguage .
-user:hasExperience a rdf:Property . # -> experience:experience
-user:hasEducation a rdf:Property . # -> education:education
-user:matchesJob a rdf:Property . # -> job:Job
+user:hasExperience a rdf:Property . # -> experience:Experience
+user:hasEducation a rdf:Property . # -> education:Education
+user:matchesRequirement a rdf:Property . # -> requirement:Requirement
 
 # EMPLOYERS
 employer:Employer a vcard:Individual ;

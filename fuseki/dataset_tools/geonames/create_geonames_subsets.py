@@ -42,4 +42,4 @@ for index, row in filtered_df.iterrows():
 with open('geonames_subsets.ttl', 'w', encoding='utf-8') as ttl_file:
     ttl_file.write("\n".join(ttl_output))
 
-print("TTL file has been created successfully.")
+print("Geonames TTL file has been created successfully.")

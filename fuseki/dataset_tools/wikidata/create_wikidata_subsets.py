@@ -64,7 +64,7 @@ class Dataset:
         SELECT ?degree ?degreeLabel
         WHERE {
         ?degree wdt:P31 wd:Q183816 ;
-            rdfs:label ?degreeLabel 
+            rdfs:label ?degreeLabel
             FILTER(LANG(?degreeLabel) = "en") .
         }
         ORDER BY ?degreeLabel
@@ -80,7 +80,7 @@ class Dataset:
         SELECT ?degree ?degreeLabel
         WHERE {
         ?degree wdt:P31 wd:Q163727 ;
-            rdfs:label ?degreeLabel 
+            rdfs:label ?degreeLabel
             FILTER(LANG(?degreeLabel) = "en") .
         }
         ORDER BY ?degreeLabel
@@ -89,14 +89,14 @@ class Dataset:
         for item in bachelor_degrees:
             self.dataset += f"<{item['degree']['value']}> wd:P31 wd:wd:Q253440 .\n"
             self.dataset += f"<{item['degree']['value']}> rdfs:label \"{item['degreeLabel']['value']}\".\n"
-    
+
     def languages(self):
         global dataset
         languages_query = """
         SELECT ?language ?languageLabel
         WHERE {
         ?language wdt:P31 wd:Q33742 ;
-            rdfs:label ?languageLabel 
+            rdfs:label ?languageLabel
             FILTER(LANG(?languageLabel) = "en") .
         }
         ORDER BY ?languageLabel
@@ -109,3 +109,4 @@ class Dataset:
 
 with open("wikidata_subsets.ttl", "w") as file:
     file.write(Dataset().dataset)
+    print("Wikidata TTL File created successfully")

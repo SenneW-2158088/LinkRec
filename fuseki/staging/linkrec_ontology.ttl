@@ -8,6 +8,7 @@
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 
 @prefix user: <http://linkrec:8080/ontology/user/> .
+@prefix employer: <http://linkrec:8080/ontology/employer/> .
 @prefix experience: <http://linkrec:8080/ontology/experience/> .
 @prefix requirement: <http://linkrec:8080/ontology/requirement/> .
 @prefix education: <http://linkrec:8080/ontology/education/> .
@@ -15,6 +16,7 @@
 @prefix profession:  <http://linkrec:8080/ontology/profession/> .
 @prefix language: <http://linkrec:8080/ontology/language/> .
 @prefix languageLevel: <http://linkrec:8080/ontology/languageLevel/> .
+@prefix location: <http://linkrec:8080/ontology/location/> .
 @prefix lr_user: <http://linkrec:8080/user/> .
 @prefix lr_experience: <http://linkrec:8080/experience/> .
 @prefix lr_requirement: <http://linkrec:8080/requirement/> .
@@ -46,15 +48,30 @@ user:hasGender a rdf:Property ;
     owl:sameAs vcard:hasGender ;
     owl:sameAs foaf:gender .
 # see http://www.geonames.org/ontology/documentation.html
-user:hasLocation a rdf:Property ; # -> gn:name
-    owl:sameAs vcard:hasGeo ;
-    owl:sameAs foaf:based_near .
+user:hasLocation a rdf:Property . # -> location:Location
 user:knows a rdf:Property ;
     owl:sameAs foaf:knows .
 user:hasLanguage a rdf:Property ;
     owl:sameAs vcard:hasLanguage .
 user:hasExperience a rdf:Property . # -> experience:experience
 user:hasEducation a rdf:Property . # -> education:education
+user:matchesJob a rdf:Property . # -> job:Job
+
+# EMPLOYERS
+employer:Employer a vcard:Individual ;
+    a foaf:Organization .
+employer:hasEmail a rdf:Property ;
+    owl:sameAs vcard:hasEmail ;
+    owl:sameAs foaf::mbox .
+employer:hasName a rdf:Property ;
+    owl:sameAs vcard:hasName ;
+    owl:sameAs foaf::name .
+employer:hasPhoneNumber a rdf:Property ;
+    owl:sameAs vcard:hasTelephone ;
+    owl:sameAs foaf::phone .
+employer:hasWebPage a rdf:Property ;
+    owl:sameAs foaf::page .
+employer:hasJob a rdf:Property ; # -> job:Job
 
 # EXPERIENCE
 experience:Experience a rdf:Class .
@@ -88,13 +105,19 @@ experience:Senior a experience:ExperienceLevel ;
 experience:Lead a experience:ExperienceLevel ;
     experience:hasMinYears 8 .
 
+# LOCATION
+location:Location a rdf:Class .
+location:hasName a rdf:Property ;
+    owl:sameAs gn:name .
+location:hasAlternateName a rdf:Property ;
+    owl:sameAs gn:alternateName .
+
 # JOB/VACANCY POST
 job:Job a rdf:Class .
 job:hasTitle a rdf:Property ;
     owl:sameAs foaf:title .
 job:hasRequirement a rdf:Property . # -> requirement:Requirement
-job:hasLocation a rdf:Property ; # -> gn:name
-    owl:sameAs foaf:based_near .
+job:hasLocation a rdf:Property . # -> location:Location
 job:isActive a rdf:Property . # -> boolean
 job:hasEmployer a rdf:Property . # -> user:User
 

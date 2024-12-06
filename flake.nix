@@ -41,7 +41,14 @@
           docker
           docker-compose
           docker-client
-        ];
+
+          python311
+          librdf_raptor2
+        ] ++
+          (with pkgs.python311Packages; [
+            requests
+            pandas
+          ]);
       };
     });
 }

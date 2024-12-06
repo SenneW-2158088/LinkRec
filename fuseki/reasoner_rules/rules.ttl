@@ -1,3 +1,4 @@
+
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:         <http://www.w3.org/2002/07/owl#>
@@ -5,20 +6,27 @@
 @prefix foaf:        <http://xmlns.com/foaf/0.1/>
 @prefix wd:  <http://www.wikidata.org/entity/> .
 @prefix gn:  <https://www.geonames.org/ontology#> .
-@prefix vcard: http://www.w3.org/2006/vcard/ns#
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 
 @prefix user: <http://linkrec:8080/ontology/user/> .
+@prefix employer: <http://linkrec:8080/ontology/employer/> .
 @prefix experience: <http://linkrec:8080/ontology/experience/> .
 @prefix requirement: <http://linkrec:8080/ontology/requirement/> .
 @prefix education: <http://linkrec:8080/ontology/education/> .
 @prefix job:  <http://linkrec:8080/ontology/job/> .
 @prefix profession:  <http://linkrec:8080/ontology/profession/> .
+@prefix language: <http://linkrec:8080/ontology/language/> .
+@prefix languageLevel: <http://linkrec:8080/ontology/languageLevel/> .
+@prefix location: <http://linkrec:8080/ontology/location/> .
 @prefix lr_user: <http://linkrec:8080/user/> .
 @prefix lr_experience: <http://linkrec:8080/experience/> .
 @prefix lr_requirement: <http://linkrec:8080/requirement/> .
 @prefix lr_education: <http://linkrec:8080/education/> .
 @prefix lr_job:  <http://linkrec:8080/job/> .
 @prefix lr_profession:  <http://linkrec:8080/profession/> .
+@prefix lr_language: <http://linkrec:8080/language/> .
+@prefix lr_languageLevel: <http://linkrec:8080/languageLevel/> .
+
 
 # OWL inferencing
 [owlSameAsInference:
@@ -42,8 +50,55 @@
     (?experience experience:hasProfession ?profession)
 ]
 
-# Education Inference
-# TODO
+[jobLocationInference:
+    (?job job:hasLocation ?locationName)
+    (?location location:hasName ?locationName)
+    ->
+    (?job job:hasLocation ?location)
+]
+
+
+[userLocationInference:
+    (?user user:hasLocation ?locationName)
+    (?location location:hasName ?locationName)
+    ->
+    (?user user:hasLocation ?location)
+]
+
+[userLanguageInference:
+    (?user user:hasLanguage ?languageName)
+    (?language rdfs:label ?languageName)
+    ->
+    (?user user:hasLanguage ?language)
+]
+
+[userEducationInference:
+    (?user user:hasEducation ?educationName)
+    (?education rdfs:label ?educationName)
+    ->
+    (?user user:hasEducation ?education)
+]
+
+[requirementProfessionInference:
+    (?requirement requirement:hasProfession ?requirementProfession)
+    (?requirementProfession profession:subProfessionOf ?profession)
+    ->
+    (?requirement requirement:hasProfession ?profession)
+]
+
+[requirementLanguageInference:
+    (?requirement requirement:hasLanguage ?languageName)
+    (?language rdfs:label ?languageName)
+    ->
+    (?requirement requirement:hasLanguage ?language)
+]
+
+[requirementEducationInference:
+    (?requirement requirement:hasEducation ?educationName)
+    (?education rdfs:label ?educationName)
+    ->
+    (?requirement requirement:hasEducation ?education)
+]
 
 # Experience level inference
 [experienceLevelInference:
@@ -55,6 +110,7 @@
     ->
     (?experience experience:hasExperienceLevel ?level)
 ]
+
 [requirementExperienceLevelInference:
     (?requirement requirement:requiredYears ?years)
     (?level experience:hasMinYears ?min)
@@ -66,11 +122,11 @@
 ]
 
 [userJobMatchingProfessionInference:
-    # Location matches
+# Location matches
     (?user user:hasLocation ?userLocation)
-    (?job job:requiresLocation ?jobLocation)
+    (?job job:hasLocation ?jobLocation)
 
-    # Experience matches
+# Experience matches
     (?job job:hasRequirement ?requirement)
     (?requirement requirement:hasProfession ?profession)
     (?user user:hasExperience ?experience)
@@ -79,11 +135,11 @@
     (?user user:matchesRequirement ?requirement)
 ]
 [userJobMatchingLanguageInference:
-    # Location matches
+# Location matches
     (?user user:hasLocation ?userLocation)
-    (?job job:requiresLocation ?jobLocation)
+    (?job job:hasLocation ?jobLocation)
 
-    # Language matches
+# Language matches
     (?job job:hasRequirement ?requirement)
     (?requirement requirement:hasLanguage ?language)
     (?user user:hasLanguage ?language)
@@ -91,11 +147,11 @@
     (?user user:matchesRequirement ?requirement)
 ]
 [userJobMatchingEducationInference:
-    # Location matches
+# Location matches
     (?user user:hasLocation ?userLocation)
-    (?job job:requiresLocation ?jobLocation)
+    (?job job:hasLocation ?jobLocation)
 
-    # Education matches
+# Education matches
     (?job job:hasRequirement ?requirement)
     (?requirement requirement:hasEducation ?education)
     (?user user:hasEducation ?education)

@@ -18,13 +18,17 @@ dataset = ""
 class Dataset:
     def __init__(self):
         self.dataset = """
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix wd:  <http://www.wikidata.org/entity/> .
+
+@prefix language: <http://linkrec:8080/ontology/language/> .
 """
         self.professions()
         self.profession_labels()
         self.bachelor_degrees()
         self.master_degrees()
+        self.languages()
 
     def professions(self):
         # Define the SPARQL query to get the label of a Developer

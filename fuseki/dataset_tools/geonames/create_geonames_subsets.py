@@ -17,7 +17,8 @@ filtered_df = df[df['feature_class'].isin(['A', 'P'])]
 # Initialize the TTL output
 ttl_output = []
 ttl_output.append("@prefix location: <http://fuseki:8080/ontology/location/> .\n")
-
+ttl_output.append("@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n")
+ttl_output.append("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n")
 # Define the base URI for the location
 base_uri = "http://www.geonames.org/"
 
@@ -28,7 +29,7 @@ for index, row in filtered_df.iterrows():
     alternatenames = row['alternatenames'].split(',') if pd.notna(row['alternatenames']) else []
 
     # Add the main location entry
-    ttl_output.append(f"<{base_uri}{geonameid}> a location:Location ;")
+    ttl_output.append(f"<{base_uri}{geonameid}> rdf:type location:Location ;")
     ttl_output.append(f"    location:hasName \"{name}\" ;")
 
     # Add alternate names

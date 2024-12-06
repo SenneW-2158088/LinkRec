@@ -71,7 +71,7 @@ employer:hasPhoneNumber a rdf:Property ;
     owl:sameAs foaf::phone .
 employer:hasWebPage a rdf:Property ;
     owl:sameAs foaf::page .
-employer:hasJob a rdf:Property ; # -> job:Job
+employer:hasJob a rdf:Property . # -> job:Job
 
 # EXPERIENCE
 experience:Experience a rdf:Class .
@@ -123,14 +123,12 @@ job:hasLocation a rdf:Property . # -> location:Location
 job:isActive a rdf:Property . # -> boolean
 job:hasEmployer a rdf:Property . # -> user:User
 
-# SKILLS
+# PROFESSIONS
 profession:Profession a wd:Q28640 . # professions are professions!
 profession:subProfessionOf owl:sameAs wd:P279 . # subclass of
 
 # Language
 language:Language a rdf:Class .
-language:hasName a rdf:Property ;
-    owl:sameAs vcard:hasLanguage .
 
 # EXAMPLES
 wd:Q6859454 a profession:Profession ;

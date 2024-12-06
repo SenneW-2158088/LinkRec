@@ -9,21 +9,14 @@ export const userQuery: GraphQLFieldConfig<any, any> = {
     id: { type: new GraphQLNonNull(GraphQLID) }
   },
   resolve: async (_source, args: { id: User["id"] }, context: ApolloContext, _info) : Promise<User|null> => {
-    return await context.api.userService.getUser(args.id);
-  }
-}
-
-export const loginQuery: GraphQLFieldConfig<any, any> = {
-  type: UserType,
-  args: {
-    input: { type: new GraphQLNonNull(LoginInputType) }
-  },
-  resolve: async (source, args: { input: loginInput }, context: ApolloContext, info): Promise<User> => {
-    return await context.api.authenticationService.login(args.input);
+    try {
+      return await context.api.userService.getUser(args.id);
+    } catch(error) {
+      throw context.api.handleError(error)
+    }
   }
 }
 
 export const userQueries = {
   "user": userQuery,
-  "login": loginQuery,
 }

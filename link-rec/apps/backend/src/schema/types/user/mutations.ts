@@ -1,7 +1,26 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
-import { User, UserInputType, UserType } from "./types";
+import { AuthPayload, AuthPayloadType, LoginInputType, User, UserInputType, UserType } from "./types";
 import { ApolloContext } from "../../../apollo_server";
-import { UserInput } from "../../../validation/user";
+import { loginInput, UserInput } from "../../../validation/user";
+
+export const loginMutation: GraphQLFieldConfig<any, any> = {
+  type: AuthPayloadType,
+  args: {
+    input: { type: new GraphQLNonNull(LoginInputType) }
+  },
+  resolve: async (source, args: { input: loginInput }, context: ApolloContext, info): Promise<AuthPayload> => {
+    try {
+      const user = await context.api.authenticationService.login(args.input);
+      const tokens = await context.jwt.generateTokens({id: user.id});
+      return {
+        user: user,
+        ...tokens
+      }
+    } catch(error) {
+      throw context.api.handleError(error)
+    }
+  }
+}
 
 export const createUserMutation: GraphQLFieldConfig<any, any> = {
   type: UserType,
@@ -14,5 +33,6 @@ export const createUserMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const userMutations = {
-  "createUser": createUserMutation,
+  "login": loginMutation,
+  "register": createUserMutation,
 }

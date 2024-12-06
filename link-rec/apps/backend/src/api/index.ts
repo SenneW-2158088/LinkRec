@@ -1,7 +1,11 @@
+import { GraphQLError } from "graphql";
 import { Database } from "../db/database";
 import { UserService } from "./services";
 import { AuthenticationService } from "./services/authentication_service";
 import { SparqlAPI } from "./sparql/sparql_api";
+import { LinkRecError } from "./errors/error";
+import { z } from "zod";
+import { ValidationError } from "./errors/validationError";
 
 export * from "./services"
 
@@ -29,5 +33,17 @@ export class LinkRecAPI {
 
     this.userService = new UserService(this.context)
     this.authenticationService = new AuthenticationService(this.context)
+  }
+
+  public handleError(error: unknown): GraphQLError {
+    if (error instanceof LinkRecError){
+      return error.toGraphQL()
+    }
+
+    if(error instanceof z.ZodError) {
+      return ValidationError.fromZodError(error).toGraphQL();
+    }
+
+    return new GraphQLError("Unexpected error occured");
   }
 }

@@ -9,6 +9,8 @@ import { compare, hash } from "bcrypt";
 import { log } from "console";
 import { GraphQLError } from "graphql";
 import { loginInput, loginInputSchema } from "../../validation/user";
+import { UserNotFoundError } from "../errors/userNotFoundError";
+import { InvalidCredentialsError } from "../errors/invalidCredentialsError";
 
 export class AuthenticationService{
   private TABLE = userTable
@@ -27,14 +29,14 @@ export class AuthenticationService{
       .limit(1);
 
     if (!user) {
-      console.log("no user found")
-      throw new Error("No user found");
+      throw new UserNotFoundError(input.email);
     }
 
     if(!await compare(input.password, user.password)){
-      throw new GraphQLError("invalid password");
+      throw new InvalidCredentialsError();
     }
 
+    // TODO: add sparql data
     return {
       ...user,
       firstName: "empy",

@@ -8,6 +8,7 @@ import { User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { UserInput, userInputSchema } from "../../validation/user";
+import { UserNotFoundError } from "../errors/userNotFoundError";
 
 export class UserService{
   private TABLE = userTable
@@ -23,10 +24,17 @@ export class UserService{
       .limit(1);
 
     if (!user) {
-      return null;
+      throw new UserNotFoundError(id);
     }
 
-    return null;
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: "",
+      lastName: "",
+      education: [],
+      connections: []
+    };
   }
 
   async createUser(input: UserInput): Promise<User> {

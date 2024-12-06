@@ -12,6 +12,7 @@ import { sign as signJwt, verify as verifyJwt } from "jsonwebtoken";
 import { Request } from "express";
 import { User } from "./schema/types";
 import { jwtMiddleware } from "./middleware/jwtMiddleware";
+import JwtService from "./jwt";
 
 const dbConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -25,9 +26,14 @@ const dbConfig: DatabaseConfig = {
 
 const db = new Database(dbConfig);
 
+export interface JwtPayload {
+  id: string
+}
+
 export interface ApolloContext {
   api: LinkRecAPI,
-  user?: User | null,
+  jwt: JwtService<JwtPayload>,
+  userId?: string | null,
 }
 
 export function createApolloServer() {
@@ -43,6 +49,7 @@ export function createApolloContext() {
   return {
     context: async ({req}: ExpressContextFunctionArgument): Promise<ApolloContext> => {
       let context: ApolloContext = {
+        jwt: new JwtService(),
         api: new LinkRecAPI({
           db: db,
           sparql: new SparqlAPI({

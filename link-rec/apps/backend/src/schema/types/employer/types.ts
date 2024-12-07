@@ -1,4 +1,5 @@
 import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { Job } from "../job";
 
 export interface Employer {
   id: string;
@@ -6,23 +7,8 @@ export interface Employer {
   email: string;
   phoneNumber: string;
   webPage?: string | null;
-  location?: string | null;
+  jobs: Job.Type[];
 }
-
-export interface EmployerAuthPayload {
-  employer: Employer,
-  access: string,
-  refresh: string,
-}
-
-export const EmployerAuthPayloadType: GraphQLObjectType = new GraphQLObjectType({
-  name: "EmployerAuthPayload",
-  fields: () => ({
-    employer: { type: new GraphQLNonNull(EmployerType) },
-    access: { type: new GraphQLNonNull(GraphQLString) },
-    refresh: { type: new GraphQLNonNull(GraphQLString) },
-  })
-})
 
 export const EmployerType: GraphQLObjectType = new GraphQLObjectType({
   name: "Employer",

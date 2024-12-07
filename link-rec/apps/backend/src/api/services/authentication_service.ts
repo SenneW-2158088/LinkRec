@@ -1,4 +1,3 @@
-import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
@@ -6,13 +5,11 @@ import { eq } from "drizzle-orm";
 import { userTable } from "../../db/schema/userSchema";
 import { Employer, User } from "../../schema/types";
 import { compare, hash } from "bcrypt";
-import { log } from "console";
-import { GraphQLError } from "graphql";
-import { loginInput, loginInputSchema } from "../../validation/user";
-import { UserNotFoundError } from "../errors/userNotFoundError";
-import { InvalidCredentialsError } from "../errors/invalidCredentialsError";
-import { EmployerInput, EmployerLoginInput, employerloginInputSchema } from "../../validation/employer";
+import { LoginInput, loginInputSchema } from "../../validation/user";
 import { employerTable } from "../../db/schema/employerSchema";
+import { UserNotFoundError } from "../errors/user";
+import { InvalidCredentialsError } from "../errors/authorization";
+import { Validation } from "../../validation";
 
 export class AuthenticationService{
   private USER_TABLE = userTable
@@ -21,9 +18,9 @@ export class AuthenticationService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async employer_login(input: EmployerLoginInput): Promise<Employer> {
+  async employer_login(input: Validation.Employer.Login): Promise<Employer> {
 
-    employerloginInputSchema.parse(input);
+    Validation.Employer.loginSchema.parse(input);
 
     const [user] = await this.db
       .select()
@@ -44,11 +41,11 @@ export class AuthenticationService{
       email: user.email,
       name: "",
       phoneNumber: "",
-      location: "",
+      jobs: [],
     }
   }
 
-  async user_login(input: loginInput): Promise<User> {
+  async user_login(input: LoginInput): Promise<User> {
 
     loginInputSchema.parse(input);
 

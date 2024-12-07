@@ -16,7 +16,9 @@ export const loginInputSchema = z.object({
   }),
 });
 
-export type loginInput = z.infer<typeof loginInputSchema>;
+export type LoginInput = z.infer<typeof loginInputSchema>;
+
+export const JobSeekingStatus = z.enum(['Red', 'Green', 'Blue']);
 
 export const userInputSchema = z.object({
   firstName: z
@@ -60,6 +62,8 @@ export const userInputSchema = z.object({
     .max(320, "Email address is too long")
     .transform(email => email.toLowerCase().trim()),
 
+  status: JobSeekingStatus,
+
   phoneNumber: z
     .string({
       required_error: "Phone number is required",
@@ -95,4 +99,4 @@ export const userInputSchema = z.object({
     .transform(bio => bio?.trim() || null),
 });
 
-export type UserInput = z.infer<typeof userInputSchema>;
+export type RegisterInput = z.infer<typeof userInputSchema>;

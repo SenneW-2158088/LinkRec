@@ -10,14 +10,9 @@ export const jobQuery: GraphQLFieldConfig<any, any> = {
     return {
       id: "1",
       title: "",
-      employer: "",
       location: "",
       requirements: [],
-      isActive: false
+      active: false
     }
   }
-}
-
-export const jobQueries = {
-  "job": jobQuery
 }

@@ -5,6 +5,7 @@ import { ApolloServer } from '@apollo/server'
 import { ApolloContext, createApolloContext, createApolloServer } from './apollo_server'
 import { CONFIG } from "./config/config";
 import jwt from 'jsonwebtoken'
+import { GQLTypes } from './schema/types';
 
 const app = express()
 

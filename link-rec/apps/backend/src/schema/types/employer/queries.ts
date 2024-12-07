@@ -12,10 +12,7 @@ export const employerQuery: GraphQLFieldConfig<any, any> = {
       name: "name",
       phoneNumber: "",
       email: "",
+      jobs: [],
     }
   }
-}
-
-export const employerQueries = {
-  "employer": employerQuery
 }

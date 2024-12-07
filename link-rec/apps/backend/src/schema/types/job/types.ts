@@ -1,16 +1,20 @@
 import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { Requirement } from "../requirement";
+
+export const enum Level {
+  ENTRY,
+  MID,
+  SENIOR,
+  LEAD,
+};
 
 export interface Job {
   id: string,
   title: string,
-  employer: string,
-  location: string,
-  description?: string,
-  requirements: string[],
-  startDate?: string,
-  endDate?: string,
-  isActive: boolean,
-}
+  requirements: Requirement.Type[],
+  location: string
+  active: boolean,
+};
 
 export const JobType: GraphQLObjectType = new GraphQLObjectType({
   name: "JobInput",
@@ -21,24 +25,13 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
     location: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     requirements: { type: new GraphQLNonNull(
-      new GraphQLList(GraphQLString)
+      new GraphQLList(Requirement.Requirement)
     ) },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },
     isActive: { type: new GraphQLNonNull(GraphQLBoolean) },
   })
 })
-
-export interface JobInput {
-  title: string,
-  employer: string,
-  location: string,
-  description?: string,
-  requirements: string[],
-  startDate?: string,
-  endDate?: string,
-  isActive: boolean,
-}
 
 export const JobInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: "Job",

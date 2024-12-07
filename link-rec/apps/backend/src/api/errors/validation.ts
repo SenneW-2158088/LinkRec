@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { LinkRecError } from "./error";
+import { LinkRecError } from "./";
 
-export class ValidationError extends LinkRecError {
+class ValidationError extends LinkRecError {
   constructor(validationErrors: Record<string, string[]>) {
     super(
       'Validation failed',
@@ -22,4 +22,8 @@ export class ValidationError extends LinkRecError {
 
     return new ValidationError(formattedErrors);
   }
+}
+
+export {
+  ValidationError
 }

@@ -2,6 +2,7 @@ import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQL
 import { ApolloContext } from "../../../apollo_server";
 import { Education } from "../education";
 import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking/types";
+import { Experience } from "../experience";
 
 export interface User {
   id: string;
@@ -13,7 +14,9 @@ export interface User {
   status: JobSeekingStatus,
   location?: string | null;
   bio?: string | null;
-  education: Education.Type[]
+  languages: string[];
+  experiences: Experience.Type[],
+  educations: Education.Type[]
   connections: User[]
 }
 
@@ -47,10 +50,19 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     bio: { type: GraphQLString },
     status: { type: new GraphQLNonNull(JobSeekingStatusType) },
+    languages: {
+      type: new GraphQLList(GraphQLString)
+    },
     education: {
       type: new GraphQLList(Education.Education),
       resolve: (parent) => {
         // Implement education resolver
+
+      }
+    },
+    experiences: {
+      type: new GraphQLList(Experience.Experience),
+      resolve: (parent) => {
 
       }
     },

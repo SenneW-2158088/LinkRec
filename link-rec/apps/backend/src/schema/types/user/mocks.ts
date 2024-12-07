@@ -8,5 +8,7 @@ export const userMock: User = {
   email: "bugo.janssen@hotmail.ru",
   status: JobSeekingStatus.Type.NOT_LOOKING,
   connections: [],
-  education: [],
+  languages: [],
+  experiences: [],
+  educations: [],
 }

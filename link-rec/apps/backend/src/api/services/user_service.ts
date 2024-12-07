@@ -9,7 +9,7 @@ import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
-import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+import { jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.Type
@@ -31,17 +31,10 @@ export class UserService{
       throw new UserNotFoundError(id);
     }
 
-    this.queryRdfUser(user);
-
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: "",
-      lastName: "",
-      status: Status.ACTIVELY_LOOKING,
-      education: [],
-      connections: []
-    };
+    console.log("before")
+    const result = await this.queryRdfUser(user);
+    console.log("result:", result)
+    return result
   }
 
   async createUser(input: RegisterInput): Promise<User> {
@@ -56,13 +49,15 @@ export class UserService{
 
     // TODO: insert into rdf and refetch + add data to struct
 
-    const user: GQLTypes.User.Type = {
+    const user: User = {
       id: inserted.id,
       email: inserted.email,
       firstName: input.firstName,
       lastName: input.lastName,
       status: GQLTypes.JobSeekingStatus.Type.NOT_LOOKING,
-      education: [],
+      languages: [],
+      educations: [],
+      experiences: [],
       connections: [],
     };
 
@@ -72,7 +67,7 @@ export class UserService{
   }
 
   private async queryRdfUser(user: { id: string }) {
-    console.log(await this.context.sparql.query(SparqlBuilder.defaultPrefixes()
+    const result = await this.context.sparql.query(SparqlBuilder.defaultPrefixes()
       .build(`
         SELECT ?firstName ?lastName ?email ?phone ?gender ?location ?jobSeekingStatus ?language ?experience ?education
         WHERE {
@@ -80,15 +75,79 @@ export class UserService{
             lr:hasFirstName ?firstName ;
             lr:hasLastName ?lastName ;
             lr:hasEmail ?email .
+          user:JohnDoe lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+          ?jobSeekingStatusResource rdfs:label ?jobSeekingStatus .
+
           OPTIONAL { user:JohnDoe lr:hasPhoneNumber ?phone . }
           OPTIONAL { user:JohnDoe lr:hasGender ?gender . }
           OPTIONAL { user:JohnDoe lr:hasLocation ?location . }
-          OPTIONAL { user:JohnDoe lr:hasJobSeekingStatus ?jobSeekingStatus . }
           OPTIONAL { user:JohnDoe lr:hasLanguage ?language . }
           OPTIONAL { user:JohnDoe lr:hasExperience ?experience . }
           OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
         }
-      `)))
+      `))
+
+    console.log("ASJKLFJKLASDJFL")
+
+    if (result.length === 0) return null
+
+    const foundUser: User = {
+        id: user.id,
+        email: "",
+        firstName: "",
+        lastName: "",
+        status: Status.ACTIVELY_LOOKING,
+        languages: [],
+        educations: [],
+        experiences: [],
+        connections: [],
+    }
+    for (const row of result) {
+      const { firstName, lastName, email, phone, location, jobSeekingStatus, language, experience } = row
+      if (!foundUser.firstName) {
+        if (firstName.termType === "Literal") {
+          foundUser.firstName = firstName.value;
+        }
+      }
+
+      if (!foundUser.lastName) {
+        if (lastName.termType === "Literal") {
+          foundUser.lastName = lastName.value;
+        }
+      }
+
+      if (!foundUser.email) {
+        if (email.termType === "Literal") {
+          foundUser.email = email.value;
+        }
+      }
+
+      if (!foundUser.phoneNumber) {
+        if (phone.termType === "Literal") {
+          foundUser.phoneNumber = phone.value;
+        }
+      }
+
+      if (!foundUser.location) {
+        if (location.termType === "Literal") {
+          foundUser.location = location.value;
+        }
+      }
+
+      if (!foundUser.status) {
+        if (jobSeekingStatus.termType === "Literal") {
+          foundUser.status = jobSeekingStatusFromString(jobSeekingStatus.value);
+        }
+      }
+
+      if (language.termType === "Literal") {
+        foundUser.languages.push(language.value)
+      }
+
+      if (experience.termType === "Literal") {
+      }
+    }
+    return foundUser
   }
 
   private async updateRdfUser(user: User) {

@@ -12,6 +12,7 @@ export class SparqlBuilder {
     this.addPrefix("rdf", "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>")
     this.addPrefix("owl","<http://www.w3.org/2002/07/owl#>")
     this.addPrefix("foaf","<http://xmlns.com/foaf/0.1/>")
+    this.addPrefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>")
 
     this.addPrefix("lr","<http://linkrec:8080/ontology/>")
     this.addPrefix("user", "<http://linkrec:8080/user/>")

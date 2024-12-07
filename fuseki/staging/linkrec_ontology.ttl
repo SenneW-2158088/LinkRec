@@ -49,9 +49,12 @@ lr:hasEducation a rdf:Property . # -> lr:Education
 lr:matchesRequirement a rdf:Property . # -> lr:Requirement
 
 lr:JobSeekingStatus a rdfs:Class .
-lr:ActivelyLooking rdfs:subClassOf lr:JobSeekingStatus .
-lr:OpenToOffers rdfs:subClassOf lr:JobSeekingStatus .
-lr:NotLooking rdfs:subClassOf lr:JobSeekingStatus .
+lr:ActivelyLooking rdfs:subClassOf lr:JobSeekingStatus ;
+    rdfs:label "ActivelyLooking" .
+lr:OpenToOffers rdfs:subClassOf lr:JobSeekingStatus ;
+    rdfs:label "OpenToOffers" .
+lr:NotLooking rdfs:subClassOf lr:JobSeekingStatus ;
+    rdfs:label "NotLooking" .
 
 # EMPLOYERS
 lr:Employer a vcard:Individual ;

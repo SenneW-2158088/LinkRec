@@ -18,7 +18,7 @@
 user:JohnDoe a lr:User ;
     lr:hasFirstName "John" ;
     lr:hasLastName "Doe" ;
-    lr:hasEmail <mailto:johndoe@example.com> ;
+    lr:hasEmail "mailto:johndoe@example.com" ;
     lr:hasPhoneNumber "+1234567890" ;
     lr:hasLocation "Hasselt" ;
     lr:hasExperience experience:Experience1 ;
@@ -29,7 +29,7 @@ user:JohnDoe a lr:User ;
 user:JaneSmith a lr:User ;
     lr:hasFirstName "Jane" ;
     lr:hasLastName "Smith" ;
-    lr:hasEmail <mailto:janesmith@example.com> ;
+    lr:hasEmail "mailto:janesmith@example.com" ;
     lr:hasPhoneNumber "+0987654321" ;
     lr:hasLocation "Antwerpen" ;
     lr:hasExperience experience:Experience2 ;
@@ -40,7 +40,7 @@ user:JaneSmith a lr:User ;
 # Employers
 employer:TechCorp a lr:Employer ;
     lr:hasName "Tech Corp" ;
-    lr:hasEmail <mailto:contact@techcorp.com> ;
+    lr:hasEmail "mailto:contact@techcorp.com" ;
     lr:hasPhoneNumber "+1122334455" ;
     lr:hasWebPage <http://www.techcorp.com> ;
     lr:hasJob job:Job1 .

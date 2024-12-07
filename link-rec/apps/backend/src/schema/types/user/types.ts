@@ -20,12 +20,8 @@ export interface User {
 export const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: {
-      type: GraphQLID,
-    },
-    firstName: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
+    id: { type: GraphQLID, },
+    firstName: { type: new GraphQLNonNull(GraphQLString), },
     lastName: {
       type: new GraphQLNonNull(GraphQLString),
       extensions: { }
@@ -78,11 +74,13 @@ export const UserInputType = new GraphQLInputObjectType({
   fields: {
     firstName: { type: new GraphQLNonNull(GraphQLString) },
     lastName: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
     webPage: { type: GraphQLString },
     location: { type: GraphQLString },
     bio: { type: GraphQLString },
+    status: { type: new GraphQLNonNull(GraphQLString) },
+    education: { type: new GraphQLList(Education.Create) },
   },
 });

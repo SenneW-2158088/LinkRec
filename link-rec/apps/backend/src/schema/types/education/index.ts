@@ -1,4 +1,4 @@
-import { EducationType } from "./types";
+import { EducationInputType, EducationType } from "./types";
 
 export namespace Education {
 
@@ -17,6 +17,8 @@ export namespace Education {
   export const Degree = DegreeType;
 
   export const Education = EducationType;
+
+  export const Create = EducationInputType;
 
   export const queries = {};
 

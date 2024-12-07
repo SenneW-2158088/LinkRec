@@ -1,5 +1,4 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { Education, EducationType } from "../education";
 import { ApolloContext } from "../../../apollo_server";
 import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking";
 import { GQLTypes } from "..";

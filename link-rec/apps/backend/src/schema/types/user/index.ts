@@ -1,3 +1,4 @@
+import { GQLTypes } from "..";
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
 import { createUserMutation, loginMutation } from "./mutations";
@@ -17,7 +18,7 @@ export namespace User {
     status: JobSeekingStatus,
     location?: string | null;
     bio?: string | null;
-    education: Education[]
+    education: GQLTypes.Education.Type[]
     connections: User.Type[]
   }
 

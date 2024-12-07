@@ -1,18 +1,18 @@
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:         <http://www.w3.org/2002/07/owl#>
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
 
-@prefix foaf:        <http://xmlns.com/foaf/0.1/>
-@prefix wd:  <http://www.wikidata.org/entity/> .
-@prefix gn:  <https://www.geonames.org/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix wd:   <http://www.wikidata.org/entity/> .
+@prefix gn:   <https://www.geonames.org/ontology#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 
 @prefix lr: <http://linkrec:8080/ontology/> .
 @prefix user: <http://linkrec:8080/user/> .
-@prefix experience: <http://linkrec:8080/experience/> .
+@prefix experience:  <http://linkrec:8080/experience/> .
 @prefix requirement: <http://linkrec:8080/requirement/> .
-@prefix education: <http://linkrec:8080/education/> .
+@prefix education:   <http://linkrec:8080/education/> .
 @prefix job:  <http://linkrec:8080/job/> .
 @prefix employer: <http://linkrec:8080/employer/> .
 

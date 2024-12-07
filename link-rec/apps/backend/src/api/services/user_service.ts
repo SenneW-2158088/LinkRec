@@ -52,8 +52,8 @@ export class UserService{
     const user: User = {
       id: inserted.id,
       email: inserted.email,
-      firstName: "",
-      lastName: "",
+      firstName: input.firstName,
+      lastName: input.lastName,
       education: [],
       connections: [],
     };
@@ -64,13 +64,15 @@ export class UserService{
   }
 
   async updateRdfUser(user: User) {
+    const fields: string[] = []
+    fields.push(`user: ${ user.id } a lro: User`)
+    fields.push(`user: ${ user.id } a lro: User`)
+
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
-      .build(`
-        INSERT DATA {
-            lr_users:${user.id} a lro:User ;
-                       foaf:name "${user.firstName} ${user.lastName}" .
-        }
-      `))
+      .build(
+        `INSERT DATA {
+        }`
+      ))
   }
 
   async createConnection(user1: User, user2: User) {

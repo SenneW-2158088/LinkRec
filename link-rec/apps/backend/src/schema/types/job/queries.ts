@@ -1,23 +1,18 @@
 import { GraphQLFieldConfig, GraphQLID } from "graphql"
-import { Job, JobType } from "./types"
+import { GQLTypes } from ".."
 
 export const jobQuery: GraphQLFieldConfig<any, any> = {
-  type: JobType,
+  type: GQLTypes.Job.Job,
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args: { id: Job["id"] }, _context, _info) : Promise<Job> => {
+  resolve: async (_source, args: { id: GQLTypes.Job.Type["id"] }, _context, _info) : Promise<GQLTypes.Job.Type> => {
     return {
       id: "1",
       title: "",
-      employer: "",
       location: "",
       requirements: [],
-      isActive: false
+      active: false
     }
   }
-}
-
-export const jobQueries = {
-  "job": jobQuery
 }

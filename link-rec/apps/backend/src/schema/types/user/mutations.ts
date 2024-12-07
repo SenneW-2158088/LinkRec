@@ -1,13 +1,14 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { LoginInput, RegisterInput } from "../../../validation/user";
+import { GQLTypes } from "..";
+import { Validation } from "../../../validation";
 
 export const loginMutation: GraphQLFieldConfig<any, any> = {
-  type: AuthPayloadType,
+  type: GQLTypes.Authentication.User,
   args: {
-    input: { type: new GraphQLNonNull(LoginInputType) }
+    input: { type: new GraphQLNonNull(GQLTypes.User.Login) }
   },
-  resolve: async (source, args: { input: LoginInput }, context: ApolloContext, info): Promise<AuthPayload> => {
+  resolve: async (source, args: { input: Validation.User.Login }, context: ApolloContext, info): Promise<GQLTypes.Authentication.UserType> => {
     try {
       const user = await context.api.authenticationService.user_login(args.input);
       const tokens = await context.jwt.generateTokens({id: user.id});
@@ -22,11 +23,11 @@ export const loginMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const createUserMutation: GraphQLFieldConfig<any, any> = {
-  type: UserType,
+  type: GQLTypes.User.User,
   args: {
-    input: { type: new GraphQLNonNull(UserInputType) }
+    input: { type: new GraphQLNonNull(GQLTypes.User.Register) }
   },
-  resolve: async (_source, args: { input: RegisterInput }, context: ApolloContext, _info) : Promise<User> => {
+  resolve: async (_source, args: { input: Validation.User.Register }, context: ApolloContext, _info) : Promise<GQLTypes.Authentication.UserType> => {
     return await context.api.userService.createUser(args.input);
   }
 }

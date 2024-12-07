@@ -10,15 +10,6 @@ export interface AuthPayload {
   user: GQLTypes.User.Type
 }
 
-export const AuthPayloadType: GraphQLObjectType = new GraphQLObjectType({
-  name: "AuthPayload",
-  fields: () => ({
-    access: { type: new GraphQLNonNull(GraphQLString) },
-    refresh: { type: new GraphQLNonNull(GraphQLString) },
-    user: { type: new GraphQLNonNull(UserType) },
-  })
-})
-
 export const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({

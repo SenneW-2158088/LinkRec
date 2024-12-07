@@ -6,6 +6,7 @@ import { LoginInputType, UserInputType, UserType } from "./types";
 
 export namespace User {
 
+  // Typescript Type representing a user
   export interface Type {
     id: string;
     firstName: string;

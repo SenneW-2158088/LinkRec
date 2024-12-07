@@ -1,14 +1,14 @@
 import { GraphQLFieldConfig, GraphQLNonNull } from "graphql"
-import { Employer, EmployerAuthPayload, EmployerAuthPayloadType, EmployerInputType, EmployerLoginInputType, EmployerType } from "./types"
 import { ApolloContext } from "../../../apollo_server"
 import { Validation } from "../../../validation";
+import { GQLTypes } from "..";
 
 export const employerLoginMutation: GraphQLFieldConfig<any, any> = {
-  type: EmployerAuthPayloadType,
+  type: GQLTypes.Authentication.Employer,
   args: {
-    input: { type: new GraphQLNonNull(EmployerLoginInputType) }
+    input: { type: new GraphQLNonNull(GQLTypes.Employer.Login) }
   },
-  resolve: async (_source, args: { input: Validation.Employer.Login }, context: ApolloContext, _info) : Promise<EmployerAuthPayload> => {
+  resolve: async (_source, args: { input: Validation.Employer.Login }, context: ApolloContext, _info) : Promise<GQLTypes.Authentication.EmployerType> => {
     try {
       const employer = await context.api.authenticationService.employer_login(args.input);
       const tokens = await context.jwt.generateTokens({id: employer.id});
@@ -23,13 +23,18 @@ export const employerLoginMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const employerRegisterMutation: GraphQLFieldConfig<any, any> = {
-  type: EmployerType,
+  type: GQLTypes.Authentication.Employer,
   args: {
-    input: { type: new GraphQLNonNull(EmployerInputType) }
+    input: { type: new GraphQLNonNull(GQLTypes.Employer.Register) }
   },
-  resolve: async (_source, args: { input: Validation.Employer.Register }, context: ApolloContext, _info) : Promise<Employer> => {
+  resolve: async (_source, args: { input: Validation.Employer.Register }, context: ApolloContext, _info) : Promise<GQLTypes.Authentication.EmployerType> => {
     try {
-      return await context.api.employerService.create_employer(args.input);
+      const employer = await context.api.employerService.create_employer(args.input);
+      const tokens = await context.jwt.generateTokens({id: employer.id});
+      return {
+        employer: employer,
+        ...tokens
+      }
     } catch(error) {
       throw context.api.handleError(error);
     }

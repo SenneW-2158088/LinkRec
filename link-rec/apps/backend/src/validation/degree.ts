@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const Degree = z.enum(["BACHELOR", "MASTER"]);
 
-export type DegreeType = z.infer<typeof Degree>;
+export type DegreeInput = z.infer<typeof Degree>;
 
 export const educationInputSchema = z.object({
   institution: z

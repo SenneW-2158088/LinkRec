@@ -1,4 +1,3 @@
-import { GQLTypes } from "..";
 import { acceptConnectionMutation, createConnectionMutation, declineConnectionMutation } from "./mutations";
 import { ConnectionType } from "./types";
 
@@ -11,7 +10,7 @@ export namespace Connection {
   };
 
   export interface Type {
-    user: GQLTypes.User.Type,
+    user: User.Type,
     status: StatusType,
   };
 

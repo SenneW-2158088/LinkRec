@@ -1,4 +1,6 @@
-import { GQLTypes } from "..";
+import { Employer } from "../employer";
+import { User } from "../user";
+import { employerLoginMutation, employerRegisterMutation, userLoginMutation, userRegisterMutation } from "./mutations";
 import { EmployerAuthPayloadType, UserAuthPayloadType } from "./types";
 
 export namespace Authentication {
@@ -6,13 +8,13 @@ export namespace Authentication {
   export interface UserType {
     access: string,
     refresh: string,
-    user: GQLTypes.User.Type,
+    user: User.Type,
   };
 
   export interface EmployerType {
     access: string,
     refresh: string,
-    employer: GQLTypes.User.Type,
+    employer: Employer.Type,
   };
 
   export const User = UserAuthPayloadType;
@@ -21,5 +23,10 @@ export namespace Authentication {
 
   export const queries = {};
 
-  export const mutations = {};
+  export const mutations = {
+    "userLogin": userLoginMutation,
+    "userRegister": userRegisterMutation,
+    "employerLogin": employerLoginMutation,
+    "employerRegister": employerRegisterMutation,
+  };
 }

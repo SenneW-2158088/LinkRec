@@ -1,5 +1,5 @@
 import { GraphQLEnumType, GraphQLNonNull, GraphQLObjectType } from "graphql"
-import { GQLTypes } from ".."
+import { User } from "../user"
 
 export const ConnectionStatusType = new GraphQLEnumType({
   name: "ConnectionStatus",
@@ -12,7 +12,7 @@ export const ConnectionStatusType = new GraphQLEnumType({
 export const ConnectionType = new GraphQLObjectType({
   name: "Connection",
   fields: {
-    user: { type: new GraphQLNonNull(GQLTypes.User.User) },
+    user: { type: new GraphQLNonNull(User.User) },
     status: { type: new GraphQLNonNull(ConnectionStatusType) }
   }
 })

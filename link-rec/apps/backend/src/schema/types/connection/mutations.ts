@@ -1,7 +1,6 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
 import { ConnectionMock as connectionMock } from "./mocks";
-import { GQLTypes } from "..";
 
 /**
  * Creates a new connection between users
@@ -44,7 +43,7 @@ export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
  * @throws {ConnectionNotFoundError} If connection doesn't exist
  * @returns {Promise<Connection>} Updated connection with declined status
  */
-const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
+export const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
   type: new GraphQLNonNull(GQLTypes.Connection.Connection),
   args: {
     id: { type: GraphQLID }

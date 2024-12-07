@@ -1,7 +1,5 @@
-import { GQLTypes } from "..";
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
-import { createUserMutation, loginMutation } from "./mutations";
 import { userQuery } from "./queries";
 import { LoginInputType, UserInputType, UserType } from "./types";
 
@@ -15,10 +13,10 @@ export namespace User {
     email: string;
     phoneNumber?: string | null;
     webPage?: string | null;
-    status: GQLTypes.JobSeekingStatus.Type,
+    status: JobSeekingStatus.Type,
     location?: string | null;
     bio?: string | null;
-    education: GQLTypes.Education.Type[]
+    education: Education.Type[]
     connections: User.Type[]
   }
 
@@ -37,8 +35,5 @@ export namespace User {
   }
 
   // Mutation
-  export const mutations = {
-    "userLogin": loginMutation,
-    "userRegister": createUserMutation,
-  }
+  export const mutations = { }
 }

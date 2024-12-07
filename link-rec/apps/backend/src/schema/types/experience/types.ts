@@ -1,5 +1,4 @@
 import { GraphQLEnumType, GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql"
-import { GQLTypes } from "..";
 
 export const ExperienceLevelType = new GraphQLEnumType({
   name: "ExperienceLevel",

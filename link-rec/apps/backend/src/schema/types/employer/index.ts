@@ -1,5 +1,4 @@
-import { GQLTypes } from "..";
-import { employerLoginMutation, employerRegisterMutation } from "./mutations";
+import { Job } from "../job";
 import { employerQuery } from "./queries";
 import { EmployerInputType, EmployerLoginInputType, EmployerType } from "./types";
 
@@ -10,7 +9,7 @@ export namespace Employer {
     email: string;
     phoneNumber: string;
     webPage?: string | null;
-    jobs: GQLTypes.Job.Type[];
+    jobs: Job.Type[];
   }
 
   export const Employer = EmployerType;
@@ -23,8 +22,5 @@ export namespace Employer {
     "employer": employerQuery,
   }
 
-  export const mutations = {
-    "employerLogin": employerLoginMutation,
-    "employerRegister": employerRegisterMutation,
-  }
+  export const mutations = {}
 }

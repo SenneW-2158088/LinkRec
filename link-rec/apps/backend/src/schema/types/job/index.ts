@@ -1,11 +1,7 @@
-import { GQLTypes } from "..";
+import { Requirement } from "../requirement";
 import { jobMutation } from "./mutations";
 import { jobQuery } from "./queries";
 import { JobInputType, JobType } from "./types";
-
-export * from "./types"
-export * from "./queries"
-export * from "./mutations"
 
 export namespace Job {
 
@@ -19,7 +15,7 @@ export namespace Job {
   export interface Type {
     id: string,
     title: string,
-    requirements: GQLTypes.Requirement.Type[],
+    requirements: Requirement.Type[],
     location: string
     active: boolean,
   };

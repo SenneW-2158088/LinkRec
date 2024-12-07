@@ -1,13 +1,13 @@
 import { GraphQLFieldConfig, GraphQLNonNull } from "graphql"
-import { GQLTypes } from ".."
 import { Validation } from "../../../validation"
+import { Job } from "."
 
 export const jobMutation: GraphQLFieldConfig<any, any> = {
-  type: GQLTypes.Job.Job,
+  type: Job.Job,
   args: {
-    input: { type: new GraphQLNonNull(GQLTypes.Job.Create) }
+    input: { type: new GraphQLNonNull(Job.Create) }
   },
-  resolve: async (_source, args: { input: Validation.Job.Input }, _context, _info) : Promise<GQLTypes.Job.Type> => {
+  resolve: async (_source, args: { input: Validation.Job.Input }, _context, _info) : Promise<Job.Type> => {
     return {
       id: "1",
       title: "",

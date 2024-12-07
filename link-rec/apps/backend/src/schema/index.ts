@@ -17,7 +17,7 @@ export function createRootMutationType(fields: Record<string, GraphQLFieldConfig
 }
 
 export const rootQuery = createRootQueryType({
-  ...GQLTypes.Authentication.queries,
+  // ...GQLTypes.Authentication.queries,
   ...GQLTypes.Connection.queries,
   ...GQLTypes.Education.queries,
   ...GQLTypes.Employer.queries,
@@ -28,7 +28,7 @@ export const rootQuery = createRootQueryType({
 })
 
 export const rootMutation = createRootMutationType({
-  ...GQLTypes.Authentication.mutations,
+  // ...GQLTypes.Authentication.mutations,
   ...GQLTypes.Connection.mutations,
   ...GQLTypes.Education.mutations,
   ...GQLTypes.Employer.mutations,

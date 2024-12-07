@@ -1,12 +1,12 @@
 import { GraphQLFieldConfig, GraphQLID } from "graphql"
-import { GQLTypes } from ".."
+import { Employer } from "."
 
 export const employerQuery: GraphQLFieldConfig<any, any> = {
-  type: GQLTypes.Employer.Employer,
+  type: Employer.Employer,
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args: { id: GQLTypes.Employer.Type["id"] }, _context, _info) : Promise<GQLTypes.Employer.Type> => {
+  resolve: async (_source, args: { id: Employer.Type["id"] }, _context, _info) : Promise<Employer.Type> => {
     return {
       id: "1",
       name: "name",

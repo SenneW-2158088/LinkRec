@@ -9,10 +9,9 @@ import { schemaTransform } from "./schema/transformers";
 import { userDirectiveTransformer } from "./schema/transformers/userDirectiveTransformer";
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import { sign as signJwt, verify as verifyJwt } from "jsonwebtoken";
-import { Request } from "express";
-import { User } from "./schema/types";
 import { jwtMiddleware } from "./middleware/jwtMiddleware";
 import JwtService from "./jwt";
+import { GQLTypes } from "./schema/types";
 
 const dbConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -41,6 +40,7 @@ export function createApolloServer() {
   const schema = schemaTransform(linkRecSchema, [
     userDirectiveTransformer
   ]);
+
 
   return new ApolloServer<ApolloContext>({ schema: schema });
 }

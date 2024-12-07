@@ -1,12 +1,13 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { GQLTypes } from "..";
+import { User } from "../user";
+import { Employer } from "../employer";
 
 export const UserAuthPayloadType: GraphQLObjectType = new GraphQLObjectType({
   name: "UserAuthPayload",
   fields: () => ({
     access: { type: new GraphQLNonNull(GraphQLString) },
     refresh: { type: new GraphQLNonNull(GraphQLString) },
-    user: { type: new GraphQLNonNull(GQLTypes.User.User) },
+    user: { type: new GraphQLNonNull(User.User) },
   })
 })
 
@@ -15,6 +16,6 @@ export const EmployerAuthPayloadType: GraphQLObjectType = new GraphQLObjectType(
   fields: () => ({
     access: { type: new GraphQLNonNull(GraphQLString) },
     refresh: { type: new GraphQLNonNull(GraphQLString) },
-    employer: { type: new GraphQLNonNull(GQLTypes.Employer.Employer) },
+    employer: { type: new GraphQLNonNull(Employer.Employer) },
   })
 })

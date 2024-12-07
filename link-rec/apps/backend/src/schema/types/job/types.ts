@@ -1,5 +1,4 @@
 import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { GQLTypes } from "..";
 
 export const JobType: GraphQLObjectType = new GraphQLObjectType({
   name: "JobInput",

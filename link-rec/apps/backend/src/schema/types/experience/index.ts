@@ -17,4 +17,8 @@ export namespace Experience {
 
   export const Create = ExperienceInputType
 
+  export const queries = {};
+
+  export const mutations = {};
+
 }

@@ -1,7 +1,12 @@
-export * from "./education"
-export * from "./employer"
-export * from "./experience"
-export * from "./job"
-export * from "./jobseeking"
-export * from "./user"
-export * from "./role"
+import { User as UserNamespace } from "./user";
+import { Job as JobNamespace } from "./job";
+
+// Reexport from different types
+export namespace GQLTypes {
+
+  export import User = UserNamespace;
+
+  export import Job = JobNamespace;
+
+
+}

@@ -1,7 +1,7 @@
+import { GQLTypes } from "..";
 import { JobSeekingStatus } from "../jobseeking";
-import { User } from "./types";
 
-export const userMock: User = {
+export const userMock: GQLTypes.User.Type = {
   id: "1",
   firstName: "bugo",
   lastName: "janssen",

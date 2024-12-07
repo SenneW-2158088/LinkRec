@@ -1,22 +1,17 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql"
-import { LoginInputType, User, UserType } from "../user"
 import { ApolloContext } from "../../../apollo_server";
-import { LoginInput } from "../../../validation/user";
+import { GQLTypes } from "..";
 
 export const userQuery: GraphQLFieldConfig<any, any> = {
-  type: UserType,
+  type: GQLTypes.User.User,
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) }
   },
-  resolve: async (_source, args: { id: User["id"] }, context: ApolloContext, _info) : Promise<User|null> => {
+  resolve: async (_source, args: { id: GQLTypes.User.Type["id"] }, context: ApolloContext, _info) : Promise<GQLTypes.User.Type> => {
     try {
       return await context.api.userService.getUser(args.id);
     } catch(error) {
       throw context.api.handleError(error)
     }
   }
-}
-
-export const userQueries = {
-  "user": userQuery,
 }

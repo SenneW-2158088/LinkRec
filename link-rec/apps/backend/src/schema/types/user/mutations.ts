@@ -1,5 +1,4 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
-import { AuthPayload, AuthPayloadType, LoginInputType, User, UserInputType, UserType } from "./types";
 import { ApolloContext } from "../../../apollo_server";
 import { LoginInput, RegisterInput } from "../../../validation/user";
 
@@ -30,9 +29,4 @@ export const createUserMutation: GraphQLFieldConfig<any, any> = {
   resolve: async (_source, args: { input: RegisterInput }, context: ApolloContext, _info) : Promise<User> => {
     return await context.api.userService.createUser(args.input);
   }
-}
-
-export const userMutations = {
-  "userLogin": loginMutation,
-  "userRegister": createUserMutation,
 }

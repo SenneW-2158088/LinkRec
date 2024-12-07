@@ -1,9 +1,9 @@
 import { getDirective, getDirectives, MapperKind, mapSchema } from "@graphql-tools/utils"
 import { defaultFieldResolver, GraphQLSchema } from "graphql"
 import { ApolloContext } from "../../apollo_server";
-import { User } from "../types";
 import { UnAuthorizedFieldError } from "../../api/errors/authorization";
 import { UserNotFoundError } from "../../api/errors/user";
+import { GQLTypes } from "../types";
 
 export interface DirectiveExtensions {
   directives: {
@@ -14,13 +14,9 @@ export interface DirectiveExtensions {
 export const userDirectiveTransformer = (schema: GraphQLSchema) => {
   return mapSchema(schema, {
     [MapperKind.OBJECT_FIELD](fieldConfig, fieldName, typeName, schema) {
-      // const directives = fieldConfig.extensions?.directives as DirectiveExtensions["directives"];
       const defaultResolver = fieldConfig.resolve || defaultFieldResolver;
 
       const directive = getDirective(schema, fieldConfig, 'user');
-      console.log(fieldName)
-      console.log(directive)
-      console.log("=============================")
 
       if(directive) {
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
@@ -29,7 +25,8 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
 
           const result = await defaultResolver(source, args, context, info);
 
-          const parentUser = source as User;
+          const parentUser = source as GQLTypes.User.Type;
+
           if(parentUser.id == context.userId) {
             return result
           }

@@ -1,4 +1,3 @@
-import { ExperienceLevel } from "../schema/types"
 import { DegreeType, EducationInput, educationInputSchema } from "./degree"
 import { EmployerLogin, employerloginSchema, EmployerRegister, employerRegisterSchema } from "./employer"
 import { ExperienceInput, experienceSchema } from "./experience"
@@ -8,7 +7,6 @@ export namespace Validation {
 
   export namespace Experience {
     export const createSchema = experienceSchema
-    export type Level = ExperienceLevel
     export type Input = ExperienceInput
   }
 

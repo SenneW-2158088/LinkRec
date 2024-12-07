@@ -17,7 +17,3 @@ export const jobMutation: GraphQLFieldConfig<any, any> = {
     }
   }
 }
-
-export const jobMutations = {
-  "job": jobMutation,
-}

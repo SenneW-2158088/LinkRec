@@ -4,7 +4,7 @@ import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
-import { SparqlBuilder, SparqlFieldBuilder } from "../sparql/sparql_builder";
+import { SparqlBuilder, SparqlFieldBuilder, SparqlParser } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
@@ -54,21 +54,8 @@ export class UserService{
       throw new UserNotFoundError(id);
     }
 
-    // console.log("before")
-    const test = await this.queryRdfUser(user);
-    // console.log("result:", result)
-    const result: User = {
-      id: user.id,
-      email: user.email,
-      firstName: "",
-      lastName: "",
-      status: Status.NOT_LOOKING,
-      phoneNumber: "asdfadfas",
-      languages: [],
-      experiences: [],
-      educations: [],
-      connections: [],
-    };
+    const result = await this.queryRdfUser(user);
+    console.log("result:", result)
 
     return result;
   }
@@ -103,27 +90,31 @@ export class UserService{
   private async queryRdfUser(user: { id: string }) {
     const result = await this.context.sparql.query(SparqlBuilder.defaultPrefixes()
       .build(`
-        SELECT ?firstName ?lastName ?email ?phone ?gender ?location ?jobSeekingStatus ?language ?experience ?education
+        SELECT ?firstName ?lastName ?email ?phone ?gender ?location ?jobSeekingStatus ?language ?experience ?education ?title ?degree
         WHERE {
-          user:JohnDoe a lr:User ;
+          user:JohnDoe2 a lr:User ;
             lr:hasFirstName ?firstName ;
             lr:hasLastName ?lastName ;
             lr:hasEmail ?email .
-          user:JohnDoe lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+          user:JohnDoe2 lr:hasJobSeekingStatus ?jobSeekingStatusResource .
           ?jobSeekingStatusResource rdfs:label ?jobSeekingStatus .
 
-          OPTIONAL { user:JohnDoe lr:hasPhoneNumber ?phone . }
-          OPTIONAL { user:JohnDoe lr:hasGender ?gender . }
-          OPTIONAL { user:JohnDoe lr:hasLocation ?location . }
-          OPTIONAL { user:JohnDoe lr:hasLanguage ?language . }
-          OPTIONAL { user:JohnDoe lr:hasExperience ?experience . }
-          OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
+          OPTIONAL { user:JohnDoe2 lr:hasPhoneNumber ?phone . }
+          OPTIONAL { user:JohnDoe2 lr:hasGender ?gender . }
+          OPTIONAL { user:JohnDoe2 lr:hasLocation ?location . }
+          OPTIONAL { user:JohnDoe2 lr:hasLanguage ?language . }
+          OPTIONAL { user:JohnDoe2 lr:hasExperience ?experience . }
+          OPTIONAL {
+        		user:JohnDoe2 lr:hasEducation ?education .
+        		?education lr:hasDegree ?degree ;
+        		lr:hasTitle ?title .
+      		}
         }
       `))
 
     console.log("ASJKLFJKLASDJFL")
 
-    if (result.length === 0) return null
+    if (result.length === 0) throw Error("No user found")
 
     const foundUser: User = {
         id: user.id,
@@ -136,6 +127,9 @@ export class UserService{
         experiences: [],
         connections: [],
     }
+
+    console.log(SparqlParser.create(result)
+      .parse())
     for (const row of result) {
       const { firstName, lastName, email, phone, location, jobSeekingStatus, language, experience } = row
       if (!foundUser.firstName) {

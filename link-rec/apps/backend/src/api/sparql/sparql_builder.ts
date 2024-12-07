@@ -1,3 +1,5 @@
+import { ResultRow } from "sparql-http-client/ResultParser"
+
 export class SparqlBuilder {
   private prefixes: string[] = []
 
@@ -50,5 +52,51 @@ export class SparqlFieldBuilder {
 
   public build() {
     return this.fields.join(" ;\n") + "."
+  }
+}
+
+
+export class SparqlParser<T extends Object> {
+  private values: {
+    [key: string]: Set<unknown>
+  } = {}
+
+  private constructor(private rows: ResultRow[]) {
+    for (const row of rows) {
+      this.parseRow(row)
+    }
+  }
+
+  private parseRow(row: ResultRow) {
+    // keys: "email", "firstName"
+    for (const key of Object.keys(row)) {
+      if (row[key].termType === "Literal") {
+        const value = row[key].value
+        if (this.values[key]){
+          this.values[key].add(value)
+        } else {
+          this.values[key] = new Set([value])
+        }
+      }
+    }
+  }
+
+  static create<T extends object>(response: ResultRow[]): SparqlParser<T> {
+    return new SparqlParser(response)
+  }
+
+  public parse(): T {
+    const result: { [key: string]: unknown[] | unknown } = {}
+    for (const key in this.values) {
+      const value = this.values[key]
+      if (value.size > 1 ) {
+        result[key] = Array.from(value)
+      }
+      else {
+        result[key] = Array.from(value)[0]
+      }
+    }
+
+    return result
   }
 }

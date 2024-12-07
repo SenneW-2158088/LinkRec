@@ -2,7 +2,8 @@ import { JobSeekingStatus as IJobSeekingStatus, JobSeekingStatusType } from "./t
 
 export namespace JobSeekingStatus {
 
-  export const Type = IJobSeekingStatus;
+  export type Type = IJobSeekingStatus;
+  export const Status = IJobSeekingStatus;
 
   export const JobSeekingStatus = JobSeekingStatusType
 

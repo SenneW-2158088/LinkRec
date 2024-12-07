@@ -1,4 +1,4 @@
-import { employerLoginMutation, employerRegisterMutation, userLoginMutation, userRegisterMutation } from "./mutations";
+import { employerLoginMutation, employerRegisterMutation, refreshTokenMutation, userLoginMutation, userRegisterMutation } from "./mutations";
 import { UserAuth as IUser, EmployerAuth as IEmployer, EmployerAuthPayloadType, UserAuthPayloadType } from "./types";
 
 export namespace Authentication {
@@ -18,5 +18,6 @@ export namespace Authentication {
     "userRegister": userRegisterMutation,
     "employerLogin": employerLoginMutation,
     "employerRegister": employerRegisterMutation,
+    "refreshToken": refreshTokenMutation,
   };
 }

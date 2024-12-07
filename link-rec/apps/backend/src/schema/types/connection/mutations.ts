@@ -1,6 +1,5 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { ConnectionMock as connectionMock } from "./mocks";
 import { Connection, ConnectionType } from "./types";
 
 /**
@@ -15,8 +14,9 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
-    return connectionMock;
+  resolve: async (_source, args, context, info): Promise<Connection|null> => {
+    // TODO remove null -> also in return type
+    return null;
   }
 };
 
@@ -32,8 +32,9 @@ export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
-    return connectionMock;
+  resolve: async (_source, args, context, info): Promise<Connection|null> => {
+    // TODO remove null -> also in return type
+    return null;
   }
 };
 
@@ -49,7 +50,8 @@ export const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> =
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
-    return connectionMock;
+  resolve: async (_source, args, context, info): Promise<Connection|null> => {
+    // TODO remove null -> also in return type
+    return null;
   }
 };

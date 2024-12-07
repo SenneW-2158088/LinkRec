@@ -9,10 +9,10 @@ import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
-import { jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+import { JobSeekingStatus, jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 
 type User = GQLTypes.User.Type
-const Status = GQLTypes.JobSeekingStatus.Type
+const Status = GQLTypes.JobSeekingStatus.Status
 
 export class UserService{
   private TABLE = userTable
@@ -38,8 +38,6 @@ export class UserService{
   }
 
   async createUser(input: RegisterInput): Promise<User> {
-    console.log("input, ", input)
-
     // userInputSchema.parse(input);
 
     const [inserted] = await this.db.insert(this.TABLE).values({
@@ -54,10 +52,10 @@ export class UserService{
       email: inserted.email,
       firstName: input.firstName,
       lastName: input.lastName,
-      status: GQLTypes.JobSeekingStatus.Type.NOT_LOOKING,
+      status: Status.NOT_LOOKING,
       languages: [],
-      educations: [],
       experiences: [],
+      educations: [],
       connections: [],
     };
 

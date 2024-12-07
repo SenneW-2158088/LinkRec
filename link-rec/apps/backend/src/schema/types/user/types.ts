@@ -27,7 +27,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     firstName: { type: new GraphQLNonNull(GraphQLString), },
     lastName: {
       type: new GraphQLNonNull(GraphQLString),
-      extensions: { }
+      extensions: { directives: { user: { }, }, },
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),
@@ -35,7 +35,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     phoneNumber: {
       type: new GraphQLNonNull(GraphQLString),
-      // extensions: { directives: { user: {} } },
+      extensions: { directives: { user: {} } },
     },
     webPage: {
       type: GraphQLString

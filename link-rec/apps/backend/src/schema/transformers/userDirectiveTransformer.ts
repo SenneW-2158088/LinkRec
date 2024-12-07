@@ -19,6 +19,7 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
       const directive = getDirective(schema, fieldConfig, 'user');
 
       if(directive) {
+
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
           if (typeName != "User") return fieldConfig;
           if(!context.userId){ throw new UserNotFoundError("jwt"); }

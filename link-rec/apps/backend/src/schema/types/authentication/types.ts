@@ -14,6 +14,11 @@ export interface EmployerAuth {
   employer: Employer,
 };
 
+export interface AuthPayload {
+  access: string,
+  refresh: string,
+};
+
 export const UserAuthPayloadType: GraphQLObjectType = new GraphQLObjectType({
   name: "UserAuthPayload",
   fields: {
@@ -29,5 +34,13 @@ export const EmployerAuthPayloadType: GraphQLObjectType = new GraphQLObjectType(
     access: { type: new GraphQLNonNull(GraphQLString) },
     refresh: { type: new GraphQLNonNull(GraphQLString) },
     employer: { type: new GraphQLNonNull(EmployerType) },
+  }
+})
+
+export const AuthPayloadType: GraphQLObjectType = new GraphQLObjectType({
+  name: "AuthPayload",
+  fields: {
+    access: { type: new GraphQLNonNull(GraphQLString) },
+    refresh: { type: new GraphQLNonNull(GraphQLString) },
   }
 })

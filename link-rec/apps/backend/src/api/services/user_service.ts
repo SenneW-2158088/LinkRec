@@ -4,11 +4,15 @@ import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
-import { User } from "../../schema/types";
-import { SparqlBuilder } from "../sparql/sparql_builder";
+import { SparqlBuilder, SparqlFieldBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
+import { GQLTypes } from "../../schema/types";
+import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+
+type User = GQLTypes.User.Type
+const Status = GQLTypes.JobSeekingStatus.Type
 
 export class UserService{
   private TABLE = userTable
@@ -27,11 +31,14 @@ export class UserService{
       throw new UserNotFoundError(id);
     }
 
+    this.queryRdfUser(user);
+
     return {
       id: user.id,
       email: user.email,
       firstName: "",
       lastName: "",
+      status: Status.ACTIVELY_LOOKING,
       education: [],
       connections: []
     };
@@ -40,7 +47,7 @@ export class UserService{
   async createUser(input: RegisterInput): Promise<User> {
     console.log("input, ", input)
 
-    userInputSchema.parse(input);
+    // userInputSchema.parse(input);
 
     const [inserted] = await this.db.insert(this.TABLE).values({
       email: input.email,
@@ -49,11 +56,12 @@ export class UserService{
 
     // TODO: insert into rdf and refetch + add data to struct
 
-    const user: User = {
+    const user: GQLTypes.User.Type = {
       id: inserted.id,
       email: inserted.email,
       firstName: input.firstName,
       lastName: input.lastName,
+      status: GQLTypes.JobSeekingStatus.Type.NOT_LOOKING,
       education: [],
       connections: [],
     };
@@ -63,19 +71,52 @@ export class UserService{
     return user;
   }
 
-  async updateRdfUser(user: User) {
-    const fields: string[] = []
-    fields.push(`user: ${ user.id } a lro: User`)
-    fields.push(`user: ${ user.id } a lro: User`)
+  private async queryRdfUser(user: { id: string }) {
+    console.log(await this.context.sparql.query(SparqlBuilder.defaultPrefixes()
+      .build(`
+        SELECT ?firstName ?lastName ?email ?phone ?gender ?location ?jobSeekingStatus ?language ?experience ?education
+        WHERE {
+          user:JohnDoe a lr:User ;
+            lr:hasFirstName ?firstName ;
+            lr:hasLastName ?lastName ;
+            lr:hasEmail ?email .
+          OPTIONAL { user:JohnDoe lr:hasPhoneNumber ?phone . }
+          OPTIONAL { user:JohnDoe lr:hasGender ?gender . }
+          OPTIONAL { user:JohnDoe lr:hasLocation ?location . }
+          OPTIONAL { user:JohnDoe lr:hasJobSeekingStatus ?jobSeekingStatus . }
+          OPTIONAL { user:JohnDoe lr:hasLanguage ?language . }
+          OPTIONAL { user:JohnDoe lr:hasExperience ?experience . }
+          OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
+        }
+      `)))
+  }
+
+  private async updateRdfUser(user: User) {
+    const fields = SparqlFieldBuilder.fromFields(
+      `user: ${ user.id } a lr:User`,
+      `lr:hasEmail ${user.email}`,
+      `lr:hasFirstName ${user.firstName}`,
+      `lr:hasLastName ${user.lastName}`,
+      `lr:hasJobSeekingStatus lr:${jobSeekingStatusToString(user.status)}`
+    )
+    if (user.phoneNumber)
+      fields.field(`lr:hasPhoneNumber ${user.phoneNumber}`)
+    if (user.location)
+      fields.field(`lr:hasLocation ${user.location}`)
+    if (user.webPage)
+      fields.field(`lr:hasWebPage ${user.webPage}`)
+
+    // TODO: Delete these fields before adding them again
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(
         `INSERT DATA {
+          ${fields.build()}
         }`
       ))
   }
 
-  async createConnection(user1: User, user2: User) {
+  private async createConnection(user1: User, user2: User) {
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(`
         INSERT DATA {

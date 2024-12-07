@@ -25,9 +25,10 @@ lr:User a vcard:Individual ;
 lr:hasEmail a rdf:Property ;
     owl:sameAs vcard:hasEmail ;
     owl:sameAs foaf::mbox .
-lr:hasName a rdf:Property ;
-    owl:sameAs vcard:hasName ;
-    owl:sameAs foaf::name .
+lr:hasFirstName a rdf:Property ;
+    owl:sameAs vcard:hasFirstName .
+lr:hasLastName a rdf:Property ;
+    owl:sameAs vcard:hasLastName .
 lr:hasPhoneNumber a rdf:Property ;
     owl:sameAs vcard:hasTelephone ;
     owl:sameAs foaf::phone .
@@ -58,9 +59,10 @@ lr:Employer a vcard:Individual ;
 lr:hasEmail a rdf:Property ;
     owl:sameAs vcard:hasEmail ;
     owl:sameAs foaf::mbox .
-lr:hasName a rdf:Property ;
-    owl:sameAs vcard:hasName ;
-    owl:sameAs foaf::name .
+lr:hasFirstName a rdf:Property ;
+    owl:sameAs vcard:hasFirstName .
+lr:hasLastName a rdf:Property ;
+    owl:sameAs vcard:hasLastName .
 lr:hasPhoneNumber a rdf:Property ;
     owl:sameAs vcard:hasTelephone ;
     owl:sameAs foaf::phone .

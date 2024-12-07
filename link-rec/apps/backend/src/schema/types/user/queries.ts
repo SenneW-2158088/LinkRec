@@ -9,7 +9,7 @@ export const UserQuery: GraphQLFieldConfig<any, any> = {
   },
   resolve: async (_source, args: { id: User["id"] }, context: ApolloContext, _info) : Promise<User> => {
     try {
-      return await context.api.userService.getUser(args.id);
+      return (await context.api.userService.getUser(args.id))!;
     } catch(error) {
       throw context.api.handleError(error)
     }

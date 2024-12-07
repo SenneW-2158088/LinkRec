@@ -1,7 +1,7 @@
-import { Connection } from ".";
 import { userMock } from "../user/mocks";
+import { Connection, Status } from "./types";
 
-export const ConnectionMock: Connection.Type = {
+export const ConnectionMock: Connection = {
   user: userMock,
-  status: Connection.StatusType.CONNECTED
+  status: Status.CONNECTED
 }

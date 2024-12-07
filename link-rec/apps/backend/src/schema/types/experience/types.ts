@@ -1,12 +1,28 @@
 import { GraphQLEnumType, GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql"
 
+export interface Experience {
+  id: string,
+  title: string,
+  company: string
+  description?: string | null,
+  years: number,
+  level: string
+}
+
+export enum Level {
+  ENTRY,
+  MID,
+  SENIOR,
+  LEAD,
+}
+
 export const ExperienceLevelType = new GraphQLEnumType({
   name: "ExperienceLevel",
   values: {
-    entry: { value: GQLTypes.Job.LevelType.ENTRY },
-    mid: { value: GQLTypes.Job.LevelType.MID },
-    senior: { value: GQLTypes.Job.LevelType.SENIOR },
-    lead: { value: GQLTypes.Job.LevelType.LEAD },
+    entry: { value: Level.ENTRY },
+    mid: { value: Level.MID },
+    senior: { value: Level.SENIOR },
+    lead: { value: Level.LEAD },
   }
 })
 

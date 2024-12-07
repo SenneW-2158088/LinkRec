@@ -1,11 +1,20 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { GQLTypes } from "..";
+import { Education } from "../education";
+import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking/types";
 
-export interface AuthPayload {
-  access: string,
-  refresh: string,
-  user: GQLTypes.User.Type
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string | null;
+  webPage?: string | null;
+  status: JobSeekingStatus,
+  location?: string | null;
+  bio?: string | null;
+  education: Education.Type[]
+  connections: User[]
 }
 
 export const UserType: GraphQLObjectType = new GraphQLObjectType({
@@ -39,7 +48,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     bio: { type: GraphQLString },
     status: { type: new GraphQLNonNull(JobSeekingStatusType) },
     education: {
-      type: new GraphQLList(GQLTypes.Education.Education),
+      type: new GraphQLList(Education.Education),
       resolve: (parent) => {
         // Implement education resolver
 
@@ -47,7 +56,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     connections: {
       type: new GraphQLList(UserType),
-      resolve: async (_source, _args, context: ApolloContext, _info): Promise<GQLTypes.User.Type[]> => {
+      resolve: async (_source, _args, context: ApolloContext, _info): Promise<User[]> => {
         // Implement education resolver
         return []
       }

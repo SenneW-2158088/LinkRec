@@ -1,5 +1,11 @@
 import { GraphQLEnumType, GraphQLObjectType } from "graphql";
 
+export enum JobSeekingStatus {
+  ACTIVELY_LOOKING,
+  OPEN_TO_OFFERS,
+  NOT_LOOKING,
+}
+
 export const JobSeekingStatusType: GraphQLEnumType = new GraphQLEnumType({
   name: "JobSeekingStatus",
   values: {

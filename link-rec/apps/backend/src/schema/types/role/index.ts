@@ -1,11 +1,8 @@
-import { RoleType } from "./types";
+import { RoleType, Role as IRole } from "./types";
 
 export namespace Role {
 
-  export const enum Type {
-    EMPLOYER,
-    USER,
-  };
+  export type Type = IRole;
 
   export const Role = RoleType;
 }

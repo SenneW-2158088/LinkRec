@@ -1,15 +1,10 @@
-import { ExperienceInputType, ExperienceLevelType, ExperienceType } from "./types"
+import { Experience as IExperience, Level as ILevel, ExperienceInputType, ExperienceLevelType, ExperienceType } from "./types"
 
 export namespace Experience {
 
-  export interface Type {
-    id: string,
-    title: string,
-    company: string
-    description?: string | null,
-    years: number,
-    level: string
-  }
+  export type LevelType = ILevel;
+
+  export type Type = IExperience;
 
   export const Level = ExperienceLevelType
 

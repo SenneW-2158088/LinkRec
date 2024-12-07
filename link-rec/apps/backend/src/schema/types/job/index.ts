@@ -1,24 +1,10 @@
-import { Requirement } from "../requirement";
 import { jobMutation } from "./mutations";
 import { jobQuery } from "./queries";
-import { JobInputType, JobType } from "./types";
+import { Job as IJob, JobInputType, JobType } from "./types";
 
 export namespace Job {
 
-  export const enum LevelType {
-    ENTRY,
-    MID,
-    SENIOR,
-    LEAD,
-  };
-
-  export interface Type {
-    id: string,
-    title: string,
-    requirements: Requirement.Type[],
-    location: string
-    active: boolean,
-  };
+  export type Type = IJob;
 
   export const Job = JobType;
 

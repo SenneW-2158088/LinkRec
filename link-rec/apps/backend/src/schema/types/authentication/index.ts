@@ -1,21 +1,11 @@
-import { Employer } from "../employer";
-import { User } from "../user";
 import { employerLoginMutation, employerRegisterMutation, userLoginMutation, userRegisterMutation } from "./mutations";
-import { EmployerAuthPayloadType, UserAuthPayloadType } from "./types";
+import { UserAuth as IUser, EmployerAuth as IEmployer, EmployerAuthPayloadType, UserAuthPayloadType } from "./types";
 
 export namespace Authentication {
 
-  export interface UserType {
-    access: string,
-    refresh: string,
-    user: User.Type,
-  };
+  export type UserType = IUser;
 
-  export interface EmployerType {
-    access: string,
-    refresh: string,
-    employer: Employer.Type,
-  };
+  export type EmployerType = IEmployer;
 
   export const User = UserAuthPayloadType;
 

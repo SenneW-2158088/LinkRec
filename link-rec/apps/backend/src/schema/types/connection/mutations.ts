@@ -1,6 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
 import { ConnectionMock as connectionMock } from "./mocks";
+import { Connection, ConnectionType } from "./types";
 
 /**
  * Creates a new connection between users
@@ -10,11 +11,11 @@ import { ConnectionMock as connectionMock } from "./mocks";
  * @returns {Promise<Connection>} Newly created connection
  */
 export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
+  type: new GraphQLNonNull(ConnectionType),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
+  resolve: async (_source, args, context, info): Promise<Connection> => {
     return connectionMock;
   }
 };
@@ -27,11 +28,11 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
  * @returns {Promise<Connection>} Updated connection with accepted status
  */
 export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
+  type: new GraphQLNonNull(ConnectionType),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
+  resolve: async (_source, args, context, info): Promise<Connection> => {
     return connectionMock;
   }
 };
@@ -44,11 +45,11 @@ export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
  * @returns {Promise<Connection>} Updated connection with declined status
  */
 export const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
+  type: new GraphQLNonNull(ConnectionType),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
+  resolve: async (_source, args, context, info): Promise<Connection> => {
     return connectionMock;
   }
 };

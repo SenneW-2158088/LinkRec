@@ -1,24 +1,13 @@
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
-import { userQuery } from "./queries";
 import { LoginInputType, UserInputType, UserType } from "./types";
+import { UserQuery } from "./queries";
+import { User as IType} from "./types";
 
 export namespace User {
 
   // Typescript Type representing a user
-  export interface Type {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber?: string | null;
-    webPage?: string | null;
-    status: JobSeekingStatus.Type,
-    location?: string | null;
-    bio?: string | null;
-    education: Education.Type[]
-    connections: User.Type[]
-  }
+  export type Type = IType;
 
   // Graphql Type representing a user
   export const User = UserType;
@@ -29,11 +18,9 @@ export namespace User {
   // Graphql Type representing registration fields
   export const Register = UserInputType;
 
-  // Queries
   export const queries = {
-    "user": userQuery,
+    "user": UserQuery,
   }
 
-  // Mutation
   export const mutations = { }
 }

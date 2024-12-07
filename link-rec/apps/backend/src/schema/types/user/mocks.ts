@@ -1,12 +1,12 @@
-import { GQLTypes } from "..";
 import { JobSeekingStatus } from "../jobseeking";
+import { User } from "./types";
 
-export const userMock: GQLTypes.User.Type = {
+export const userMock: User = {
   id: "1",
   firstName: "bugo",
   lastName: "janssen",
   email: "bugo.janssen@hotmail.ru",
-  status: GQLTypes.JobSeekingStatus.Type.NOT_LOOKING,
+  status: JobSeekingStatus.Type.NOT_LOOKING,
   connections: [],
   education: [],
 }

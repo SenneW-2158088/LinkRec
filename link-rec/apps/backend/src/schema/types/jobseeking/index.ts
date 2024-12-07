@@ -1,12 +1,8 @@
-import { JobSeekingStatusType } from "./types";
+import { JobSeekingStatus as IJobSeekingStatus, JobSeekingStatusType } from "./types";
 
 export namespace JobSeekingStatus {
 
-  export enum Type {
-    ACTIVELY_LOOKING,
-    OPEN_TO_OFFERS,
-    NOT_LOOKING,
-  }
+  export const Type = IJobSeekingStatus;
 
   export const JobSeekingStatus = JobSeekingStatusType
 

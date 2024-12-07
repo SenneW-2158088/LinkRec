@@ -1,16 +1,16 @@
 import { GraphQLFieldConfig, GraphQLNonNull } from "graphql";
-import { Authentication } from ".";
-import { User } from "../user";
-import { Employer } from "../employer";
+import { LoginInputType, UserInputType, UserType} from "../user/types";
 import { Validation } from "../../../validation";
 import { ApolloContext } from "../../../apollo_server";
+import { EmployerAuth, EmployerAuthPayloadType, UserAuth, UserAuthPayloadType } from "./types";
+import { EmployerInputType, EmployerLoginInputType } from "../employer/types";
 
 export const userLoginMutation: GraphQLFieldConfig<any, any> = {
-  type: Authentication.User,
+  type: UserAuthPayloadType,
   args: {
-    input: { type: new GraphQLNonNull(User.Login) }
+    input: { type: new GraphQLNonNull(LoginInputType) }
   },
-  resolve: async (source, args: { input: Validation.User.Login }, context: ApolloContext, info): Promise<Authentication.UserType> => {
+  resolve: async (source, args: { input: Validation.User.Login }, context: ApolloContext, info): Promise<UserAuth> => {
     try {
       const user = await context.api.authenticationService.user_login(args.input);
       const tokens = await context.jwt.generateTokens({id: user.id});
@@ -25,21 +25,21 @@ export const userLoginMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const userRegisterMutation: GraphQLFieldConfig<any, any> = {
-  type: Authentication.User,
+  type: UserAuthPayloadType,
   args: {
-    input: { type: new GraphQLNonNull(User.Register) }
+    input: { type: new GraphQLNonNull(UserInputType) }
   },
-  resolve: async (_source, args: { input: Validation.User.Register }, context: ApolloContext, _info) : Promise<Authentication.UserType> => {
+  resolve: async (_source, args: { input: Validation.User.Register }, context: ApolloContext, _info) : Promise<UserAuth> => {
     return await context.api.userService.createUser(args.input);
   }
 }
 
 export const employerLoginMutation: GraphQLFieldConfig<any, any> = {
-  type: Authentication.Employer,
+  type: EmployerAuthPayloadType,
   args: {
-    input: { type: new GraphQLNonNull(Employer.Login) }
+    input: { type: new GraphQLNonNull(EmployerLoginInputType) }
   },
-  resolve: async (_source, args: { input: Validation.Employer.Login }, context: ApolloContext, _info) : Promise<Authentication.EmployerType> => {
+  resolve: async (_source, args: { input: Validation.Employer.Login }, context: ApolloContext, _info) : Promise<EmployerAuth> => {
     try {
       const employer = await context.api.authenticationService.employer_login(args.input);
       const tokens = await context.jwt.generateTokens({id: employer.id});
@@ -54,11 +54,11 @@ export const employerLoginMutation: GraphQLFieldConfig<any, any> = {
 }
 
 export const employerRegisterMutation: GraphQLFieldConfig<any, any> = {
-  type: Authentication.Employer,
+  type: EmployerAuthPayloadType,
   args: {
-    input: { type: new GraphQLNonNull(Employer.Register) }
+    input: { type: new GraphQLNonNull(EmployerInputType) }
   },
-  resolve: async (_source, args: { input: Validation.Employer.Register }, context: ApolloContext, _info) : Promise<Authentication.EmployerType> => {
+  resolve: async (_source, args: { input: Validation.Employer.Register }, context: ApolloContext, _info) : Promise<EmployerAuth> => {
     try {
       const employer = await context.api.employerService.create_employer(args.input);
       const tokens = await context.jwt.generateTokens({id: employer.id});

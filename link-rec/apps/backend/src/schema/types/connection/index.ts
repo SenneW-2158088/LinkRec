@@ -1,18 +1,11 @@
 import { acceptConnectionMutation, createConnectionMutation, declineConnectionMutation } from "./mutations";
-import { ConnectionType } from "./types";
+import { Status as IStatus, Connection as IConnection, ConnectionType } from "./types";
 
 export namespace Connection {
 
-  export enum StatusType {
-    CONNECTED,
-    PENDING,
-    RECEIVING
-  };
+  export const StatusType = IStatus;
 
-  export interface Type {
-    user: User.Type,
-    status: StatusType,
-  };
+  export type Type = IConnection;
 
   export const Status = StatusType;
 

@@ -1,4 +1,14 @@
 import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { Job } from "../job";
+
+export interface Employer {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  webPage?: string | null;
+  jobs: Job.Type[];
+}
 
 export const EmployerType: GraphQLObjectType = new GraphQLObjectType({
   name: "Employer",

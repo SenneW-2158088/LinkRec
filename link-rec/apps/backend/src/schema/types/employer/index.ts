@@ -1,16 +1,9 @@
-import { Job } from "../job";
 import { employerQuery } from "./queries";
-import { EmployerInputType, EmployerLoginInputType, EmployerType } from "./types";
+import { Employer as IEmployer, EmployerInputType, EmployerLoginInputType, EmployerType } from "./types";
 
 export namespace Employer {
-  export interface Type {
-    id: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    webPage?: string | null;
-    jobs: Job.Type[];
-  }
+
+  export type Type = IEmployer;
 
   export const Employer = EmployerType;
 

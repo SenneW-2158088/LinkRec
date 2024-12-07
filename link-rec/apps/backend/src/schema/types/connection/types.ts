@@ -1,17 +1,6 @@
 import { GraphQLEnumType, GraphQLNonNull, GraphQLObjectType } from "graphql"
 import { GQLTypes } from ".."
 
-export enum ConnectionStatus {
-  CONNECTED,
-  PENDING,
-  RECEIVING
-}
-
-export interface Connection {
-  user: GQLTypes.User.Type,
-  status: ConnectionStatus
-}
-
 export const ConnectionStatusType = new GraphQLEnumType({
   name: "ConnectionStatus",
   values: {

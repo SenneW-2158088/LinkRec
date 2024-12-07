@@ -4,6 +4,7 @@ import { Requirement as RequirementNamespace } from "./requirement";
 import { Experience as ExperienceNamespace } from "./experience";
 import { Authentication as AuthenticationNamespace } from "./authentication";
 import { Employer as EmployerNamespace } from "./employer";
+import { Connection as ConnectionNamespace } from "./connection";
 
 // Reexport from different types
 export namespace GQLTypes {
@@ -20,4 +21,5 @@ export namespace GQLTypes {
 
   export import Employer = EmployerNamespace;
 
+  export import Connection = ConnectionNamespace;
 }

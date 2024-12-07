@@ -1,7 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { Connection, ConnectionType } from "./types";
 import { ConnectionMock as connectionMock } from "./mocks";
+import { GQLTypes } from "..";
 
 /**
  * Creates a new connection between users
@@ -10,12 +10,12 @@ import { ConnectionMock as connectionMock } from "./mocks";
  * @throws {UserNotFoundError} If target user doesn't exist
  * @returns {Promise<Connection>} Newly created connection
  */
-const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(ConnectionType),
+export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
+  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
+  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
     return connectionMock;
   }
 };
@@ -27,12 +27,12 @@ const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
  * @throws {ConnectionNotFoundError} If connection doesn't exist
  * @returns {Promise<Connection>} Updated connection with accepted status
  */
-const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(ConnectionType),
+export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
+  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
+  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
     return connectionMock;
   }
 };
@@ -45,17 +45,11 @@ const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
  * @returns {Promise<Connection>} Updated connection with declined status
  */
 const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(ConnectionType),
+  type: new GraphQLNonNull(GQLTypes.Connection.Connection),
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection> => {
+  resolve: async (_source, args, context, info): Promise<GQLTypes.Connection.Type> => {
     return connectionMock;
   }
-};
-
-export const connectionMutations = {
-  createConnection: createConnectionMutation,
-  acceptConnection: acceptConnectionMutation, // Fixed typo in key name
-  declineConnection: declineConnectionMutation, // Fixed incorrect value
 };

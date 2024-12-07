@@ -1,7 +1,7 @@
+import { GQLTypes } from "..";
 import { userMock } from "../user/mocks";
-import { Connection, ConnectionStatus } from "./types";
 
-export const ConnectionMock: Connection = {
+export const ConnectionMock: GQLTypes.Connection.Type = {
   user: userMock,
-  status: ConnectionStatus.CONNECTED
+  status: GQLTypes.Connection.StatusType.CONNECTED
 }

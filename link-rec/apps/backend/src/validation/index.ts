@@ -1,4 +1,4 @@
-import { DegreeInput, EducationInput, educationInputSchema } from "./degree"
+import { DegreeInput, EducationInput, educationInputSchema } from "./education"
 import { EmployerLogin, employerloginSchema, EmployerRegister, employerRegisterSchema } from "./employer"
 import { ExperienceInput, experienceSchema } from "./experience"
 import { JobInput, jobSchema } from "./job"

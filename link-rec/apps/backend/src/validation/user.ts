@@ -1,4 +1,6 @@
 import { z } from "zod"
+import { jobseekingSchema } from "./jobseeking";
+import { educationInputSchema } from "./education";
 
 const NAME_MIN_LENGTH = 2;
 const NAME_MAX_LENGTH = 50;
@@ -17,8 +19,6 @@ export const loginInputSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
-
-export const JobSeekingStatus = z.enum(['Red', 'Green', 'Blue']);
 
 export const userInputSchema = z.object({
   firstName: z
@@ -41,6 +41,15 @@ export const userInputSchema = z.object({
     .regex(/^[a-zA-Z\s-']+$/, "Last name can only contain letters, spaces, hyphens, and apostrophes")
     .transform(name => name.trim()),
 
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Email must be a string",
+    })
+    .email("Please enter a valid email address")
+    .max(320, "Email address is too long")
+    .transform(email => email.toLowerCase().trim()),
+
   password: z
     .string({
       required_error: "Password is required",
@@ -53,16 +62,7 @@ export const userInputSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
 
-  email: z
-    .string({
-      required_error: "Email is required",
-      invalid_type_error: "Email must be a string",
-    })
-    .email("Please enter a valid email address")
-    .max(320, "Email address is too long")
-    .transform(email => email.toLowerCase().trim()),
 
-  status: JobSeekingStatus,
 
   phoneNumber: z
     .string({
@@ -97,6 +97,10 @@ export const userInputSchema = z.object({
     .optional()
     .nullable()
     .transform(bio => bio?.trim() || null),
+
+  status: jobseekingSchema,
+
+  education: z.array(educationInputSchema),
 });
 
 export type RegisterInput = z.infer<typeof userInputSchema>;

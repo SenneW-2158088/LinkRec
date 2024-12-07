@@ -2,11 +2,15 @@ import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 
-import { Employer, User } from "../../schema/types";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { employerTable } from "../../db/schema/employerSchema";
 import { Validation } from "../../validation";
+import { GQLTypes } from "../../schema/types";
+
+type Employer = GQLTypes.Employer.Type;
+type User = GQLTypes.User.Type;
+const Status = GQLTypes.JobSeekingStatus.StatusType;
 
 export class EmployerService{
   private TABLE = employerTable

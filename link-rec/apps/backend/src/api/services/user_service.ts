@@ -12,7 +12,7 @@ import { GQLTypes } from "../../schema/types";
 import { JobSeekingStatus, jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 
 type User = GQLTypes.User.Type
-const Status = GQLTypes.JobSeekingStatus.Status
+const Status = GQLTypes.JobSeekingStatus.StatusType
 
 export class UserService{
   private TABLE = userTable
@@ -31,10 +31,23 @@ export class UserService{
       throw new UserNotFoundError(id);
     }
 
-    console.log("before")
-    const result = await this.queryRdfUser(user);
-    console.log("result:", result)
-    return result
+    // console.log("before")
+    const test = await this.queryRdfUser(user);
+    // console.log("result:", result)
+    const result: User = {
+      id: user.id,
+      email: user.email,
+      firstName: "",
+      lastName: "",
+      status: Status.NOT_LOOKING,
+      phoneNumber: "asdfadfas",
+      languages: [],
+      experiences: [],
+      educations: [],
+      connections: [],
+    };
+
+    return result;
   }
 
   async createUser(input: RegisterInput): Promise<User> {

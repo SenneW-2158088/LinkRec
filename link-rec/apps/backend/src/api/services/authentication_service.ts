@@ -3,13 +3,17 @@ import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
 
 import { userTable } from "../../db/schema/userSchema";
-import { Employer, User } from "../../schema/types";
 import { compare, hash } from "bcrypt";
 import { LoginInput, loginInputSchema } from "../../validation/user";
 import { employerTable } from "../../db/schema/employerSchema";
 import { UserNotFoundError } from "../errors/user";
 import { InvalidCredentialsError } from "../errors/authorization";
 import { Validation } from "../../validation";
+import { GQLTypes } from "../../schema/types";
+
+type Employer = GQLTypes.Employer.Type;
+type User = GQLTypes.User.Type;
+const Status = GQLTypes.JobSeekingStatus.StatusType;
 
 export class AuthenticationService{
   private USER_TABLE = userTable
@@ -65,11 +69,16 @@ export class AuthenticationService{
 
     // TODO: add sparql data
     return {
-      ...user,
-      firstName: "empy",
-      lastName: "empty",
-      education: [], // Fetch education if needed
-      connections: [] // Fetch connections if needed
-    };
+      id: user.id,
+      email: user.email,
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      status: Status.ACTIVELY_LOOKING,
+      languages: [],
+      educations: [],
+      connections: [],
+      experiences: [],
+    }
   }
 }

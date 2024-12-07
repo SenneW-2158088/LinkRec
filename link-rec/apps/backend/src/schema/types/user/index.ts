@@ -15,7 +15,7 @@ export namespace User {
     email: string;
     phoneNumber?: string | null;
     webPage?: string | null;
-    status: JobSeekingStatus,
+    status: GQLTypes.JobSeekingStatus.Type,
     location?: string | null;
     bio?: string | null;
     education: GQLTypes.Education.Type[]

@@ -6,6 +6,7 @@ import { Authentication as AuthenticationNamespace } from "./authentication";
 import { Employer as EmployerNamespace } from "./employer";
 import { Connection as ConnectionNamespace } from "./connection";
 import { Education as EducationNamespace } from "./education";
+import { JobSeekingStatus as JobSeekingStatusNamespace } from "./jobseeking";
 
 // Reexport from different types
 export namespace GQLTypes {
@@ -25,4 +26,6 @@ export namespace GQLTypes {
   export import Connection = ConnectionNamespace;
 
   export import Education = EducationNamespace;
+
+  export import JobSeekingStatus = JobSeekingStatusNamespace;
 }

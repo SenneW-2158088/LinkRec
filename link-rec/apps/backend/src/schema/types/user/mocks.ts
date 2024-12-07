@@ -6,7 +6,7 @@ export const userMock: GQLTypes.User.Type = {
   firstName: "bugo",
   lastName: "janssen",
   email: "bugo.janssen@hotmail.ru",
-  status: JobSeekingStatus.NOT_LOOKING,
+  status: GQLTypes.JobSeekingStatus.Type.NOT_LOOKING,
   connections: [],
   education: [],
 }

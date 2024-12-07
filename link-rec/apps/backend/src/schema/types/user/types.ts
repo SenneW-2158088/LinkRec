@@ -1,6 +1,5 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking";
 import { GQLTypes } from "..";
 
 export interface AuthPayload {
@@ -40,7 +39,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     bio: { type: GraphQLString },
     status: { type: new GraphQLNonNull(JobSeekingStatusType) },
     education: {
-      type: new GraphQLList(EducationType),
+      type: new GraphQLList(GQLTypes.Education.Education),
       resolve: (parent) => {
         // Implement education resolver
 

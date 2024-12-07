@@ -8,24 +8,13 @@
 @prefix gn:  <https://www.geonames.org/ontology#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 
-@prefix user: <http://linkrec:8080/ontology/user/> .
-@prefix employer: <http://linkrec:8080/ontology/employer/> .
-@prefix experience: <http://linkrec:8080/ontology/experience/> .
-@prefix requirement: <http://linkrec:8080/ontology/requirement/> .
-@prefix education: <http://linkrec:8080/ontology/education/> .
-@prefix job:  <http://linkrec:8080/ontology/job/> .
-@prefix profession:  <http://linkrec:8080/ontology/profession/> .
-@prefix language: <http://linkrec:8080/ontology/language/> .
-@prefix languageLevel: <http://linkrec:8080/ontology/languageLevel/> .
-@prefix location: <http://linkrec:8080/ontology/location/> .
-@prefix lr_user: <http://linkrec:8080/user/> .
-@prefix lr_experience: <http://linkrec:8080/experience/> .
-@prefix lr_requirement: <http://linkrec:8080/requirement/> .
-@prefix lr_education: <http://linkrec:8080/education/> .
-@prefix lr_job:  <http://linkrec:8080/job/> .
-@prefix lr_profession:  <http://linkrec:8080/profession/> .
-@prefix lr_language: <http://linkrec:8080/language/> .
-@prefix lr_languageLevel: <http://linkrec:8080/languageLevel/> .
+@prefix lr: <http://linkrec:8080/ontology/> .
+@prefix user: <http://linkrec:8080/user/> .
+@prefix experience: <http://linkrec:8080/experience/> .
+@prefix requirement: <http://linkrec:8080/requirement/> .
+@prefix education: <http://linkrec:8080/education/> .
+@prefix job:  <http://linkrec:8080/job/> .
+@prefix employer: <http://linkrec:8080/employer/> .
 
 
 # OWL inferencing
@@ -44,129 +33,129 @@
 # We can now find all users that have a profession which is
 # a subProfessionOf developer (even Web Developer)
 [userProfessionInference:
-    (?experience experience:hasProfession ?experienceProfession)
-    (?experienceProfession profession:subProfessionOf ?profession)
+    (?experience lr:hasProfession ?experienceProfession)
+    (?experienceProfession lr:subProfessionOf ?profession)
     ->
-    (?experience experience:hasProfession ?profession)
+    (?experience lr:hasProfession ?profession)
 ]
 
-[jobLocationInference:
-    (?job job:hasLocation ?locationName)
-    (?location location:hasName ?locationName)
+[locationInference:
+    (?job lr:hasLocation ?locationName)
+    (?location lr:hasGeoName ?locationName)
     ->
-    (?job job:hasLocation ?location)
+    (?job lr:hasLocation ?location)
 ]
 
 
-[userLocationInference:
-    (?user user:hasLocation ?locationName)
-    (?location location:hasName ?locationName)
+[alternateLocationInference:
+    (?user lr:hasLocation ?locationName)
+    (?location lr:hasAlternateGeoName ?locationName)
     ->
-    (?user user:hasLocation ?location)
+    (?user lr:hasLocation ?location)
 ]
 
 [userLanguageInference:
-    (?user user:hasLanguage ?languageName)
+    (?user lr:hasLanguage ?languageName)
     (?language rdfs:label ?languageName)
     ->
-    (?user user:hasLanguage ?language)
+    (?user lr:hasLanguage ?language)
 ]
 
 [userEducationInference:
-    (?user user:hasEducation ?userEducation)
-    (?userEducation education:hasTitle ?educationName)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
-    (?userEducation education:hasTitle ?education)
+    (?userEducation lr:hasTitle ?education)
 ]
 
 [requirementProfessionInference:
-    (?requirement requirement:hasProfession ?requirementProfession)
+    (?requirement lr:hasProfession ?requirementProfession)
     (?profession rdfs:label ?requirementProfession)
     ->
-    (?requirement requirement:hasProfession ?profession)
+    (?requirement lr:hasProfession ?profession)
 ]
 
 [requirementLanguageInference:
-    (?requirement requirement:hasLanguage ?languageName)
+    (?requirement lr:hasLanguage ?languageName)
     (?language rdfs:label ?languageName)
     ->
-    (?requirement requirement:hasLanguage ?language)
+    (?requirement lr:hasLanguage ?language)
 ]
 
 [requirementEducationInference:
-    (?requirement requirement:hasEducationTitle ?educationName)
+    (?requirement lr:hasEducationTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
-    (?requirement requirement:hasEducationTitle ?education)
+    (?requirement lr:hasEducationTitle ?education)
 ]
 
 # Experience level inference
 [experienceLevelInference:
-    (?experience experience:hasYears ?years)
-    (?level experience:hasMinYears ?min)
-    (?level experience:hasMaxYears ?max)
+    (?experience lr:hasYears ?years)
+    (?level lr:hasMinYears ?min)
+    (?level lr:hasMaxYears ?max)
     ge(?years, ?min)
     le(?years, ?max)
     ->
-    (?experience experience:hasExperienceLevel ?level)
+    (?experience lr:hasExperienceLevel ?level)
 ]
 
 [requirementExperienceLevelInference:
-    (?requirement requirement:requiredYears ?years)
-    (?level experience:hasMinYears ?min)
-    (?level experience:hasMaxYears ?max)
+    (?requirement lr:requiredYears ?years)
+    (?level lr:hasMinYears ?min)
+    (?level lr:hasMaxYears ?max)
     ge(?years, ?min)
     le(?years, ?max)
     ->
-    (?requirement experience:hasExperienceLevel ?level)
+    (?requirement lr:hasExperienceLevel ?level)
 ]
 
 [userJobMatchingProfessionInference:
 # Location matches
-    (?user user:hasLocation ?userLocation)
-    (?job job:hasLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
 # Experience matches
-    (?job job:hasRequirement ?requirement)
-    (?requirement requirement:hasProfession ?profession)
-    (?user user:hasExperience ?experience)
-    (?experience experience:hasProfession ?profession)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasProfession ?profession)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasProfession ?profession)
     ->
-    (?user user:matchesRequirement ?requirement)
+    (?user lr:matchesRequirement ?requirement)
 ]
 [userJobMatchingLanguageInference:
 # Location matches
-    (?user user:hasLocation ?userLocation)
-    (?job job:hasLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
 # Language matches
-    (?job job:hasRequirement ?requirement)
-    (?requirement requirement:hasLanguage ?language)
-    (?user user:hasLanguage ?language)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasLanguage ?language)
+    (?user lr:hasLanguage ?language)
     ->
-    (?user user:matchesRequirement ?requirement)
+    (?user lr:matchesRequirement ?requirement)
 ]
 [usrJobMatchingEducationInference:
-    (?user user:hasLocation ?userLocation)
-    (?job job:hasLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
-    (?job job:hasRequirement ?requirement)
-    (?requirement requirement:hasEducationTitel ?educationTitle)
-    (?user user:hasEducation ?userEducation)
-    (?userEducation education:hasTitle ?educationTitle)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasEducationTitel ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
     ->
-    (?user user:matchesRequirement ?requirement)
+    (?user lr:matchesRequirement ?requirement)
 ]
 
 [userJobMatchingEducationInference:
-    (?user user:hasLocation ?userLocation)
-    (?job job:hasLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
-    (?job job:hasRequirement ?requirement)
-    (?requirement requirement:hasDegree ?educationDegree)
-    (?user user:hasEducation ?userEducation)
-    (?userEducation education:hasDegree ?educationDegree)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasDegree ?educationDegree)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasDegree ?educationDegree)
     ->
-    (?user user:matchesRequirement ?requirement)
+    (?user lr:matchesRequirement ?requirement)
 ]

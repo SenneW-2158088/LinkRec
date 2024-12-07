@@ -12,9 +12,6 @@ def query_wd(query):
         raise Exception("Error:", response.status_code, response.text)
 
 
-dataset = ""
-
-
 class Dataset:
     def __init__(self):
         self.dataset = """
@@ -22,7 +19,7 @@ class Dataset:
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix wd:  <http://www.wikidata.org/entity/> .
 
-@prefix language: <http://linkrec:8080/ontology/language/> .
+@prefix lr: <http://linkrec:8080/ontology/> .
 """
         self.professions()
         self.profession_labels()
@@ -34,28 +31,25 @@ class Dataset:
         # Define the SPARQL query to get the label of a Developer
         professions_query = """
         SELECT ?subProfession ?profession WHERE {
-        ?subProfession wdt:P279 ?profession ;
-                    wdt:P31 wd:Q28640.
-        OPTIONAL {
-            ?profession wdt:P31 wd:Q28640.
-        }
-        OPTIONAL {
-            ?profession rdfs:label ?jobLabel. FILTER(LANG(?jobLabel) = "en")
-        }
+            ?subProfession wdt:P279 ?profession ;
+                        wdt:P31 wd:Q28640.
+            OPTIONAL {
+                ?profession wdt:P31 wd:Q28640.
+            }
         }
         """
 
         professions = query_wd(professions_query)
         for item in professions:
-            self.dataset += f"<{item['subProfession']['value']}> wd:P279 <{item['profession']['value']}>.\n"
+            self.dataset += f"<{item['subProfession']['value']}> a lr:Profession ;\n"
+            self.dataset += f"  wd:P279 <{item['profession']['value']}> .\n"
 
     def profession_labels(self):
-        global dataset
         profession_labels_query = """
         SELECT ?profession ?professionLabel WHERE {
-        ?profession wdt:P31 wd:Q28640 ;
-                    rdfs:label ?professionLabel
-                    FILTER(LANG(?professionLabel) = "en") .
+            ?profession wdt:P31 wd:Q28640 ;
+                        rdfs:label ?professionLabel
+                        FILTER(LANG(?professionLabel) = "en") .
         }
         """
         labels = query_wd(profession_labels_query)
@@ -63,7 +57,6 @@ class Dataset:
             self.dataset += f"<{item['profession']['value']}> rdfs:label \"{item['professionLabel']['value']}\".\n"
 
     def master_degrees(self):
-        global dataset
         master_degrees_query = """
         SELECT ?degree ?degreeLabel
         WHERE {
@@ -75,11 +68,10 @@ class Dataset:
         """
         master_degrees = query_wd(master_degrees_query)
         for item in master_degrees:
-            self.dataset += f"<{item['degree']['value']}> wd:P31 wd:wd:Q183816 .\n"
-            self.dataset += f"<{item['degree']['value']}> rdfs:label \"{item['degreeLabel']['value']}\".\n"
+            self.dataset += f"<{item['degree']['value']}> wd:P31 wd:Q183816 ;\n"
+            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value']}\".\n"
 
     def bachelor_degrees(self):
-        global dataset
         bachelor_degrees_query = """
         SELECT ?degree ?degreeLabel
         WHERE {
@@ -91,11 +83,10 @@ class Dataset:
         """
         bachelor_degrees = query_wd(bachelor_degrees_query)
         for item in bachelor_degrees:
-            self.dataset += f"<{item['degree']['value']}> wd:P31 wd:wd:Q253440 .\n"
-            self.dataset += f"<{item['degree']['value']}> rdfs:label \"{item['degreeLabel']['value']}\".\n"
+            self.dataset += f"<{item['degree']['value']}> wd:P31 wd:Q253440 ;\n"
+            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value']}\".\n"
 
     def languages(self):
-        global dataset
         languages_query = """
         SELECT ?language ?languageLabel
         WHERE {
@@ -107,8 +98,8 @@ class Dataset:
         """
         languages = query_wd(languages_query)
         for item in languages:
-            self.dataset += f"<{item['language']['value']}> rdf:type language:Language .\n"
-            self.dataset += f"<{item['language']['value']}> rdfs:label \"{item['languageLabel']['value']}\".\n"
+            self.dataset += f"<{item['language']['value']}> rdf:type lr:Language ;\n"
+            self.dataset += f"  rdfs:label \"{item['languageLabel']['value']}\".\n"
 
 
 with open("wikidata_subsets.ttl", "w") as file:

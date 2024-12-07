@@ -6,99 +6,88 @@
 @prefix gn:   <https://www.geonames.org/ontology#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 
-@prefix user: <http://linkrec:8080/ontology/user/> .
-@prefix employer: <http://linkrec:8080/ontology/employer/> .
-@prefix experience: <http://linkrec:8080/ontology/experience/> .
-@prefix requirement: <http://linkrec:8080/ontology/requirement/> .
-@prefix education: <http://linkrec:8080/ontology/education/> .
-@prefix job: <http://linkrec:8080/ontology/job/> .
-@prefix profession: <http://linkrec:8080/ontology/profession/> .
-@prefix language: <http://linkrec:8080/ontology/language/> .
-@prefix location: <http://linkrec:8080/ontology/location/> .
-@prefix lr_user: <http://linkrec:8080/user/> .
-@prefix lr_experience: <http://linkrec:8080/experience/> .
-@prefix lr_requirement: <http://linkrec:8080/requirement/> .
-@prefix lr_education: <http://linkrec:8080/education/> .
-@prefix lr_job: <http://linkrec:8080/job/> .
-@prefix lr_profession: <http://linkrec:8080/profession/> .
-@prefix lr_language: <http://linkrec:8080/language/> .
-@prefix lr_languageLevel: <http://linkrec:8080/languageLevel/> .
-@prefix lr_employer: <http://linkrec:8080/employer/> .
+@prefix lr: <http://linkrec:8080/ontology/> .
+@prefix user: <http://linkrec:8080/user/> .
+@prefix experience: <http://linkrec:8080/experience/> .
+@prefix requirement: <http://linkrec:8080/requirement/> .
+@prefix education: <http://linkrec:8080/education/> .
+@prefix job:  <http://linkrec:8080/job/> .
+@prefix employer: <http://linkrec:8080/employer/> .
 
 # Users
-lr_user:JohnDoe a user:User ;
-    user:hasName "John Doe" ;
-    user:hasEmail <mailto:johndoe@example.com> ;
-    user:hasPhoneNumber "+1234567890" ;
-    user:hasLocation "Hasselt" ;
-    user:hasExperience lr_experience:Experience1 ;
-    user:hasEducation "master in diplomacy" ;
-    user:hasLanguage "English" ;
-    user:hasJobSeekingStatus user:ActivelyLooking .
+user:JohnDoe a lr:User ;
+    lr:hasName "John Doe" ;
+    lr:hasEmail <mailto:johndoe@example.com> ;
+    lr:hasPhoneNumber "+1234567890" ;
+    lr:hasLocation "Hasselt" ;
+    lr:hasExperience experience:Experience1 ;
+    lr:hasEducation "master in diplomacy" ;
+    lr:hasLanguage "English" ;
+    lr:hasJobSeekingStatus lr:ActivelyLooking .
 
-lr_user:JaneSmith a user:User ;
-    user:hasName "Jane Smith" ;
-    user:hasEmail <mailto:janesmith@example.com> ;
-    user:hasPhoneNumber "+0987654321" ;
-    user:hasLocation "Antwerpen" ;
-    user:hasExperience lr_experience:Experience2 ;
-    user:hasEducation "master in diplomacy" ;
-    user:hasLanguage "Spanish" ;
-    user:hasJobSeekingStatus user:ActivelyLooking .
+user:JaneSmith a lr:User ;
+    lr:hasName "Jane Smith" ;
+    lr:hasEmail <mailto:janesmith@example.com> ;
+    lr:hasPhoneNumber "+0987654321" ;
+    lr:hasLocation "Antwerpen" ;
+    lr:hasExperience experience:Experience2 ;
+    lr:hasEducation "master in diplomacy" ;
+    lr:hasLanguage "Spanish" ;
+    lr:hasJobSeekingStatus lr:ActivelyLooking .
 
 # Employers
-lr_employer:TechCorp a employer:Employer ;
-    employer:hasName "Tech Corp" ;
-    employer:hasEmail <mailto:contact@techcorp.com> ;
-    employer:hasPhoneNumber "+1122334455" ;
-    employer:hasWebPage <http://www.techcorp.com> ;
-    employer:hasJob lr_job:Job1 .
+employer:TechCorp a lr:Employer ;
+    lr:hasName "Tech Corp" ;
+    lr:hasEmail <mailto:contact@techcorp.com> ;
+    lr:hasPhoneNumber "+1122334455" ;
+    lr:hasWebPage <http://www.techcorp.com> ;
+    lr:hasJob job:Job1 .
 
 # Experiences
-lr_experience:Experience1 a experience:Experience ;
-    experience:hasProfession "Web Developer" ;
-    experience:hasDescription "Developed web applications." ;
-    experience:hasYears 3 ;
-    experience:hasCompany "Web Solutions Inc." .
+experience:Experience1 a lr:Experience ;
+    lr:hasProfession "Web Developer" ;
+    lr:hasDescription "Developed web applications." ;
+    lr:hasYears 3 ;
+    lr:hasCompany "Web Solutions Inc." .
 
-lr_experience:Experience2 a experience:Experience ;
-    experience:hasProfession "Software Developer" ;
-    experience:hasDescription "Worked on mobile applications." ;
-    experience:hasYears 4 ;
-    experience:hasCompany "Mobile Innovations LLC" .
+    experience:Experience2 a lr:Experience ;
+    lr:hasProfession "Software Developer" ;
+    lr:hasDescription "Worked on mobile applications." ;
+    lr:hasYears 4 ;
+    lr:hasCompany "Mobile Innovations LLC" .
 
 # Requirements
-lr_requirement:Requirement1 a requirement:Requirement ;
-    requirement:hasProfession "Software Developer" ;
-    requirement:hasDescription "Looking for a skilled software developer." ;
-    requirement:requiredYears 2 .
+requirement:Requirement1 a lr:Requirement ;
+    lr:hasProfession "Software Developer" ;
+    lr:hasDescription "Looking for a skilled software developer." ;
+    lr:requiredYears 2 .
 
-lr_requirement:Requirement2 a requirement:Requirement ;
-    requirement:hasEducationTitle "master in diplomacy" .
+    requirement:Requirement2 a lr:Requirement ;
+    lr:hasEducationTitle "master in diplomacy" .
 
-lr_requirement:Requirement3 a requirement:Requirement ;
-    requirement:hasLanguage "English" .
+    requirement:Requirement3 a lr:Requirement ;
+    lr:hasLanguage "English" .
 
 # Jobs
-lr_job:Job1 a job:Job ;
-    job:hasTitle "Software Developer" ;
-    job:hasRequirement lr_requirement:Requirement1 ;
-    job:hasLocation "Hasselt" ;
-    job:isActive true .
+job:Job1 a lr:Job ;
+    lr:hasTitle "Software Developer" ;
+    lr:hasRequirement requirement:Requirement1 ;
+    lr:hasLocation "Hasselt" ;
+    lr:isActive true .
 
-lr_job:Job2 a job:Job ;
-    job:hasTitle "Software Engineer" ;
-    job:hasRequirement lr_requirement:Requirement2 ;
-    job:hasLocation "Hasselt" ;
-    job:isActive true .
+job:Job2 a lr:Job ;
+    lr:hasTitle "Software Engineer" ;
+    lr:hasRequirement requirement:Requirement2 ;
+    lr:hasLocation "Hasselt" ;
+    lr:isActive true .
 
 # Education
-lr_education:Education1 a education:Education ;
-    education:hasDegree "Bachelor of Science in Computer Science" ;
-    education:hasInstitution "University of Technology" ;
-    education:hasDegree "Bachelor" .
+education:Education1 a lr:Education ;
+    lr:hasDegree "Bachelor of Science in Computer Science" ;
+    lr:hasInstitution "University of Technology" ;
+    lr:hasDegree "Bachelor" .
 
-lr_education:Education2 a education:Education ;
-    education:hasDegree "Master of Science in Software Engineering" ;
-    education:hasInstitution "Institute of Advanced Studies" ;
-    education:hasDegree "Master" .
+education:Education2 a lr:Education ;
+    lr:hasDegree "Master of Science in Software Engineering" ;
+    lr:hasInstitution "Institute of Advanced Studies" ;
+    lr:hasDegree "Master" .

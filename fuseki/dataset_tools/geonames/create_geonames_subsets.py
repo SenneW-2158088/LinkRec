@@ -16,7 +16,7 @@ filtered_df = df[df['feature_class'].isin(['A', 'P'])]
 
 # Initialize the TTL output
 ttl_output = []
-ttl_output.append("@prefix location: <http://fuseki:8080/ontology/location/> .\n")
+ttl_output.append("@prefix lr: <http://fuseki:8080/ontology/> .\n")
 ttl_output.append("@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n")
 ttl_output.append("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n")
 # Define the base URI for the location
@@ -29,12 +29,12 @@ for index, row in filtered_df.iterrows():
     alternatenames = row['alternatenames'].split(',') if pd.notna(row['alternatenames']) else []
 
     # Add the main location entry
-    ttl_output.append(f"<{base_uri}{geonameid}> rdf:type location:Location ;")
-    ttl_output.append(f"    location:hasName \"{name}\" ;")
+    ttl_output.append(f"<{base_uri}{geonameid}> rdf:type lr:Location ;")
+    ttl_output.append(f"    lr:hasGeoName \"{name}\" ;")
 
     # Add alternate names
     for alt_name in alternatenames:
-        ttl_output.append(f"    location:hasAlternateName \"{alt_name.strip()}\" ;")
+        ttl_output.append(f"    lr:hasAlternateGeoName \"{alt_name.strip()}\" ;")
 
     # Close the entry
     ttl_output[-1] = ttl_output[-1].rstrip(" ;") + " .\n"  # Remove the last semicolon and add a period

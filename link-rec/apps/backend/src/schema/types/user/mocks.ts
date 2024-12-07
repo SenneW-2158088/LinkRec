@@ -6,7 +6,7 @@ export const userMock: User = {
   firstName: "bugo",
   lastName: "janssen",
   email: "bugo.janssen@hotmail.ru",
-  status: JobSeekingStatus.Type.NOT_LOOKING,
+  status: JobSeekingStatus.StatusType.NOT_LOOKING,
   connections: [],
   languages: [],
   experiences: [],

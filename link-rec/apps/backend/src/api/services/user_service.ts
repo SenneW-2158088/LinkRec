@@ -10,6 +10,7 @@ import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { JobSeekingStatus, jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+import { User } from "../../schema/types/user";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -20,7 +21,29 @@ export class UserService{
 
   constructor(private context: Context) { this.db = context.db.db; }
 
-  async getUser(id: string): Promise<User | null> {
+  async getUsers() : Promise<User[]> {
+
+    const user = await this.db
+      .select()
+      .from(this.TABLE)
+
+    return user.flatMap((u): User.Type  => {
+      return {
+        id: u.id,
+        email: u.email,
+        firstName: "",
+        lastName: "",
+        status: Status.NOT_LOOKING,
+        phoneNumber: "asdfadfas",
+        languages: [],
+        experiences: [],
+        educations: [],
+        connections: [],
+      };
+    })
+  }
+
+  async getUser(id: string): Promise<User> {
     const [user] = await this.db
       .select()
       .from(this.TABLE)

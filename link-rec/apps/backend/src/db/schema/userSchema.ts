@@ -1,4 +1,5 @@
 import { text, varchar, uuid } from "drizzle-orm/pg-core";
+import { InferModel } from "drizzle-orm";
 import { schema } from ".";
 
 export const userTable = schema.table('users', {
@@ -12,6 +13,9 @@ export const userTable = schema.table('users', {
     .notNull()
 });
 
+
+export const UserModel = userTable.$inferSelect
+//
 // firstName: varchar('first_name', { length: 255 }).notNull(),
 // lastName: varchar('last_name', { length: 255 }).notNull(),
 // phoneNumber: varchar('phone_number', { length: 20 }),

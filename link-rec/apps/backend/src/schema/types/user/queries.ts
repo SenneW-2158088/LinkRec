@@ -1,4 +1,4 @@
-import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql"
+import { GraphQLFieldConfig, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from "graphql"
 import { ApolloContext } from "../../../apollo_server";
 import { User, UserType } from "./types";
 
@@ -9,7 +9,19 @@ export const UserQuery: GraphQLFieldConfig<any, any> = {
   },
   resolve: async (_source, args: { id: User["id"] }, context: ApolloContext, _info) : Promise<User> => {
     try {
-      return (await context.api.userService.getUser(args.id))!;
+      return context.api.userService.getUser(args.id);
+    } catch(error) {
+      throw context.api.handleError(error)
+    }
+  }
+}
+
+
+export const AllUserQuery: GraphQLFieldConfig<any, any> = {
+  type: new GraphQLList(UserType),
+  resolve: async (_source, _args, context: ApolloContext, _info) : Promise<User[]> => {
+    try {
+      return context.api.userService.getUsers();
     } catch(error) {
       throw context.api.handleError(error)
     }

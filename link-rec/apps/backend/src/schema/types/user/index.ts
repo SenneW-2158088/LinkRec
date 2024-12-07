@@ -1,7 +1,7 @@
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
 import { LoginInputType, UserInputType, UserType } from "./types";
-import { UserQuery } from "./queries";
+import { AllUserQuery, UserQuery } from "./queries";
 import { User as IType} from "./types";
 
 export namespace User {
@@ -20,6 +20,7 @@ export namespace User {
 
   export const queries = {
     "user": UserQuery,
+    "users": AllUserQuery,
   }
 
   export const mutations = { }

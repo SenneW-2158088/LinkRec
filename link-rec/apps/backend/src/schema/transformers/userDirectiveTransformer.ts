@@ -22,7 +22,9 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
 
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
           if (typeName != "User") return fieldConfig;
-          if(!context.userId){ throw new UserNotFoundError("jwt"); }
+          if(!context.userId){
+            throw new UnAuthorizedFieldError( { field: fieldName } );
+          }
 
           const result = await defaultResolver(source, args, context, info);
 
@@ -31,11 +33,7 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
           if(parentUser.id == context.userId) {
             return result
           }
-
-          throw new UnAuthorizedFieldError(
-            { field: fieldName }
-          );
-
+          throw new UnAuthorizedFieldError( { field: fieldName } );
         }
         return fieldConfig;
       }

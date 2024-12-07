@@ -1,5 +1,4 @@
 import { DirectiveLocation, GraphQLDirective, GraphQLNonNull } from "graphql";
-import { RoleType } from "../types";
 
 export const userDirective: GraphQLDirective  = new GraphQLDirective({
   name: "user",

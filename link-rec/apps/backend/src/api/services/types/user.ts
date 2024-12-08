@@ -15,6 +15,20 @@ export interface SparqlUser {
   // connections: SparqlUser[]
 }
 
+export interface SparqlConnection {
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string | null;
+  webPage?: string | null;
+  status: string,
+  location?: string | null;
+  bio?: string | null;
+  languages: string[];
+  educations: SparqlEducation[],
+  experiences: SparqlExperience[],
+  connectionStatus: string,
+}
+
 export interface SparqlEmployer {
   name: string;
   phoneNumber: string;
@@ -84,8 +98,63 @@ export interface SparqlJob {
 //   OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
 // }
 
+const SparqlEducationsType = () => ObjectListType<SparqlEducation>({
+  query: (education) => {
+    console.log("URI educaiton:", education)
+    return SparqlBuilder.defaultPrefixes().build(`
+    SELECT ?institution ?title ?degree
+    WHERE {
+      <${education}> a lr:Education ;
+        lr:hasInstitution ?institution ;
+        lr:hasTitle ?title ;
+        lr:hasDegree ?degree .
+    }
+  `)
+},
+  fields: {
+    title: { type: StringType },
+    institution: { type: StringType },
+    degree: { type: StringType }
+  }
+})
+
+const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
+  query: (experience) => {
+    console.log("URI experience:", experience)
+    return SparqlBuilder.defaultPrefixes().build(`
+    SELECT
+      ?title
+      ?company
+      ?description
+      ?years
+      ?level
+      ?profession
+    WHERE {
+      <${experience}> a lr:Experience ;
+        lr:hasProfession ?profession ;
+        lr:hasTitle ?title ;
+        lr:hasCompany ?company ;
+        lr:hasDescription ?description ;
+        lr:hasYears ?years ;
+        lr:hasExperienceLevel ?levelUri .
+ 			?levelUri rdfs:label ?level .
+    }
+  `)
+},
+  fields: {
+    profession: { type: StringType },
+    title: { type: StringType },
+    company: { type: StringType },
+    description: { type: OptionalType(StringType) },
+    years: { type: IntegerType },
+    level: { type: StringType }
+  }
+})
+
 export const SparqlUserType = (id: string = "JohnDoe") => ObjectType<SparqlUser>({
-  query: SparqlBuilder.defaultPrefixes().build(`
+  query: (user) => {
+    console.log("URI user:", user)
+    return SparqlBuilder.defaultPrefixes().build(`
     SELECT
       ?firstName
       ?lastName
@@ -94,21 +163,26 @@ export const SparqlUserType = (id: string = "JohnDoe") => ObjectType<SparqlUser>
       ?gender
       ?location
       ?status
-      (GROUP_CONCAT(?language; separator=",") as ?languages)
+      (GROUP_CONCAT(DISTINCT ?education; separator=",") as ?educations)
+      (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
+      (GROUP_CONCAT(DISTINCT ?experience; separator=",") as ?experiences)
     WHERE {
-      user:${id} a lr:User ;
+      <${user}> a lr:User ;
       lr:hasFirstName ?firstName ;
       lr:hasLastName ?lastName ;
       lr:hasEmail ?email .
-      user:${id} lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+      <${user}> lr:hasJobSeekingStatus ?jobSeekingStatusResource .
       ?jobSeekingStatusResource rdfs:label ?status .
-      OPTIONAL { user:${id} lr:hasPhoneNumber ?phone . }
-      OPTIONAL { user:${id} lr:hasGender ?gender . }
-      OPTIONAL { user:${id} lr:hasLocation ?location . }
-      OPTIONAL { user:${id} lr:hasLanguage ?language . }
+      OPTIONAL { <${user}> lr:hasPhoneNumber ?phone . }
+      OPTIONAL { <${user}> lr:hasGender ?gender . }
+      OPTIONAL { <${user}> lr:hasLocation ?location . }
+      OPTIONAL { <${user}> lr:hasEducation ?education . }
+      OPTIONAL { <${user}> lr:hasLanguage ?language . }
+      OPTIONAL { <${user}> lr:hasExperience ?experience . }
     }
     GROUP BY ?firstName ?lastName ?email ?status ?phone ?gender ?location
-  `),
+  `)
+  },
   fields: {
     firstName: { type: StringType },
     lastName: { type: StringType },
@@ -119,78 +193,35 @@ export const SparqlUserType = (id: string = "JohnDoe") => ObjectType<SparqlUser>
     bio: { type: OptionalType(StringType) },
     languages: { type: ListType(StringType) },
     educations: {
-      type: ObjectListType<SparqlEducation>({
-        query: SparqlBuilder.defaultPrefixes().build(`
-          SELECT ?institution ?title ?degree
-          WHERE {
-            user:${id} a lr:User ;
-              lr:hasEducation ?education .
-            ?education a lr:Education ;
-              lr:hasInstitution ?institution ;
-              lr:hasTitle ?title ;
-              lr:hasDegree ?degree .
-          }
-        `),
-        fields: {
-          title: { type: StringType },
-          institution: { type: StringType },
-          degree: { type: StringType }
-        }
-      })
+      type: SparqlEducationsType()
     },
     experiences: {
-      type: ObjectListType<SparqlExperience>({
-        query: SparqlBuilder.defaultPrefixes().build(`
-          SELECT
-            ?title
-            ?company
-            ?description
-            ?years
-            ?level
-            ?profession
-          WHERE {
-            user:${id} a lr:User ;
-              lr:hasExperience ?experience .
-            ?experience a lr:Experience ;
-              lr:hasProfession ?profession ;
-              lr:hasTitle ?title ;
-              lr:hasCompany ?company ;
-              lr:hasDescription ?description ;
-              lr:hasYears ?years ;
-              lr:hasExperienceLevel ?levelUri .
-       			?levelUri rdfs:label ?level .
-          }
-        `),
-        fields: {
-          profession: { type: StringType },
-          title: { type: StringType },
-          company: { type: StringType },
-          description: { type: OptionalType(StringType) },
-          years: { type: IntegerType },
-          level: { type: StringType }
-        }
-      })
+      type: SparqlExperienceType()
     },
     // connections: {
-    //   type: ObjectListType<SparqlConnection>,
-    //   fields: {
-    //     user: { type: ObjectType<SparqlUser>({
-    //       query: "",
-    //       fields: {
-    //         firstName: { type: StringType },
-    //         lastName: { type: StringType },
-    //         phoneNumber: { type: OptionalType(StringType) },
-    //         webPage: { type: OptionalType(StringType) },
-    //         status: { type: StringType },
-    //         location: { type: OptionalType(StringType) },
-    //         bio: { type: OptionalType(StringType) },
-    //         languages: { type: ListType(StringType) },
-    //         educations: { type: ListType() },
-    //         experiences: { type: ListType() },
-    //       }
-    //     })},
-    //     status: { type: StringType }
-    //   }
+    //   type: ObjectListType<SparqlConnection>({
+    //     query: `
+    //       getConnectionFromUser(id)
+    //     `,
+    //     fields: {
+    //       firstName: { type: StringType },
+    //       lastName: { type: StringType },
+    //       phoneNumber: { type: OptionalType(StringType) },
+    //       webPage: { type: OptionalType(StringType) },
+    //       status: { type: StringType },
+    //       location: { type: OptionalType(StringType) },
+    //       bio: { type: OptionalType(StringType) },
+    //       languages: { type: ListType(StringType) },
+    //       educations: { type: SparqlEducationsType(id) },
+    //       experiences: { type: SparqlExperienceType(id) },
+    //       connectionStatus: { type: StringType }
+    //     }
+    //   })
+    // },
+    // status: { type: StringType }
+    //     }
+
+    //   })
     // }
   }
 })

@@ -1,5 +1,6 @@
 import { ParsingClient, SimpleClient } from "sparql-http-client"
 import { ParserType, ResolverContext } from "./sparql_parser"
+import { Term } from "@rdfjs/types";
 
 export type SparqlConfig = {
   updateUrl: string,
@@ -29,6 +30,15 @@ export class SparqlAPI {
     const context: ResolverContext = {
       query: this.query.bind(this)
     }
-    return await object.resolve(context, {})
+
+    const node: Term = {
+      termType: "NamedNode",
+      value: `http://linkrec:8080/user/JohnDoe`,
+      equals(other: Term) {
+        return false;
+      }
+    }
+
+    return await object.resolve(context, node)
   }
 }

@@ -51,7 +51,7 @@ export const ListType = <T>(itemType: ParserType<T>): ParserType<T[]> => ({
 });
 
 export interface ObjectTypeConfig<T> {
-  query: string;
+  query: (uri: string) => string;
   fields: {
     [K in keyof T]: ObjectTypeField<T[K]>;
   };
@@ -65,8 +65,8 @@ export interface ObjectTypeField<T> {
 
 export function ObjectType<T>(config: ObjectTypeConfig<T>): ParserType<T> {
   return {
-    resolve: async (context: ResolverContext, _term: any) => {
-      const rows = await context.query(config.query)
+    resolve: async (context: ResolverContext, term: Term) => {
+      const rows = await context.query(config.query(term.value))
       const row = rows[0];
       const result = {} as T;
 
@@ -95,21 +95,24 @@ export const OptionalType = <T>(parser: ParserType<T>): ParserType<T | null> => 
 
 export function ObjectListType<T>(config: ObjectTypeConfig<T>): ParserType<T[]> {
   return {
-    resolve: async (context: ResolverContext, _term: any) => {
-      const rows = await context.query(config.query)
+    resolve: async (context: ResolverContext, term: Term) => {
+      const uris = term.value.split(',')
       const results: T[] = []
+      for (const uri of uris) {
+        const rows = await context.query(config.query(uri))
 
-      const entries = Object.entries(config.fields) as [keyof T, ObjectTypeField<T[keyof T]>][];
+        const entries = Object.entries(config.fields) as [keyof T, ObjectTypeField<T[keyof T]>][];
 
-      for (const row of rows) {
-        const result = {} as T;
+        for (const row of rows) {
+          const result = {} as T;
 
-        for (const [fieldName, field] of entries) {
-          const term = row[fieldName as string] || null;
-          console.log(fieldName, "term", term)
-          result[fieldName] = await field.type.resolve(context, term);
+          for (const [fieldName, field] of entries) {
+            const term = row[fieldName as string] || null;
+            console.log(fieldName, "term", term)
+            result[fieldName] = await field.type.resolve(context, term);
+          }
+          results.push(result)
         }
-        results.push(result)
       }
 
       return results;

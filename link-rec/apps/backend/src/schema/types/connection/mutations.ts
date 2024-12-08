@@ -1,6 +1,6 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLNonNull } from "graphql";
 import { ApolloContext } from "../../../apollo_server";
-import { Connection, ConnectionType } from "./types";
+import { Connection, ConnectionType } from "../user/types";
 
 /**
  * Creates a new connection between users
@@ -12,11 +12,15 @@ import { Connection, ConnectionType } from "./types";
 export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
   type: new GraphQLNonNull(ConnectionType),
   args: {
-    id: { type: GraphQLID }
+    id: { type: GraphQLID },
   },
-  resolve: async (_source, args, context, info): Promise<Connection|null> => {
-    // TODO remove null -> also in return type
-    return null;
+  resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
+    try {
+      console.log("executing")
+      return context.api.userService.createConnection(context.userId!, args.id)
+    } catch(error) {
+      throw context.api.handleError(error);
+    }
   }
 };
 
@@ -32,9 +36,9 @@ export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args, context, info): Promise<Connection|null> => {
+  resolve: async (_source, args, context: ApolloContext, info): Promise<Connection|null> => {
     // TODO remove null -> also in return type
-    return null;
+    return null
   }
 };
 

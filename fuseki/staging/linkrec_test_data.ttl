@@ -26,7 +26,8 @@ user:JohnDoe a lr:User ;
     lr:hasEducation education:Education1 ;
     lr:hasEducation education:Education2 ;
     lr:hasLanguage "English" ;
-    lr:hasJobSeekingStatus lr:ActivelyLooking .
+    lr:hasJobSeekingStatus lr:ActivelyLooking ;
+    lr:knows user:JaneSmith .
 
 user:JaneSmith a lr:User ;
     lr:hasId "JaneSmith" ;
@@ -38,7 +39,8 @@ user:JaneSmith a lr:User ;
     lr:hasExperience experience:Experience2 ;
     lr:hasEducation education:Education2 ;
     lr:hasLanguage "Spanish" ;
-    lr:hasJobSeekingStatus lr:ActivelyLooking .
+    lr:hasJobSeekingStatus lr:ActivelyLooking ;
+    lr:knows user:JohnDoe .
 
 # Employers
 employer:TechCorp a lr:Employer ;

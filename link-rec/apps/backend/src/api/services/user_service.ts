@@ -9,9 +9,10 @@ import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
-import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
+import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
+import { statusFromString } from "../../schema/types/user/types";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -49,9 +50,22 @@ export class UserService{
     return result as any
   }
 
-  async getUserConnections(id: string): Promise<User[]> {
-    const users = await this.context.sparql.resolve(SparqlConnectionType(id))
-    return users as any
+  async getUserConnections(id: string): Promise<GQLTypes.Connection.Type[]> {
+    const users = await this.context.sparql.resolve(SparqlConnectionsType(id))
+    return users.map((user) => ({
+      status: statusFromString(user.connectionStatus),
+      user: user as any
+    }))
+  }
+
+  async getUserConnection(userId: string, peerId: string): Promise<GQLTypes.Connection.Type> {
+    const user = await this.context.sparql.resolve(SparqlConnectionType(userId, peerId))
+    const result: GQLTypes.Connection.Type = {
+      user: user as any,
+      status: statusFromString(user.connectionStatus)
+    }
+    console.log("RESULT:", result)
+    return result
   }
 
   async getUserEducations(id: string): Promise<GQLTypes.Education.Type[]> {
@@ -74,14 +88,12 @@ export class UserService{
       password: await hash(input.password, 4)
     }).returning();
 
-    // TODO: insert into rdf and refetch + add data to struct
-
     const user: User = {
       id: inserted.id,
       email: inserted.email,
       firstName: input.firstName,
       lastName: input.lastName,
-      status: Status.NOT_LOOKING,
+      status: input.status,
       phoneNumber: input.phoneNumber,
       languages: [],
       experiences: [],
@@ -101,7 +113,7 @@ export class UserService{
       `lr:hasEmail "${user.email}"`,
       `lr:hasFirstName "${user.firstName}"`,
       `lr:hasLastName "${user.lastName}"`,
-      `lr:hasJobSeekingStatus lr:${jobSeekingStatusToString(user.status)}`,
+      `lr:hasJobSeekingStatus lr:${jobSeekingStatusToUriString(user.status)}`,
       `lr:hasPhoneNumber "${user.phoneNumber}"`
     )
     if (user.location)
@@ -116,17 +128,29 @@ export class UserService{
               ${fields.build()}
             }`
           )
-    console.log("query", query)
 
     await this.context.sparql.update(query)
   }
 
-  private async createConnection(user1: User, user2: User) {
+  async createConnection(userId: string, peerId: string): Promise<GQLTypes.Connection.Type> {
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
       .build(`
-        INSERT DATA {
-          lr_users:${user1.id} lro:Connection lr_users:${user2.id} .
+        DELETE {
+            user:${userId} lr:knows user:${peerId} .
+            user:${userId} lr:hasConnection user:${peerId} .
+            user:${userId} lr:hasReceiving user:${peerId} .
+            user:${userId} lr:hasPending user:${peerId} .
+        }
+        INSERT {
+            user:${userId} lr:knows user:${peerId} .
+        }
+        WHERE {
+            # This WHERE clause can be used to match the existing triples you want to delete.
+            OPTIONAL {
+                user:${userId} lr:knows user:${peerId} .
+            }
         }
       `))
+    return await this.getUserConnection(userId, peerId)
   }
 }

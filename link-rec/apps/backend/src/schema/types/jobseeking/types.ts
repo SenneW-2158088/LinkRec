@@ -6,7 +6,7 @@ export enum JobSeekingStatus {
   NOT_LOOKING = "NOT_LOOKING",
 }
 
-export const jobSeekingStatusToString = (status: JobSeekingStatus) => {
+export const jobSeekingStatusToUriString = (status: JobSeekingStatus) => {
   switch(status) {
       case JobSeekingStatus.ACTIVELY_LOOKING:
         return "ActivelyLooking";
@@ -21,11 +21,11 @@ export const jobSeekingStatusToString = (status: JobSeekingStatus) => {
 
 export const jobSeekingStatusFromString = (status: string) => {
   switch(status) {
-    case "ActivelyLooking":
+    case "ACTIVELY_LOOKING":
         return JobSeekingStatus.ACTIVELY_LOOKING
-    case "OpenToOffers":
+    case "OPEN_TO_OFFERS":
       return JobSeekingStatus.OPEN_TO_OFFERS
-    case "NotLooking":
+    case "NOT_LOOKING":
       return JobSeekingStatus.NOT_LOOKING
     default:
        throw Error("Doesn't match any job seeking status string")

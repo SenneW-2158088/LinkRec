@@ -43,6 +43,12 @@ lr:hasLocation a rdf:Property . # -> lr:Location
 lr:hasInferredLocation a rdf:Property . # -> lr:Location
 lr:knows a rdf:Property ;
     owl:sameAs foaf:knows .
+lr:hasConnection a rdf:Property ; # inferenced
+    rdfs:label "CONNECTED" .
+lr:hasPending a rdf:Property ; # inferenced
+    rdfs:label "PENDING" .
+lr:hasReceiving a rdf:Property ; # inferenced
+    rdfs:label "RECEIVING" .
 lr:hasJobSeekingStatus a rdf:Property .
 lr:hasLanguage a rdf:Property ;
     owl:sameAs vcard:hasLanguage .
@@ -54,11 +60,11 @@ lr:matchesRequirement a rdf:Property . # -> lr:Requirement
 
 lr:JobSeekingStatus a rdfs:Class .
 lr:ActivelyLooking rdfs:subClassOf lr:JobSeekingStatus ;
-    rdfs:label "ActivelyLooking" .
+    rdfs:label "ACTIVELY_LOOKING" .
 lr:OpenToOffers rdfs:subClassOf lr:JobSeekingStatus ;
-    rdfs:label "OpenToOffers" .
+    rdfs:label "OPEN_TO_OFFERS" .
 lr:NotLooking rdfs:subClassOf lr:JobSeekingStatus ;
-    rdfs:label "NotLooking" .
+    rdfs:label "NOT_LOOKING" .
 
 # EMPLOYERS
 lr:Employer a vcard:Individual ;

@@ -1,6 +1,6 @@
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
-import { LoginInputType, UserInputType, UserType } from "./types";
+import { RequestConnectionInputType as RequestConnectionInputType, LoginInputType, UserInputType, UserType } from "./types";
 import { AllUserQuery, UserQuery } from "./queries";
 import { User as IType} from "./types";
 
@@ -23,5 +23,7 @@ export namespace User {
     "users": AllUserQuery,
   }
 
-  export const mutations = { }
+  export const mutations = {
+
+  }
 }

@@ -25,28 +25,39 @@
     (?s ?x ?o)
 ]
 
+# connection inferencing
+[connectionsInference:
+    (?user1 rdf:type lr:User)
+    (?user1 lr:knows ?user2)
+    (?user2 lr:knows ?user1)
+    ->
+    (?user1 lr:hasConnection ?user2)
+    (?user2 lr:hasConnection ?user1)
+]
+
+[requestInference:
+    (?user1 rdf:type lr:User)
+    (?user1 lr:knows ?user2)
+    noValue(?user2, lr:knows, ?user1)
+    ->
+    (?user1 lr:hasPending ?user2)
+    (?user2 lr:hasReceiving ?user1)
+]
+
 [locationInference:
-    (?user a lr:User)
-    (?user lr:hasLocation ?locationID)
+    (?user rdf:type lr:User)
+    (?user lr:hasInferredLocation ?locationID)
     (?locationID lr:isPartOf ?parentLocationID)
     ->
-    (?user lr:hasLocation ?parentLocationID)
+    (?user lr:hasInferredLocation ?parentLocationID)
 ]
 
 [locationNameInference:
     (?subject lr:hasLocation ?locationName)
     (?location lr:hasGeoName ?locationName)
     ->
-    (?subject lr:hasLocation ?location)
+    (?subject lr:hasInferredLocation ?location)
 ]
-
-# [locationInference:
-#     (?job lr:hasLocation ?locationName)
-#     (?location lr:hasGeoName ?locationName)
-#     ->
-#     (?job lr:hasLocation ?location)
-# ]
-
 
 # [alternateLocationInference:
 #     (?subject lr:hasLocation ?locationName)
@@ -63,7 +74,7 @@
 ]
 
 [educationInference:
-    (?subject a lr:Education)
+    (?subject rdf:type lr:Education)
     (?subject lr:hasTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
@@ -112,9 +123,10 @@
     (?requirement lr:hasExperienceLevel ?level)
 ]
 
+# TODO: don't inference if job is closed or if user is not looking for a job
 [userJobMatchingProfessionInference:
-    (?user lr:hasLocation ?userLocation)
-    (?job lr:hasLocation ?jobLocation)
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasProfession ?profession)
@@ -124,8 +136,8 @@
     (?user lr:matchesRequirement ?requirement)
 ]
 [userJobMatchingLanguageInference:
-    (?user lr:hasLocation ?userLocation)
-    (?job lr:hasLocation ?jobLocation)
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
@@ -133,9 +145,9 @@
     ->
     (?user lr:matchesRequirement ?requirement)
 ]
-[usrJobMatchingEducationInference:
-    (?user lr:hasLocation ?userLocation)
-    (?job lr:hasLocation ?jobLocation)
+[userJobMatchingEducationInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasEducationTitle ?educationTitle)

@@ -1,5 +1,5 @@
+import { ConnectionType, Status as IStatus, Connection as IConnection } from "../user/types";
 import { acceptConnectionMutation, createConnectionMutation, declineConnectionMutation } from "./mutations";
-import { Status as IStatus, Connection as IConnection, ConnectionType } from "./types";
 
 export namespace Connection {
 

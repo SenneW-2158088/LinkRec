@@ -24,10 +24,7 @@ export const requirementInputScheme = z.object({
     .min(2, 'Education must be at least 2 characters')
     .max(50, 'Education cannot exceed 50 characters')
     .trim(),
-  description: z.string()
-    .min(10, 'Description must be at least 10 characters')
-    .max(1000, 'Description cannot exceed 1000 characters')
-    .trim(),
+
 })
 
 export const requirementUpdateInputScheme = z.object({
@@ -58,11 +55,6 @@ export const requirementUpdateInputScheme = z.object({
   degree: z.string()
     .min(2, 'Education must be at least 2 characters')
     .max(50, 'Education cannot exceed 50 characters')
-    .trim()
-    .optional(),
-  description: z.string()
-    .min(10, 'Description must be at least 10 characters')
-    .max(1000, 'Description cannot exceed 1000 characters')
     .trim()
     .optional(),
 })

@@ -1,16 +1,41 @@
-import { SparqlFieldBuilder } from "../sparql_builder"
+import { SparqlBuilder, SparqlFieldBuilder } from "../sparql_builder"
 
 export namespace JobQuery {
+
+  export const all = () : string => {
+
+    const jobFields = SparqlFieldBuilder.fromFields(
+      `?job a lr:Job`,
+      `lr:hasId ?id`,
+      `lr:hasTitle ?title`,
+      `lr:hasLocation ?location`,
+      `lr:isActive ?active`,
+    );
+
+    return `
+      SELECT ?id ?title ?location ?active
+      WHERE {
+        ${jobFields.build()}
+      }
+    `
+  }
 
   export const get = (id: string) : string => {
 
     const jobFields = SparqlFieldBuilder.fromFields(
-      `job:${id} a lr:Job`,
-      `lr:hasId "${id}"`,
-      `lr:hasTitle "${title}"`,
-      `lr:hasLocation "${location}"`,
-      `lr:isActive ${active}`,
+      `a lr:Job`,
+      `lr:hasId ?id`,
+      `lr:hasTitle ?title`,
+      `lr:hasLocation ?location`,
+      `lr:isActive ?active`,
     );
+
+    return `
+SELECT ?id ?title ?location ?active
+WHERE {
+  ${jobFields.build()}
+}
+    `
   }
 
   export const create = (
@@ -25,7 +50,6 @@ export namespace JobQuery {
       language: string,
       education: string,
       degree: string,
-      description: string,
     }[]
   ) : string => {
 
@@ -40,17 +64,16 @@ export namespace JobQuery {
     const requirementFields: string[] = [];
 
     requirements.forEach(req => {
-      jobFields.field(`lr:hasRequirement req:${req.id}`);
+      jobFields.field(`lr:hasRequirement requirement:${req.id}`);
 
       const reqTriples = SparqlFieldBuilder.fromFields(
         `requirement:${req.id} a lr:Requirement`,
         `lr:hasId "${req.id}"`,
         `lr:hasProfession "${req.profession}"`,
-        `lr:hasYearsExperience "${req.years}"`,
+        `lr:requiredYears "${req.years}"`,
         `lr:hasLanguage "${req.language}"`,
         `lr:hasEducation "${req.education}"`,
         `lr:hasDegree "${req.degree}"`,
-        `lr:hasDescription "${req.description}"`
       );
 
       requirementFields.push(reqTriples.build());

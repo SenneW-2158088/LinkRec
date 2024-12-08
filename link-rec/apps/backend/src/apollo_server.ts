@@ -3,17 +3,15 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 
 import { linkRecSchema } from "./schema";
 import { Database, DatabaseConfig } from "./db/database";
-import { LinkRecAPI } from "./api";
 import { SparqlAPI } from "./api/sparql/sparql_api";
 import { schemaTransform } from "./schema/transformers";
 import { userDirectiveTransformer } from "./schema/transformers/userDirectiveTransformer";
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
-import { sign as signJwt, verify as verifyJwt } from "jsonwebtoken";
 import { jwtMiddleware } from "./middleware/jwtMiddleware";
 import JwtService from "./jwt";
-import { GQLTypes } from "./schema/types";
 import { roleDirectiveTransformer } from "./schema/transformers/roleDirectiveTransformer";
 import { Role } from "./schema/types/role/types";
+import { LinkRecAPI } from "./api";
 
 const dbConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',

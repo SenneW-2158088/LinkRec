@@ -12,17 +12,9 @@ export const createJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   // extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
   resolve: async (_source, args: { input: Validation.Job.Input }, context, _info) : Promise<Job> => {
     try {
-      await context.api.jobService.create(args.input)
-
-      return {
-        id: "1",
-        title: "",
-        location: "",
-        requirements: [],
-        active: false
-      }
+      return await context.api.jobService.create(args.input)
     }catch(error) {
-      context.api.handleError(error);
+      throw context.api.handleError(error);
     }
   }
 }
@@ -36,7 +28,6 @@ export const updateJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   // extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
   resolve: async (_source, args: { id: string, input: Validation.Job.Update }, context, _info) : Promise<void> => {
     try {
-      console.log(args.input);
       await context.api.jobService.update(args.id, args.input)
     }catch(error) {
       context.api.handleError(error);

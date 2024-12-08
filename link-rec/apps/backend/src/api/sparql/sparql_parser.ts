@@ -76,7 +76,10 @@ export function ObjectType<T>(config: ObjectTypeConfig<T>): ParserType<T> {
       for (const [fieldName, field] of entries) {
         console.log("fieldname", fieldName)
         const term = row[fieldName as string] || null;
-        result[fieldName] = await field.type.resolve(context, term);
+        console.log("term", term)
+        if (term && field) {
+          result[fieldName] = await field.type.resolve(context, term);
+        }
       }
 
       return result;
@@ -97,6 +100,8 @@ export function ObjectListType<T>(config: ObjectTypeConfig<T>): ParserType<T[]> 
   return {
     resolve: async (context: ResolverContext, term: Term) => {
       const uris = term.value.split(',')
+      console.log("URIS", uris)
+      console.log("CONFIG", config)
       const results: T[] = []
       for (const uri of uris) {
         const rows = await context.query(config.query(uri))
@@ -109,7 +114,9 @@ export function ObjectListType<T>(config: ObjectTypeConfig<T>): ParserType<T[]> 
           for (const [fieldName, field] of entries) {
             const term = row[fieldName as string] || null;
             console.log(fieldName, "term", term)
-            result[fieldName] = await field.type.resolve(context, term);
+            if (term && field) {
+              result[fieldName] = await field.type.resolve(context, term);
+            }
           }
           results.push(result)
         }

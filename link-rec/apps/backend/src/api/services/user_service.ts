@@ -11,7 +11,7 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlUserType } from "./types/user";
+import { SparqlUserConfig, SparqlUserType } from "./types/user";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -89,8 +89,8 @@ export class UserService{
   }
 
   private async queryRdfUser(user: { id: string }) {
-    const result = await this.context.sparql.resolve(SparqlUserType())
-    console.log("RESULLTTTTTT!!!!:", result)
+    const result = await this.context.sparql.resolve(SparqlUserType)
+    console.log("RESULLTTTTTT!!!!:", JSON.stringify(result, null, 2))
 
     return result
   }

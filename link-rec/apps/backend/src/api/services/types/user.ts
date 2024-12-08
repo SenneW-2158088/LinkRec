@@ -12,7 +12,7 @@ export interface SparqlUser {
   languages: string[];
   educations: SparqlEducation[],
   experiences: SparqlExperience[],
-  // connections: SparqlUser[]
+  connections?: SparqlUser[]
 }
 
 export interface SparqlConnection {
@@ -151,77 +151,61 @@ const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
   }
 })
 
-export const SparqlUserType = (id: string = "JohnDoe") => ObjectType<SparqlUser>({
-  query: (user) => {
-    console.log("URI user:", user)
-    return SparqlBuilder.defaultPrefixes().build(`
-    SELECT
-      ?firstName
-      ?lastName
-      ?email
-      ?phone
-      ?gender
-      ?location
-      ?status
-      (GROUP_CONCAT(DISTINCT ?education; separator=",") as ?educations)
-      (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
-      (GROUP_CONCAT(DISTINCT ?experience; separator=",") as ?experiences)
-    WHERE {
-      <${user}> a lr:User ;
-      lr:hasFirstName ?firstName ;
-      lr:hasLastName ?lastName ;
-      lr:hasEmail ?email .
-      <${user}> lr:hasJobSeekingStatus ?jobSeekingStatusResource .
-      ?jobSeekingStatusResource rdfs:label ?status .
-      OPTIONAL { <${user}> lr:hasPhoneNumber ?phone . }
-      OPTIONAL { <${user}> lr:hasGender ?gender . }
-      OPTIONAL { <${user}> lr:hasLocation ?location . }
-      OPTIONAL { <${user}> lr:hasEducation ?education . }
-      OPTIONAL { <${user}> lr:hasLanguage ?language . }
-      OPTIONAL { <${user}> lr:hasExperience ?experience . }
+export const SparqlUserConfig: any = (depth: number = 2) => {
+  return {
+    query: (user: string) => {
+      console.log("URI user:", user)
+      return SparqlBuilder.defaultPrefixes().build(`
+      SELECT
+        ?firstName
+        ?lastName
+        ?email
+        ?phone
+        ?gender
+        ?location
+        ?status
+        (GROUP_CONCAT(DISTINCT ?education; separator=",") as ?educations)
+        (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
+        (GROUP_CONCAT(DISTINCT ?experience; separator=",") as ?experiences)
+        (GROUP_CONCAT(DISTINCT ?connection; separator=",") as ?connections)
+      WHERE {
+        <${user}> a lr:User ;
+        lr:hasFirstName ?firstName ;
+        lr:hasLastName ?lastName ;
+        lr:hasEmail ?email .
+        <${user}> lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+        ?jobSeekingStatusResource rdfs:label ?status .
+        OPTIONAL { <${user}> lr:hasPhoneNumber ?phone . }
+        OPTIONAL { <${user}> lr:hasGender ?gender . }
+        OPTIONAL { <${user}> lr:hasLocation ?location . }
+        OPTIONAL { <${user}> lr:hasEducation ?education . }
+        OPTIONAL { <${user}> lr:hasLanguage ?language . }
+        OPTIONAL { <${user}> lr:hasExperience ?experience . }
+        OPTIONAL { <${user}> lr:knows ?connection . }
+      }
+      GROUP BY ?firstName ?lastName ?email ?status ?phone ?gender ?location
+    `)
+    },
+    fields: {
+      firstName: { type: StringType },
+      lastName: { type: StringType },
+      phoneNumber: { type: OptionalType(StringType) },
+      webPage: { type: OptionalType(StringType) },
+      status: { type: StringType },
+      location: { type: OptionalType(StringType) },
+      bio: { type: OptionalType(StringType) },
+      languages: { type: ListType(StringType) },
+      educations: {
+        type: SparqlEducationsType()
+      },
+      experiences: {
+        type: SparqlExperienceType()
+      },
+      connections: depth > 0 ? {
+        type: ObjectListType(SparqlUserConfig(depth - 1))
+      } : undefined
     }
-    GROUP BY ?firstName ?lastName ?email ?status ?phone ?gender ?location
-  `)
-  },
-  fields: {
-    firstName: { type: StringType },
-    lastName: { type: StringType },
-    phoneNumber: { type: OptionalType(StringType) },
-    webPage: { type: OptionalType(StringType) },
-    status: { type: StringType },
-    location: { type: OptionalType(StringType) },
-    bio: { type: OptionalType(StringType) },
-    languages: { type: ListType(StringType) },
-    educations: {
-      type: SparqlEducationsType()
-    },
-    experiences: {
-      type: SparqlExperienceType()
-    },
-    // connections: {
-    //   type: ObjectListType<SparqlConnection>({
-    //     query: `
-    //       getConnectionFromUser(id)
-    //     `,
-    //     fields: {
-    //       firstName: { type: StringType },
-    //       lastName: { type: StringType },
-    //       phoneNumber: { type: OptionalType(StringType) },
-    //       webPage: { type: OptionalType(StringType) },
-    //       status: { type: StringType },
-    //       location: { type: OptionalType(StringType) },
-    //       bio: { type: OptionalType(StringType) },
-    //       languages: { type: ListType(StringType) },
-    //       educations: { type: SparqlEducationsType(id) },
-    //       experiences: { type: SparqlExperienceType(id) },
-    //       connectionStatus: { type: StringType }
-    //     }
-    //   })
-    // },
-    // status: { type: StringType }
-    //     }
-
-    //   })
-    // }
   }
-})
+}
+
+export const SparqlUserType = ObjectType<SparqlUser>(SparqlUserConfig())

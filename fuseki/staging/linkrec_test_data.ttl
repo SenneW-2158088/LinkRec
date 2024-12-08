@@ -34,7 +34,7 @@ user:JaneSmith a lr:User ;
     lr:hasPhoneNumber "+0987654321" ;
     lr:hasLocation "Antwerpen" ;
     lr:hasExperience experience:Experience2 ;
-    lr:hasEducation "master in diplomacy" ;
+    lr:hasEducation education:Education2 ;
     lr:hasLanguage "Spanish" ;
     lr:hasJobSeekingStatus lr:ActivelyLooking .
 

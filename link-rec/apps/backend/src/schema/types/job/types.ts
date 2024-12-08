@@ -29,7 +29,6 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
       type: new GraphQLList(new GraphQLNonNull(requirementType)),
       resolve: async (source, args, context: ApolloContext, _info) : Promise<Requirement[]>  => {
         try {
-          console.log("using requirements")
           return context.api.jobService.getRequirementsFor(source.id);
         }catch(error) {
           console.log(error)

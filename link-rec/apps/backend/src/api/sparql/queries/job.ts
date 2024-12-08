@@ -2,10 +2,28 @@ import { SparqlBuilder, SparqlFieldBuilder } from "../sparql_builder"
 
 export namespace JobQuery {
 
+  export const all = () : string => {
+
+    const jobFields = SparqlFieldBuilder.fromFields(
+      `?job a lr:Job`,
+      `lr:hasId ?id`,
+      `lr:hasTitle ?title`,
+      `lr:hasLocation ?location`,
+      `lr:isActive ?active`,
+    );
+
+    return `
+      SELECT ?id ?title ?location ?active
+      WHERE {
+        ${jobFields.build()}
+      }
+    `
+  }
+
   export const get = (id: string) : string => {
 
     const jobFields = SparqlFieldBuilder.fromFields(
-      `job:${id} a lr:Job`,
+      `a lr:Job`,
       `lr:hasId ?id`,
       `lr:hasTitle ?title`,
       `lr:hasLocation ?location`,

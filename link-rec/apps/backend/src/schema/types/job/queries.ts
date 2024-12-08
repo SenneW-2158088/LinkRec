@@ -1,4 +1,4 @@
-import { GraphQLFieldConfig, GraphQLID } from "graphql"
+import { GraphQLFieldConfig, GraphQLID, GraphQLList } from "graphql"
 import { Job, JobType } from "./types"
 import { ApolloContext } from "../../../apollo_server"
 
@@ -15,6 +15,17 @@ export const jobQuery: GraphQLFieldConfig<any, ApolloContext> = {
       location: "",
       requirements: [],
       active: false
+    }
+  }
+}
+
+export const allJobsQuery: GraphQLFieldConfig<any, ApolloContext> = {
+  type: new GraphQLList(JobType),
+  resolve: async (_source, _args, context, _info) : Promise<Job[]> => {
+    try {
+      return await context.api.jobService.all();
+    } catch(error) {
+      throw context.api.handleError(error)
     }
   }
 }

@@ -6,7 +6,7 @@ import { SparqlAPI } from "../sparql/sparql_api";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { JobQuery } from "../sparql/queries/job";
 import { v4 as uuid } from "uuid";
-import { SparqlJobType } from "../sparql/parsers/job";
+import { SparqlAllJobType, SparqlJobType } from "../sparql/parsers/job";
 import { Job } from "../../schema/types/job/types";
 import { Experience } from "../../schema/types/experience/types";
 import { Requirement } from "../../schema/types/requirement/types";
@@ -49,7 +49,6 @@ export class JobService{
       title: queryResult.title,
       requirements: [],
     }
-    // Fetch query
   }
 
   async update(id: string, input: JobUpdate) {
@@ -71,8 +70,12 @@ export class JobService{
 
   }
 
-  async all() {
-
+  async all() : Promise<Job[]> {
+    const jobs = await this.context.sparql.resolve(SparqlAllJobType());
+    return jobs.map((job) => ({
+      ...job,
+      requirements: []
+    }))
   }
 
   async getRequirementsFor(jobId: string) : Promise<Requirement[]> {

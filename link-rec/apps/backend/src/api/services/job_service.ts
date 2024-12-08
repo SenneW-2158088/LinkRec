@@ -7,6 +7,11 @@ import { SparqlBuilder } from "../sparql/sparql_builder";
 import { JobQuery } from "../sparql/queries/job";
 import { v4 as uuid } from "uuid";
 import { SparqlJobType } from "../sparql/parsers/job";
+import { Job } from "../../schema/types/job/types";
+import { Experience } from "../../schema/types/experience/types";
+import { Requirement } from "../../schema/types/requirement/types";
+import { RequirementQuery } from "../sparql/queries/requirement";
+import { SparqlJobRequirementsType } from "../sparql/parsers/requirement";
 
 
 type Employer = GQLTypes.Employer.Type;
@@ -17,10 +22,9 @@ export class JobService{
   constructor(private context: Context) { }
 
 
-  async create(input: JobInput) {
+  async create(input: JobInput) : Promise<Job> {
 
-    // jobSchema.parse(input);
-    console.log(input)
+    jobSchema.parse(input);
 
     // Create query
     const jobId = uuid();
@@ -35,15 +39,16 @@ export class JobService{
       })),
     )
 
-    console.log(insert)
-    const insertResult = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
-    console.log(insertResult);
-
-    // const query = JobQuery.get(jobId)
-    // console.log(query)
-
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
     const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
-    console.log("JOB: ", queryResult);
+
+    return {
+      id: queryResult.id,
+      active: queryResult.active,
+      location: queryResult.location,
+      title: queryResult.title,
+      requirements: [],
+    }
     // Fetch query
   }
 
@@ -68,5 +73,13 @@ export class JobService{
 
   async all() {
 
+  }
+
+  async getRequirementsFor(jobId: string) : Promise<Requirement[]> {
+    const queryResult = await this.context.sparql.resolve(SparqlJobRequirementsType(jobId));
+
+    return queryResult.map((res) => ({
+      ...res
+    }));
   }
 }

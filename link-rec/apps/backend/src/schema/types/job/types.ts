@@ -1,6 +1,7 @@
 import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { Requirement, requirementInputType, requirementType, requirementUpdateType } from "../requirement/types";
 import { Validation } from "../../../validation";
+import { ApolloContext } from "../../../apollo_server";
 
 export const enum Level {
   ENTRY,
@@ -22,14 +23,18 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
-    employer: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     requirements: {
       type: new GraphQLList(new GraphQLNonNull(requirementType)),
-      resolve: async (_source, args, context, _info) : Promise<Requirement[]>  => {
-        console.log("using requirements")
-        return []
+      resolve: async (source, args, context: ApolloContext, _info) : Promise<Requirement[]>  => {
+        try {
+          console.log("using requirements")
+          return context.api.jobService.getRequirementsFor(source.id);
+        }catch(error) {
+          console.log(error)
+          throw context.api.handleError(error)
+        }
       }
     },
     isActive: { type: new GraphQLNonNull(GraphQLBoolean) },

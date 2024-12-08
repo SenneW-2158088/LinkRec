@@ -32,7 +32,6 @@ WHERE {
       language: string,
       education: string,
       degree: string,
-      description: string,
     }[]
   ) : string => {
 
@@ -57,7 +56,6 @@ WHERE {
         `lr:hasLanguage "${req.language}"`,
         `lr:hasEducation "${req.education}"`,
         `lr:hasDegree "${req.degree}"`,
-        `lr:hasDescription "${req.description}"`
       );
 
       requirementFields.push(reqTriples.build());

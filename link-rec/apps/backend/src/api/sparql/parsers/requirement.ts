@@ -10,7 +10,6 @@ export interface SparqlRequirement {
   language: string | null,
   education: string | null,
   degree: string | null,
-  description: string | null,
 }
 
 export const SparqlJobRequirementsType = (id: string) => ObjectListType<SparqlRequirement>({
@@ -24,6 +23,5 @@ export const SparqlJobRequirementsType = (id: string) => ObjectListType<SparqlRe
     language: { type: OptionalType(StringType) },
     education: { type: OptionalType(StringType) },
     degree: { type: OptionalType(StringType) },
-    description: { type: OptionalType(StringType) },
   }
 })

@@ -50,6 +50,7 @@ export class LinkRecAPI {
       return ValidationError.fromZodError(error).toGraphQL();
     }
 
+    console.log(error)
     return new GraphQLError("Unexpected error occured");
   }
 }

@@ -4,8 +4,7 @@ export namespace RequirementQuery {
   export const forJob = (id: string) : string => {
 
   const jobField = SparqlFieldBuilder.fromFields(
-    `job:${id} a lr:Requirement`,
-    `lr:hasRequirement ?requirement`,
+    `job:${id} lr:hasRequirement ?requirement`,
   );
 
   return `

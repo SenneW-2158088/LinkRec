@@ -8,7 +8,6 @@ export interface SparqlJob {
   title: string,
   location: string
   active: boolean,
-  requirements: SparqlRequirement[],
 }
 
 export const SparqlJobType = (id: string) => ObjectType<SparqlJob>({
@@ -20,6 +19,5 @@ export const SparqlJobType = (id: string) => ObjectType<SparqlJob>({
     title: { type: StringType },
     location: { type: StringType },
     active: { type: BooleanType },
-    requirements: { type: SparqlJobRequirementsType(id) },
   }
 })

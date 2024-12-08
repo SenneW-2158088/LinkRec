@@ -4,6 +4,7 @@ import { Education } from "../education";
 import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking/types";
 import { Experience } from "../experience";
 import { GQLTypes } from "..";
+import { EducationInput } from "../education/types";
 
 export interface User {
   id: string;
@@ -162,8 +163,24 @@ export const UserInputType = new GraphQLInputObjectType({
     bio: { type: GraphQLString },
     status: { type: new GraphQLNonNull(GraphQLString) },
     education: { type: new GraphQLList(Education.Create) },
+    experiences: { type: new GraphQLList(Experience.Create) },
+    languages: { type: new GraphQLList(GraphQLString) },
   },
 });
+
+export type UserInput = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  phoneNumber: string,
+  webPage: string | null,
+  location: string | null,
+  bio: string | null,
+  status: string,
+  education: EducationInput[],
+  languages: string[],
+}
 
 export type RequestConnectionInput = {
   userId: string

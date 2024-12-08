@@ -40,7 +40,7 @@ export class SparqlBuilder {
 }
 
 export class SparqlFieldBuilder {
-  private constructor(private fields: string[]) {
+  constructor(private fields: string[]) {
 
   }
   static fromFields(...fields: string[]) {

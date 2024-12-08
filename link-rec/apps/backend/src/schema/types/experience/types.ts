@@ -47,3 +47,9 @@ export const ExperienceInputType: GraphQLInputObjectType = new GraphQLInputObjec
     years: { type: new GraphQLNonNull(GraphQLInt) },
   })
 });
+export type ExperienceInput = {
+  title: string,
+  company: string,
+  description: string | null,
+  years: number
+}

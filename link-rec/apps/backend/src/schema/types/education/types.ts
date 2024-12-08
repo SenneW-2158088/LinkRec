@@ -37,3 +37,9 @@ export const EducationInputType: GraphQLInputObjectType  = new GraphQLInputObjec
     degree: { type: new GraphQLNonNull(DegreeType) },
   })
 })
+
+export type EducationInput = {
+  institution: string,
+  title: string,
+  degree: string,
+}

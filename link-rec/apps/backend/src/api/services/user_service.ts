@@ -12,7 +12,7 @@ import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
 import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
-import { statusFromString } from "../../schema/types/user/types";
+import { statusFromString, UserInput } from "../../schema/types/user/types";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -101,12 +101,14 @@ export class UserService{
       connections: [],
     };
 
-    await this.updateRdfUser(user)
+    await this.createRdfUser(user)
 
     return user;
   }
 
-  private async updateRdfUser(user: User) {
+  private async createRdfUser(user: User) {
+    const queryBuilder = new SparqlFieldBuilder([])
+    const deleteBuilder = new SparqlFieldBuilder([])
     const fields = SparqlFieldBuilder.fromFields(
       `user:${ user.id } a lr:User`,
       `lr:hasId "${user.id}"`,
@@ -120,6 +122,8 @@ export class UserService{
       fields.field(`lr:hasLocation "${user.location}"`)
     if (user.webPage)
       fields.field(`lr:hasWebPage "${user.webPage}"`)
+    if (user.educations.length > 0) {
+    }
 
     // TODO: Delete these fields before adding them again
     const query = SparqlBuilder.defaultPrefixes()
@@ -130,6 +134,14 @@ export class UserService{
           )
 
     await this.context.sparql.update(query)
+  }
+
+  public updateUser(input: UserInput) {
+
+  }
+
+  private async updateRdfUser() {
+
   }
 
   async createConnection(userId: string, peerId: string): Promise<GQLTypes.Connection.Type> {

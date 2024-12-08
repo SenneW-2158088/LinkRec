@@ -1,4 +1,5 @@
 import { SparqlJob } from "../../sparql/parsers/job";
+import { EmployerQuery } from "../../sparql/queries/employer";
 import { SparqlBuilder } from "../../sparql/sparql_builder"
 import { BooleanType, IntegerType, ListType, ObjectListType, ObjectType, OptionalType, StringType } from "../../sparql/sparql_parser"
 
@@ -127,6 +128,24 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
     years: { type: IntegerType },
   }
 })
+
+export const SparqlMatchesUserType = (employerId: string) => ObjectListType<SparqlUser>({
+    query: () => {
+      return EmployerQuery.matches(employerId);
+    },
+    fields: {
+      id: { type: StringType },
+      email: { type: StringType },
+      firstName: { type: StringType },
+      lastName: { type: StringType },
+      phoneNumber: { type: StringType },
+      webPage: { type: OptionalType(StringType) },
+      status: { type: StringType },
+      location: { type: OptionalType(StringType) },
+      bio: { type: OptionalType(StringType) },
+      languages: { type: ListType(StringType) }
+    }
+  })
 
 export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
     query: () => {

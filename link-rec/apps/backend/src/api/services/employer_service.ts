@@ -13,6 +13,7 @@ import { SparqlAllEmployersType, SparqlEmployerType } from "../sparql/parsers/em
 import { UserNotFoundError } from "../errors/user";
 import { JobInput } from "../../validation/job";
 import { JobService } from "./job_service";
+import { SparqlMatchesUserType } from "./types/user";
 
 type Employer = GQLTypes.Employer.Type;
 type User = GQLTypes.User.Type;
@@ -102,10 +103,12 @@ export class EmployerService{
   ) : Promise<Job> {
 
     const result = await this.jobservice.create(input);
+    console.log("ADDED JOB")
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
       EmployerQuery.addJob(employerId, result.id)
     ));
+    console.log("ADDED RELATION")
 
     return result;
   }
@@ -124,8 +127,22 @@ export class EmployerService{
     return result;
   }
 
-  async matches() : Promise<User[]> {
-
+  async matches(employerId: string) : Promise<User[]> {
+    const matches = await this.context.sparql.resolve(SparqlMatchesUserType(employerId));
+    return matches.flatMap((u)  => {
+      return {
+        id: u.id,
+        email: u.email,
+        firstName: "",
+        lastName: "",
+        status: Status.NOT_LOOKING,
+        phoneNumber: "asdfadfas",
+        languages: [],
+        experiences: [],
+        educations: [],
+        connections: [],
+      };
+    })
   }
 
 }

@@ -101,4 +101,43 @@ export namespace EmployerQuery {
     }
     `
   }
+
+  export const matches = (
+    employerId: string,
+  ) : string => {
+    return `
+    SELECT
+      ?id
+      ?email
+      ?firstName
+      ?lastName
+      ?email
+      ?phoneNumber
+      ?gender
+      ?location
+      ?status
+      (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
+    WHERE {
+      ?user a lr:User ;
+        lr:hasId ?id ;
+        lr:hasEmail ?email ;
+        lr:hasFirstName ?firstName ;
+        lr:hasLastName ?lastName ;
+        lr:hasEmail ?email ;
+        lr:hasInferredProfession ?inferredProfession ;
+        lr:hasPhoneNumber ?phoneNumber .
+      ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+      ?jobSeekingStatusResource rdfs:label ?status .
+      OPTIONAL { ?user lr:hasGender ?gender . }
+      OPTIONAL { ?user lr:hasLocation ?location . }
+      OPTIONAL { ?user lr:hasLanguage ?language . }
+
+      employer:${employerId} a lr:Employer ;
+        lr:hasJob ?job .
+
+      ?job lr:hasRequirement ?requirement .
+      ?requirement lr:hasInferredProfession ?inferredProfession .
+    }
+    GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location`
+  }
 }

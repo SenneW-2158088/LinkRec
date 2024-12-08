@@ -9,10 +9,26 @@ export const createJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   args: {
     input: { type: new GraphQLNonNull(JobInputType) }
   },
-  // extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
+  // extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
   resolve: async (_source, args: { input: Validation.Job.Input }, context, _info) : Promise<Job> => {
     try {
-      return await context.api.jobService.create(args.input)
+      console.log(context.userId)
+      return await context.api.employerService.addJob(context.userId!, args.input);
+    }catch(error) {
+      throw context.api.handleError(error);
+    }
+  }
+}
+
+export const deleteJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
+  type: JobType,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLID) }
+  },
+  // extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
+  resolve: async (_source, args: { id: string }, context, _info) : Promise<Job> => {
+    try {
+      return await context.api.employerService.removeJob(context.userId!, args.id);
     }catch(error) {
       throw context.api.handleError(error);
     }

@@ -53,3 +53,20 @@ export type ExperienceInput = {
   description: string | null,
   years: number
 }
+
+export const ExperienceUpdateType: GraphQLInputObjectType = new GraphQLInputObjectType({
+  name: "ExperienceUpdate",
+  fields: () => ({
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    company: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: GraphQLString },
+    years: { type: new GraphQLNonNull(GraphQLInt) },
+  })
+});
+
+export type ExperienceUpdate = {
+  title: string | null,
+  company: string | null,
+  description: string | null,
+  years: number | null
+}

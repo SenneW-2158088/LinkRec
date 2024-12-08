@@ -12,7 +12,8 @@ import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
 import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
-import { statusFromString, UserInput } from "../../schema/types/user/types";
+import { statusFromString, UserInput, UserUpdate } from "../../schema/types/user/types";
+import { EducationUpdate } from "../../schema/types/education/types";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -24,7 +25,6 @@ export class UserService{
   constructor(private context: Context) { this.db = context.db.db; }
 
   async getUsers() : Promise<User[]> {
-
     const user = await this.db
       .select()
       .from(this.TABLE)
@@ -136,11 +136,128 @@ export class UserService{
     await this.context.sparql.update(query)
   }
 
-  public updateUser(input: UserInput) {
-
+  public updateUser(id: string, update: UserUpdate) {
+    this.updateRdfUser(id, update)
+    return this.getUser(id)
   }
 
-  private async updateRdfUser() {
+  private async updateRdfUser(id: string, update: UserUpdate) {
+    const deleteBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
+    const queryBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
+    const whereBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
+
+    // Check and build delete and insert fields for each property
+    if (update.firstName) {
+        deleteBuilder.field(`lr:hasFirstName ?firstName`);
+        queryBuilder.field(`lr:hasFirstName "${update.firstName}"`);
+        whereBuilder.field(`lr:hasFirstName ?firstName`);
+    }
+
+    if (update.lastName) {
+        deleteBuilder.field(`lr:hasLastName ?lastName`);
+        queryBuilder.field(`lr:hasLastName "${update.lastName}"`);
+        whereBuilder.field(`lr:hasLastName ?lastName`);
+    }
+
+    if (update.email) {
+        deleteBuilder.field(`lr:hasEmail ?email`);
+        queryBuilder.field(`lr:hasEmail "${update.email}"`);
+        whereBuilder.field(`lr:hasEmail ?email`);
+    }
+
+    if (update.phoneNumber) {
+        deleteBuilder.field(`lr:hasPhoneNumber ?phoneNumber`);
+        queryBuilder.field(`lr:hasPhoneNumber "${update.phoneNumber}"`);
+        whereBuilder.field(`lr:hasPhoneNumber ?phoneNumber`);
+    }
+
+    if (update.webPage) {
+        deleteBuilder.field(`lr:hasWebPage ?webPage`);
+        queryBuilder.field(`lr:hasWebPage "${update.webPage}"`);
+        whereBuilder.field(`lr:hasWebPage ?webPage`);
+    }
+
+    if (update.location) {
+        deleteBuilder.field(`lr:hasLocation ?location`);
+        queryBuilder.field(`lr:hasLocation "${update.location}"`);
+        whereBuilder.field(`lr:hasLocation ?location`);
+    }
+
+    if (update.bio) {
+        deleteBuilder.field(`lr:hasBio ?bio`); // Assuming lr:hasBio is defined in your ontology
+        queryBuilder.field(`lr:hasBio "${update.bio}"`);
+        whereBuilder.field(`lr:hasBio ?bio`);
+    }
+
+    if (update.status) {
+        deleteBuilder.field(`lr:hasJobSeekingStatus ?status`);
+        queryBuilder.field(`lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
+        whereBuilder.field(`lr:hasJobSeekingStatus ?status`);
+    }
+
+    if (update.education) {
+        // Handle education updates (delete and insert logic)
+        update.education.forEach(edu => {
+            deleteBuilder.field(`lr:hasEducation ?educationId`);
+            queryBuilder.field(`lr:hasEducation "${edu}"`); // Adjust as necessary
+            whereBuilder.field(`lr:hasEducation ?educationId`);
+        });
+    }
+
+    if (update.experiences) {
+        // Handle experience updates (delete and insert logic)
+        update.experiences.forEach(exp => {
+            deleteBuilder.field(`lr:hasExperience ?experienceId`);
+            queryBuilder.field(`lr:hasExperience "${exp}"`); // Adjust as necessary
+            whereBuilder.field(`lr:hasExperience ?experienceId`);
+        });
+    }
+
+    if (update.languages) {
+        update.languages.forEach(lang => {
+            deleteBuilder.field(`lr:hasLanguage ?language`);
+            queryBuilder.field(`lr:hasLanguage "${lang}"`);
+            whereBuilder.field(`lr:hasLanguage ?language`);
+        });
+    }
+
+    // Build the final SPARQL update query
+    const deleteQuery = deleteBuilder.hasFields() ? `DELETE { ${deleteBuilder.build()} }` : '';
+    const insertQuery = queryBuilder.hasFields() ? `INSERT { ${queryBuilder.build()} } ` : '';
+    const whereQuery = whereBuilder.hasFields() ? `WHERE { ${whereBuilder.build()} }` : '';
+
+    const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
+
+    this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(finalQuery))
+
+    return finalQuery;
+  }
+
+  private async updateEducations(userId: string, educations: EducationUpdate[]) {
+    const query = `
+      DELETE DATA {
+        user:${userId} lr:hasEducation ?education .
+        ?education lr:hasInstution ?institution ;
+          lr:hasDegree ?degree ;
+          lr:hasTitle ?title ;
+          lr:hasInferredTitle ?inferredTitle .
+      }
+    `
+
+    this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query))
+
+    let fields = ``
+
+    for (const education of educations) {
+      fields += `
+        user:${userId} lr:hasEducation _:education${education.id} .
+      `
+    }
+
+    const insertQuery = queryBuilder.hasFields() ? `INSERT { ${queryBuilder.build()} } ` : '';
+    const whereQuery = whereBuilder.hasFields() ? `WHERE { ${whereBuilder.build()} }` : '';
+
+    const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
 
   }
 

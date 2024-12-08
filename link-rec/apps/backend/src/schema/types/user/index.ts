@@ -3,6 +3,7 @@ import { JobSeekingStatus } from "../jobseeking";
 import { RequestConnectionInputType as RequestConnectionInputType, LoginInputType, UserInputType, UserType } from "./types";
 import { AllUserQuery, UserQuery } from "./queries";
 import { User as IType} from "./types";
+import { updateUserMutation } from "./mutations";
 
 export namespace User {
 
@@ -24,6 +25,6 @@ export namespace User {
   }
 
   export const mutations = {
-
+    "updateUser": updateUserMutation
   }
 }

@@ -2,8 +2,7 @@ import pandas as pd
 import pprint
 
 # Load the TSV file into a DataFrame
-file_path = '/Users/kobe/Documents/School/2024-2025/Web_Information_Systems/LinkRec/fuseki/dataset_tools/geonames/BE.txt'  # Replace with your TSV file path
-df = pd.read_csv(file_path, sep='\t', header=None)
+df = pd.read_csv("./BE.txt", sep='\t', header=None)
 
 # Define the column names based on the provided table
 df.columns = [
@@ -38,7 +37,7 @@ for index, row in filtered_df.iterrows():
 
     if not feature_code in data:
         data[feature_code] = {}
-    
+
     if feature_code == 'PCLI':
         data[feature_code][row['country_code']] = {
             "geonameid" : geonameid,

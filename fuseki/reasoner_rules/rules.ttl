@@ -101,278 +101,6 @@
 
 
 
-[requirementInferenceProfession:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasInferredProfession ?profession)
-    noValue(?requirement, lr:hasLanguage)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceLanguage:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasInferredProfession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    noValue(?requirement, lr:hasInferredLanguage)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceEducation:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasInferredProfession)
-    (?experience lr:hasInferredProfession ?profession)
-    noValue(?requirement, lr:hasInferredLanguage)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionLanguage:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasInferredProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceLanguageEducation:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasInferredProfession)
-    (?experience lr:hasInferredProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionEducation:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasInferredProfession ?profession)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionLanguageEducation:
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasInferredProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfession:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasInferredProfession ?profession)
-    noValue(?requirement, lr:hasInferredLanguage)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceLanguage:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasInferredProfession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    noValue(?requirement, lr:hasInferredLanguage)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceEducation:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasProfession)
-    (?experience lr:hasProfession ?profession)
-    noValue(?requirement, lr:hasInferredLanguage)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionLanguage:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    noValue(?requirement, lr:hasEducationTitle)
-    noValue(?requirement, lr:hasDegree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceLanguageEducation:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    noValue(?requirement, lr:hasProfession)
-    (?experience lr:hasProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionEducation:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasProfession ?profession)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
-[requirementInferenceProfessionLanguageEducation:
-    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
-    (?job lr:hasRequirement ?requirement)
-    (?job lr:isActive true)
-    (?user lr:hasInferredLocation ?location)
-    (?job lr:hasInferredLocation ?location)
-    (?requirement lr:hasProfession ?profession)
-    (?requirement lr:requiredYears ?years)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?years)
-    (?experience lr:hasProfession ?profession)
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
-    (?requirement lr:hasDegree ?degree)
-    (?userEducation, lr:hasDegree ?degree)
-    ->
-    (?user lr:matchesRequirement ?requirement)
-]
-
 [requirementProfessionInference:
     (?requirement lr:hasProfession ?requirementProfession)
     (?profession rdfs:label ?requirementProfession)
@@ -380,49 +108,49 @@
     (?requirement lr:hasInferredProfession ?profession)
 ]
 
-# [requirementExperienceLevelInference:
-#     (?requirement lr:requiredYears ?years)
-#     (?level lr:hasMinYears ?min)
-#     (?level lr:hasMaxYears ?max)
-#     ge(?years, ?min)
-#     lessThan(?years, ?max)
-#     ->
-#     (?requirement lr:hasExperienceLevel ?level)
-# ]
+[requirementExperienceLevelInference:
+    (?requirement lr:requiredYears ?years)
+    (?level lr:hasMinYears ?min)
+    (?level lr:hasMaxYears ?max)
+    ge(?years, ?min)
+    lessThan(?years, ?max)
+    ->
+    (?requirement lr:hasExperienceLevel ?level)
+]
 
-# # TODO: don't inference if job is closed or if user is not looking for a job
-# [userJobMatchingProfessionInference:
-#     (?user lr:hasInferredLocation ?userLocation)
-#     (?job lr:hasInferredLocation ?jobLocation)
+# TODO: don't inference if job is closed or if user is not looking for a job
+[userJobMatchingProfessionInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
-#     (?job lr:hasRequirement ?requirement)
-#     (?requirement lr:hasProfession ?profession)
-#     (?requirement lr:requiredYears ?reqYears)
-#     (?user lr:hasExperience ?experience)
-#     (?experience lr:hasYears ?expYears)
-#     ge(?expYears, ?reqYears)
-#     (?experience lr:hasProfession ?profession)
-#     ->
-#     (?user lr:matchesRequirement ?requirement)
-# ]
-# [userJobMatchingLanguageInference:
-#     (?user lr:hasInferredLocation ?userLocation)
-#     (?job lr:hasInferredLocation ?jobLocation)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?reqYears)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?reqYears)
+    (?experience lr:hasProfession ?profession)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+[userJobMatchingLanguageInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
-#     (?job lr:hasRequirement ?requirement)
-#     (?requirement lr:hasInferredLanguage ?language)
-#     (?user lr:hasInferredLanguage ?language)
-#     ->
-#     (?user lr:matchesRequirement ?requirement)
-# ]
-# [userJobMatchingEducationInference:
-#     (?user lr:hasInferredLocation ?userLocation)
-#     (?job lr:hasInferredLocation ?jobLocation)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasInferredLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+[userJobMatchingEducationInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
 
-#     (?job lr:hasRequirement ?requirement)
-#     (?requirement lr:hasEducationTitle ?educationTitle)
-#     (?user lr:hasEducation ?userEducation)
-#     (?userEducation lr:hasTitle ?educationTitle)
-#     ->
-#     (?user lr:matchesRequirement ?requirement)
-# ]
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]

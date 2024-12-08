@@ -9,7 +9,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber?: string | null;
+  phoneNumber: string;
   webPage?: string | null;
   status: JobSeekingStatus,
   location?: string | null;
@@ -64,8 +64,12 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     connections: {
       type: new GraphQLList(UserType),
-      resolve: async (source, _args, context: ApolloContext, _info): Promise<User[]> => {
-        return source.connections
+      resolve: async (parent: User, _args, context: ApolloContext, _info): Promise<User[]> => {
+        try {
+          return context.api.userService.getUserConnections(parent.id);
+        } catch(error) {
+          throw context.api.handleError(error)
+        }
       }
     },
   }),

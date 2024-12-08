@@ -22,6 +22,7 @@
 # USERS
 lr:User a vcard:Individual ;
     a foaf::Person .
+lr:hasId a rdf:Property .
 lr:hasEmail a rdf:Property ;
     owl:sameAs vcard:hasEmail ;
     owl:sameAs foaf::mbox .

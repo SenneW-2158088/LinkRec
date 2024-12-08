@@ -11,7 +11,7 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlUserConfig, SparqlUserType } from "./types/user";
+import { SparqlConnectionType, SparqlUserConfig, SparqlUserType } from "./types/user";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -45,24 +45,19 @@ export class UserService{
   }
 
   async getUser(id: string): Promise<User> {
-    const [user] = await this.db
-      .select()
-      .from(this.TABLE)
-      .where(eq(this.TABLE.id, id))
-      .limit(1);
+    const result = await this.context.sparql.resolve(SparqlUserType(id))
+    console.log("RESULLTTTTTT!!!!:", JSON.stringify(result, null, 2))
 
-    if (!user) {
-      throw new UserNotFoundError(id);
-    }
-
-    const result = await this.queryRdfUser(user);
-    console.log("result:", result)
-
-    return {
-      ...user,
-      ...result
-    }
+    return result
   }
+
+  async getUserConnections(id: string): Promise<User[]> {
+    const users = await this.context.sparql.resolve(SparqlConnectionType(id))
+    console.log("connections:", users)
+    return users
+  }
+
+
 
   async createUser(input: RegisterInput): Promise<User> {
     // userInputSchema.parse(input);
@@ -80,47 +75,43 @@ export class UserService{
       firstName: input.firstName,
       lastName: input.lastName,
       status: Status.NOT_LOOKING,
+      phoneNumber: input.phoneNumber,
       languages: [],
       experiences: [],
       educations: [],
       connections: [],
     };
 
-    // await this.updateRdfUser(user)
+    await this.updateRdfUser(user)
 
     return user;
   }
 
-  private async queryRdfUser(user: { id: string }) {
-    const result = await this.context.sparql.resolve(SparqlUserType)
-    console.log("RESULLTTTTTT!!!!:", JSON.stringify(result, null, 2))
-
-    return result
-  }
-
   private async updateRdfUser(user: User) {
     const fields = SparqlFieldBuilder.fromFields(
-      `user: ${ user.id } a lr:User`,
-      `lr:hasEmail ${user.email}`,
-      `lr:hasFirstName ${user.firstName}`,
-      `lr:hasLastName ${user.lastName}`,
-      `lr:hasJobSeekingStatus lr:${jobSeekingStatusToString(user.status)}`
+      `user:${ user.id } a lr:User`,
+      `lr:hasId "${user.id}"`,
+      `lr:hasEmail "${user.email}"`,
+      `lr:hasFirstName "${user.firstName}"`,
+      `lr:hasLastName "${user.lastName}"`,
+      `lr:hasJobSeekingStatus lr:${jobSeekingStatusToString(user.status)}`,
+      `lr:hasPhoneNumber "${user.phoneNumber}"`
     )
-    if (user.phoneNumber)
-      fields.field(`lr:hasPhoneNumber ${user.phoneNumber}`)
     if (user.location)
-      fields.field(`lr:hasLocation ${user.location}`)
+      fields.field(`lr:hasLocation "${user.location}"`)
     if (user.webPage)
-      fields.field(`lr:hasWebPage ${user.webPage}`)
+      fields.field(`lr:hasWebPage "${user.webPage}"`)
 
     // TODO: Delete these fields before adding them again
+    const query = SparqlBuilder.defaultPrefixes()
+          .build(
+            `INSERT DATA {
+              ${fields.build()}
+            }`
+          )
+    console.log("query", query)
 
-    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
-      .build(
-        `INSERT DATA {
-          ${fields.build()}
-        }`
-      ))
+    await this.context.sparql.update(query)
   }
 
   private async createConnection(user1: User, user2: User) {

@@ -1,4 +1,4 @@
-import { employerQuery } from "./queries";
+import { allEmployerQuery, employerQuery } from "./queries";
 import { Employer as IEmployer, EmployerInputType, EmployerLoginInputType, EmployerType } from "./types";
 
 export namespace Employer {
@@ -13,6 +13,7 @@ export namespace Employer {
 
   export const queries = {
     "employer": employerQuery,
+    "allEmployer": allEmployerQuery,
   }
 
   export const mutations = {}

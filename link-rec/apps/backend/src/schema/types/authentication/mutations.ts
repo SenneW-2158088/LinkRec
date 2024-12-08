@@ -73,7 +73,7 @@ export const employerRegisterMutation: GraphQLFieldConfig<any, any> = {
   },
   resolve: async (_source, args: { input: Validation.Employer.Register }, context: ApolloContext, _info) : Promise<EmployerAuth> => {
     try {
-      const employer = await context.api.employerService.create_employer(args.input);
+      const employer = await context.api.employerService.create(args.input);
       context.userId = employer.id;
       const tokens = await context.jwt.generateTokens({id: employer.id, role: Role.EMPLOYER});
       return {

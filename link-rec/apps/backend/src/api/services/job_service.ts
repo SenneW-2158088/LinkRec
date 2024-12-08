@@ -65,8 +65,16 @@ export class JobService{
     console.log(query);
   }
 
-  async delete(id: string) {
+  async get(id: string) : Promise<Job> {
+    const queryResult = await this.context.sparql.resolve(SparqlJobType(id))
+    return {
+      ...queryResult,
+      requirements: [],
+    }
+  }
 
+  async delete(id: string) {
+    const job = await this.get(id);
 
   }
 

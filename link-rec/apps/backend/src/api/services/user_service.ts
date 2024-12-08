@@ -2,6 +2,7 @@ import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
+import { nanoid } from "nanoid"
 
 import { userTable } from "../../db/schema/userSchema";
 import { SparqlBuilder, SparqlFieldBuilder, SparqlParser } from "../sparql/sparql_builder";
@@ -11,9 +12,10 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
+import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
 import { statusFromString, UserInput, UserUpdate } from "../../schema/types/user/types";
 import { EducationUpdate } from "../../schema/types/education/types";
+import { ExperienceUpdate } from "../../schema/types/experience/types";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -64,7 +66,6 @@ export class UserService{
       user: user as any,
       status: statusFromString(user.connectionStatus)
     }
-    console.log("RESULT:", result)
     return result
   }
 
@@ -136,12 +137,13 @@ export class UserService{
     await this.context.sparql.update(query)
   }
 
-  public updateUser(id: string, update: UserUpdate) {
-    this.updateRdfUser(id, update)
-    return this.getUser(id)
+  public async updateUser(id: string, update: UserUpdate) {
+    await this.updateRdfUser(id, update)
+    return await this.getUser(id)
   }
 
   private async updateRdfUser(id: string, update: UserUpdate) {
+    console.log("udpate:", update)
     const deleteBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
     const queryBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
     const whereBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
@@ -195,32 +197,6 @@ export class UserService{
         whereBuilder.field(`lr:hasJobSeekingStatus ?status`);
     }
 
-    if (update.education) {
-        // Handle education updates (delete and insert logic)
-        update.education.forEach(edu => {
-            deleteBuilder.field(`lr:hasEducation ?educationId`);
-            queryBuilder.field(`lr:hasEducation "${edu}"`); // Adjust as necessary
-            whereBuilder.field(`lr:hasEducation ?educationId`);
-        });
-    }
-
-    if (update.experiences) {
-        // Handle experience updates (delete and insert logic)
-        update.experiences.forEach(exp => {
-            deleteBuilder.field(`lr:hasExperience ?experienceId`);
-            queryBuilder.field(`lr:hasExperience "${exp}"`); // Adjust as necessary
-            whereBuilder.field(`lr:hasExperience ?experienceId`);
-        });
-    }
-
-    if (update.languages) {
-        update.languages.forEach(lang => {
-            deleteBuilder.field(`lr:hasLanguage ?language`);
-            queryBuilder.field(`lr:hasLanguage "${lang}"`);
-            whereBuilder.field(`lr:hasLanguage ?language`);
-        });
-    }
-
     // Build the final SPARQL update query
     const deleteQuery = deleteBuilder.hasFields() ? `DELETE { ${deleteBuilder.build()} }` : '';
     const insertQuery = queryBuilder.hasFields() ? `INSERT { ${queryBuilder.build()} } ` : '';
@@ -228,37 +204,115 @@ export class UserService{
 
     const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
 
-    this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(finalQuery))
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(finalQuery))
 
-    return finalQuery;
+    if (update.education) {
+      await this.updateEducations(id, update.education)
+    }
+    if (update.experiences) {
+      await this.updateExperiences(id, update.experiences)
+    }
+    if (update.languages) {
+      await this.updateLanguages(id, update.languages)
+    }
   }
 
   private async updateEducations(userId: string, educations: EducationUpdate[]) {
+    console.log("querying delete")
     const query = `
-      DELETE DATA {
+      DELETE {
         user:${userId} lr:hasEducation ?education .
-        ?education lr:hasInstution ?institution ;
+        ?education lr:hasInstitution ?institution ;
           lr:hasDegree ?degree ;
           lr:hasTitle ?title ;
           lr:hasInferredTitle ?inferredTitle .
       }
+      WHERE  {
+        user:${userId} lr:hasEducation ?education .
+      }
     `
 
-    this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query))
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query))
 
     let fields = ``
 
     for (const education of educations) {
+      const educationId = nanoid()
       fields += `
-        user:${userId} lr:hasEducation _:education${education.id} .
+        user:${userId} lr:hasEducation education:${educationId} .
+        education:${educationId} a lr:Education ;
+          lr:hasInstitution "${education.institution}" ;
+          lr:hasDegree "${education.degree}" ;
+          lr:hasTitle "${education.title}" .
       `
     }
 
-    const insertQuery = queryBuilder.hasFields() ? `INSERT { ${queryBuilder.build()} } ` : '';
-    const whereQuery = whereBuilder.hasFields() ? `WHERE { ${whereBuilder.build()} }` : '';
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(`INSERT DATA { ${fields} }`))
+  }
 
-    const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
+  private async updateExperiences(userId: string, experiences: ExperienceUpdate[]) {
+    const query = `
+      DELETE {
+        user:${userId} lr:hasExperience ?experience .
+        ?experience lr:hasTitle ?title ;
+          lr:hasProfession ?profession ;
+          lr:hasInferredProfession ?profession ;
+          lr:hasDescription ?description ;
+          lr:hasCompany ?company .
+      }
+      WHERE {
+        user:${userId} lr:hasExperience ?experience .
+        OPTIONAL {
+          ?experience lr:hasDescription ?description ;
+        }
+      }
+    `
 
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query))
+
+    let fields = ``
+
+    for (const experience of experiences) {
+      const experienceId = nanoid()
+      fields += `
+        user:${userId} lr:hasExperience experience:${experienceId} .
+        experience:${experienceId} a lr:Experience;
+          lr:hasTitle "${experience.title}" ;
+          lr:hasProfession "${experience.profession}" ;
+          lr:hasDescription "${experience.description}" ;
+          lr:hasCompany "${experience.company}" ;
+          lr:hasYears "${experience.years}" .
+      `
+    }
+
+    console.log("adding experiiences:", fields)
+
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(`INSERT DATA { ${fields} }`))
+  }
+
+  private async updateLanguages(userId: string, languages: string[]) {
+    const query = `
+      DELETE {
+        user:${userId} lr:hasLanguage ?language ;
+          lr:hasInferredLanguage ?language .
+      }
+      WHERE {
+        user:${userId} lr:hasLanguage ?language .
+      }
+    `
+
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query))
+
+    let fields = ``
+
+    for (const language of languages) {
+      console.log("adding language", language)
+      fields += `
+        user:${userId} lr:hasLanguage "${language}" .
+      `
+    }
+
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(`INSERT DATA { ${fields} }`))
   }
 
   async createConnection(userId: string, peerId: string): Promise<GQLTypes.Connection.Type> {
@@ -275,6 +329,23 @@ export class UserService{
         }
         WHERE {
             # This WHERE clause can be used to match the existing triples you want to delete.
+            OPTIONAL {
+                user:${userId} lr:knows user:${peerId} .
+            }
+        }
+      `))
+    return await this.getUserConnection(userId, peerId)
+  }
+
+  async deleteConnection(userId: string, peerId: string): Promise<GQLTypes.Connection.Type> {
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
+      .build(`
+        DELETE {
+            user:${userId} lr:knows user:${peerId} .
+            user:${userId} lr:hasConnection user:${peerId} .
+            user:${userId} lr:hasPending user:${peerId} .
+        }
+        WHERE {
             OPTIONAL {
                 user:${userId} lr:knows user:${peerId} .
             }

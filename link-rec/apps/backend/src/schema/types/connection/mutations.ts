@@ -27,6 +27,23 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   }
 };
 
+export const deleteConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = {
+  type: new GraphQLNonNull(ConnectionType),
+  args: {
+    id: { type: GraphQLID },
+  },
+  extensions: {
+    directives: { user: {} }
+  },
+  resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
+    try {
+      return context.api.userService.deleteConnection(context.userId!, args.id)
+    } catch(error) {
+      throw context.api.handleError(error);
+    }
+  }
+};
+
 /**
  * Accepts a pending connection request
  * @param id - ID of the user to accept connection
@@ -39,9 +56,11 @@ export const acceptConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID }
   },
+  extensions: {
+    directives: { user: {} }
+  },
   resolve: async (_source, args, context: ApolloContext, info): Promise<Connection|null> => {
-    // TODO remove null -> also in return type
-    return null
+    return context.api.userService.createConnection(context.userId!, args.id)
   }
 };
 
@@ -57,8 +76,10 @@ export const declineConnectionMutation: GraphQLFieldConfig<any, ApolloContext> =
   args: {
     id: { type: GraphQLID }
   },
+  extensions: {
+    directives: { user: {} }
+  },
   resolve: async (_source, args, context, info): Promise<Connection|null> => {
-    // TODO remove null -> also in return type
-    return null;
+    return context.api.userService.deleteConnection(context.userId!, args.id)
   }
 };

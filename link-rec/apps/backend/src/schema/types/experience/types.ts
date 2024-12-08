@@ -31,6 +31,7 @@ export const ExperienceType: GraphQLObjectType = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
+    profession: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     years: { type: new GraphQLNonNull(GraphQLInt) },
@@ -42,6 +43,7 @@ export const ExperienceInputType: GraphQLInputObjectType = new GraphQLInputObjec
   name: "ExperienceInput",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
+    profession: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     years: { type: new GraphQLNonNull(GraphQLInt) },
@@ -58,6 +60,7 @@ export const ExperienceUpdateType: GraphQLInputObjectType = new GraphQLInputObje
   name: "ExperienceUpdate",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
+    profession: { type: new GraphQLNonNull(GraphQLString) },
     company: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     years: { type: new GraphQLNonNull(GraphQLInt) },
@@ -65,8 +68,9 @@ export const ExperienceUpdateType: GraphQLInputObjectType = new GraphQLInputObje
 });
 
 export type ExperienceUpdate = {
-  title: string | null,
-  company: string | null,
+  title: string,
+  profession: string,
+  company: string,
   description: string | null,
-  years: number | null
+  years: number
 }

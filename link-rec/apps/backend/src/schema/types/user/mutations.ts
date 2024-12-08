@@ -3,7 +3,7 @@ import { User, UserInputType, UserType, UserUpdateType } from "./types";
 import { ApolloContext } from "../../../apollo_server";
 
 export const updateUserMutation: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLNonNull(UserType),
+  type: UserType,
   args: {
     input: { type: new GraphQLNonNull(UserUpdateType) },
   },
@@ -12,7 +12,7 @@ export const updateUserMutation: GraphQLFieldConfig<any, ApolloContext> = {
   },
   resolve: async (_source, args, context: ApolloContext, info): Promise<User> => {
     try {
-      return context.api.userService.updateUser(context.userId!, args.input)
+      return await context.api.userService.updateUser(context.userId!, args.input)
     } catch(error) {
       throw context.api.handleError(error);
     }

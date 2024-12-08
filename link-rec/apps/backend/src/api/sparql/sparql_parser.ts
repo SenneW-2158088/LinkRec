@@ -83,8 +83,6 @@ export function ObjectType<T>(config: ObjectTypeConfig<T>): ParserType<T> {
       const entries = Object.entries(config.fields) as [keyof T, ObjectTypeField<T[keyof T]>][];
 
       for (const [fieldName, field] of entries) {
-        console.log(fieldName, field)
-        console.log("ROW", row)
         const term = row[fieldName as string] || null;
         result[fieldName] = await field.type.resolve(context, term);
       }

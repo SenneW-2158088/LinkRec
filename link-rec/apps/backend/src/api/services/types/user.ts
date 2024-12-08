@@ -48,7 +48,6 @@ export interface SparqlExperience {
   company: string
   description?: string | null,
   years: number,
-  level: string
 }
 
 
@@ -107,7 +106,6 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
       ?company
       ?description
       ?years
-      ?level
       ?profession
     WHERE {
       user:${userId} a lr:User ;
@@ -117,9 +115,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
         lr:hasTitle ?title ;
         lr:hasCompany ?company ;
         lr:hasDescription ?description ;
-        lr:hasYears ?years ;
-        lr:hasExperienceLevel ?levelUri .
- 			?levelUri rdfs:label ?level .
+        lr:hasYears ?years .
     }
   `)
 },
@@ -129,7 +125,6 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
     company: { type: StringType },
     description: { type: OptionalType(StringType) },
     years: { type: IntegerType },
-    level: { type: StringType }
   }
 })
 

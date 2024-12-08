@@ -26,10 +26,11 @@
 ]
 
 [locationInference:
-    (?subject lr:hasLocation ?locationID)
+    (?user a lr:User)
+    (?user lr:hasLocation ?locationID)
     (?locationID lr:isPartOf ?parentLocationID)
     ->
-    (?subject lr:hasLocation ?parentLocationID)
+    (?user lr:hasLocation ?parentLocationID)
 ]
 
 [locationNameInference:

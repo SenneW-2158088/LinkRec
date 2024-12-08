@@ -36,7 +36,7 @@ export const IntegerType: ParserType<number> = {
 export const ListType = <T>(itemType: ParserType<T>): ParserType<T[]> => ({
   resolve: async (context: ResolverContext, term: Term) => {
     // If the term is a comma-separated list
-    if (term.termType === "Literal") {
+    if (term && term.termType === "Literal") {
       const values = term.value.split(',').filter(Boolean);
       return Promise.all(
         values.map(value =>
@@ -45,7 +45,7 @@ export const ListType = <T>(itemType: ParserType<T>): ParserType<T[]> => ({
       );
     }
     else {
-      throw Error("Not a list of literals")
+      return [];
     }
   }
 });

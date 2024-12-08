@@ -11,7 +11,7 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlConnectionType, SparqlUserConfig, SparqlUserType } from "./types/user";
+import { SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserConfig, SparqlUserType } from "./types/user";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -46,18 +46,25 @@ export class UserService{
 
   async getUser(id: string): Promise<User> {
     const result = await this.context.sparql.resolve(SparqlUserType(id))
-    console.log("RESULLTTTTTT!!!!:", JSON.stringify(result, null, 2))
-
-    return result
+    return result as any
   }
 
   async getUserConnections(id: string): Promise<User[]> {
     const users = await this.context.sparql.resolve(SparqlConnectionType(id))
-    console.log("connections:", users)
-    return users
+    return users as any
   }
 
+  async getUserEducations(id: string): Promise<GQLTypes.Education.Type[]> {
+    const educations = await this.context.sparql.resolve(SparqlEducationsType(id))
+    console.log("educations:", educations)
+    return educations as any
+  }
 
+  async getUserExperiences(id: string): Promise<GQLTypes.Education.Type[]> {
+    const experiences = await this.context.sparql.resolve(SparqlExperienceType(id))
+    console.log("experiences:", experiences)
+    return experiences as any
+  }
 
   async createUser(input: RegisterInput): Promise<User> {
     // userInputSchema.parse(input);

@@ -39,4 +39,3 @@ WHERE {
   - accept: user2 knows user1
   - remove: user1 doesn't know user2
 - add/update rdf employer data
-- add roles + RBA to some routes

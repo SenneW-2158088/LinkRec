@@ -1,5 +1,7 @@
-import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { Job } from "../job";
+import { JobType } from "../job/types";
+import { ApolloContext } from "../../../apollo_server";
 
 export interface Employer {
   id: string;
@@ -18,7 +20,17 @@ export const EmployerType: GraphQLObjectType = new GraphQLObjectType({
     email: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
     webPage: { type: GraphQLString },
-    location: { type: GraphQLString },
+    jobs: {
+      type: new GraphQLList(JobType),
+      resolve: async (root, args, context: ApolloContext, fields) : Promise<Job.Type[]> => {
+        try {
+          // context.api.employerService.
+          return []
+        }catch(error) {
+          context.api.handleError(error);
+        }
+      }
+    }
   })
 });
 

@@ -69,13 +69,12 @@ lr:NotLooking rdfs:subClassOf lr:JobSeekingStatus ;
 # EMPLOYERS
 lr:Employer a vcard:Individual ;
     a foaf:Organization .
+lr:hasId a rdf:Property .
 lr:hasEmail a rdf:Property ;
     owl:sameAs vcard:hasEmail ;
     owl:sameAs foaf::mbox .
-lr:hasFirstName a rdf:Property ;
-    owl:sameAs vcard:hasFirstName .
-lr:hasLastName a rdf:Property ;
-    owl:sameAs vcard:hasLastName .
+lr:hasName a rdf:Property ;
+    owl:sameAs vcard:hasName .
 lr:hasPhoneNumber a rdf:Property ;
     owl:sameAs vcard:hasTelephone ;
     owl:sameAs foaf::phone .

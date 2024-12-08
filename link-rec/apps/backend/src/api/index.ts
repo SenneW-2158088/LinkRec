@@ -36,9 +36,9 @@ export class LinkRecAPI {
     }
 
     this.userService = new UserService(this.context)
-    this.employerService = new EmployerService(this.context)
     this.authenticationService = new AuthenticationService(this.context)
     this.jobService = new JobService(this.context);
+    this.employerService = new EmployerService(this.context, this.jobService);
   }
 
   public handleError(error: unknown): GraphQLError {

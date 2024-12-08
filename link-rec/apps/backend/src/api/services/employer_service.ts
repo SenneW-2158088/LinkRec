@@ -1,12 +1,19 @@
 import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
-
+import { eq } from "drizzle-orm";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { hash } from "bcrypt";
 import { employerTable } from "../../db/schema/employerSchema";
 import { Validation } from "../../validation";
 import { GQLTypes } from "../../schema/types";
+import { Job } from "../../schema/types/job/types";
+import { EmployerQuery } from "../sparql/queries/employer";
+import { SparqlAllEmployersType, SparqlEmployerType } from "../sparql/parsers/employer";
+import { UserNotFoundError } from "../errors/user";
+import { JobInput } from "../../validation/job";
+import { JobService } from "./job_service";
+import { SparqlMatchesUserType } from "./types/user";
 
 type Employer = GQLTypes.Employer.Type;
 type User = GQLTypes.User.Type;
@@ -16,9 +23,9 @@ export class EmployerService{
   private TABLE = employerTable
   private db: Database["db"]
 
-  constructor(private context: Context) { this.db = context.db.db; }
+  constructor(private context: Context, private jobservice: JobService) { this.db = context.db.db; }
 
-  async create_employer(input: Validation.Employer.Register): Promise<Employer> {
+  async create(input: Validation.Employer.Register): Promise<Employer> {
 
     Validation.Employer.registerSchema.parse(input);
 
@@ -27,36 +34,115 @@ export class EmployerService{
       password: await hash(input.password, 4)
     }).returning();
 
-    // TODO: insert into rdf and refetch + add data to struct
+
+    const insert = EmployerQuery.create(inserted.id, input)
+    console.log(insert)
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
+    console.log("before")
+    const queryResult = await this.context.sparql.resolve(SparqlEmployerType(inserted.id));
+    console.log("after")
 
     const employer: Employer = {
       id: inserted.id,
       email: inserted.email,
-      name: "",
-      phoneNumber: "",
+      name: queryResult.name,
+      phoneNumber: queryResult.phoneNumber,
       jobs: []
     };
 
-    // await this.updateRdfUser(user)
     return employer;
   }
 
-  async updateRdfUser(user: User) {
-    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
-      .build(`
-        INSERT DATA {
-            lr_users:${user.id} a lro:User ;
-                       foaf:name "${user.firstName} ${user.lastName}" .
-        }
-      `))
+  async update(id: string) : Promise<Employer>{
+
   }
 
-  async createConnection(user1: User, user2: User) {
-    await this.context.sparql.update(SparqlBuilder.defaultPrefixes()
-      .build(`
-        INSERT DATA {
-          lr_users:${user1.id} lro:Connection lr_users:${user2.id} .
-        }
-      `))
+  // Get specific employer
+  async get(id: string) : Promise<Employer> {
+
+    const [employer] = await this.db
+      .select()
+      .from(this.TABLE)
+      .where(eq(this.TABLE.id, id))
+
+    if (!employer) {
+      throw new UserNotFoundError(id);
+    }
+
+    const queryResult = await this.context.sparql.resolve(SparqlEmployerType(id));
+
+    return {
+      ...employer,
+      ...queryResult,
+      jobs: [],
+    }
   }
+
+  // Remove an employer account
+  async remove(id: string) : Promise<Employer> {
+    const employer = this.get(id);
+    const remove = EmployerQuery.remove(id);
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(remove));
+    return employer;
+  }
+
+
+  // Get all employers
+  async all() : Promise<Employer[]> {
+    const employers = await this.context.sparql.resolve(SparqlAllEmployersType());
+    return employers.map((employer) => ({
+      ...employer,
+      jobs: []
+    }))
+  }
+
+  //
+  async addJob(
+    employerId: string,
+    input: JobInput
+  ) : Promise<Job> {
+
+    const result = await this.jobservice.create(input);
+    console.log("ADDED JOB")
+
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
+      EmployerQuery.addJob(employerId, result.id)
+    ));
+    console.log("ADDED RELATION")
+
+    return result;
+  }
+
+  async removeJob(
+    employerId: string,
+    jobId: string
+  ) : Promise<Job> {
+
+    const result = await this.jobservice.delete(jobId);
+
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
+      EmployerQuery.removeJob(employerId, jobId)
+    ));
+
+    return result;
+  }
+
+  async matches(employerId: string) : Promise<User[]> {
+    const matches = await this.context.sparql.resolve(SparqlMatchesUserType(employerId));
+    return matches.flatMap((u)  => {
+      return {
+        id: u.id,
+        email: u.email,
+        firstName: "",
+        lastName: "",
+        status: Status.NOT_LOOKING,
+        phoneNumber: "asdfadfas",
+        languages: [],
+        experiences: [],
+        educations: [],
+        connections: [],
+      };
+    })
+  }
+
 }

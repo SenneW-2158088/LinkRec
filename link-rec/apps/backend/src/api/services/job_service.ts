@@ -12,6 +12,7 @@ import { Experience } from "../../schema/types/experience/types";
 import { Requirement } from "../../schema/types/requirement/types";
 import { RequirementQuery } from "../sparql/queries/requirement";
 import { SparqlJobRequirementsType } from "../sparql/parsers/requirement";
+import { LinkRecError } from "../errors";
 
 
 type Employer = GQLTypes.Employer.Type;
@@ -39,7 +40,9 @@ export class JobService{
       })),
     )
 
+    console.log("update")
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
+    console.log("result")
     const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
 
     return {
@@ -65,9 +68,22 @@ export class JobService{
     console.log(query);
   }
 
-  async delete(id: string) {
+  async get(id: string) : Promise<Job> {
+    const queryResult = await this.context.sparql.resolve(SparqlJobType(id))
+    return {
+      ...queryResult,
+      requirements: [],
+    }
+  }
 
-
+  async delete(id: string) : Promise<Job> {
+    const job = await this.get(id);
+    if(!job) throw new LinkRecError("Job not found")
+    console.log(job)
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
+      JobQuery.remove(id)
+    ));
+    return job;
   }
 
   async all() : Promise<Job[]> {

@@ -23,7 +23,7 @@ export namespace JobQuery {
   export const get = (id: string) : string => {
 
     const jobFields = SparqlFieldBuilder.fromFields(
-      `a lr:Job`,
+      `job:${id} a lr:Job`,
       `lr:hasId ?id`,
       `lr:hasTitle ?title`,
       `lr:hasLocation ?location`,
@@ -185,7 +185,31 @@ INSERT DATA {
       `.trim();
     };
 
-  export const remove = () : string => {
-   return ""
-  }
+    export const remove = (jobId: string): string => {
+      return `
+        DELETE {
+          ?job a lr:Job ;
+              lr:hasId ?id ;
+              lr:hasTitle ?title ;
+              lr:hasLocation ?location ;
+              lr:isActive ?active ;
+              lr:hasRequirement ?requirement .
+          ?requirement ?p ?o .
+        }
+        WHERE {
+          ?job a lr:Job ;
+              lr:hasId "${jobId}" .
+
+          OPTIONAL {
+            ?job lr:hasTitle ?title ;
+                lr:hasLocation ?location ;
+                lr:isActive ?active .
+          }
+
+          OPTIONAL {
+            ?job lr:hasRequirement ?requirement .
+            ?requirement ?p ?o .
+          }
+        }`
+    }
 }

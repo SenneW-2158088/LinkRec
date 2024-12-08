@@ -58,7 +58,10 @@ export class UserService{
     const result = await this.queryRdfUser(user);
     console.log("result:", result)
 
-    return result;
+    return {
+      ...user,
+      ...result
+    }
   }
 
   async createUser(input: RegisterInput): Promise<User> {

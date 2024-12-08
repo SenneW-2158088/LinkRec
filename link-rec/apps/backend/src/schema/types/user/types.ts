@@ -64,9 +64,8 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     connections: {
       type: new GraphQLList(UserType),
-      resolve: async (_source, _args, context: ApolloContext, _info): Promise<User[]> => {
-        // Implement education resolver
-        return []
+      resolve: async (source, _args, context: ApolloContext, _info): Promise<User[]> => {
+        return source.connections
       }
     },
   }),

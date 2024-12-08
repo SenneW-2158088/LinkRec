@@ -100,7 +100,6 @@ export interface SparqlJob {
 
 const SparqlEducationsType = () => ObjectListType<SparqlEducation>({
   query: (education) => {
-    console.log("URI educaiton:", education)
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT ?institution ?title ?degree
     WHERE {
@@ -120,7 +119,6 @@ const SparqlEducationsType = () => ObjectListType<SparqlEducation>({
 
 const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
   query: (experience) => {
-    console.log("URI experience:", experience)
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT
       ?title
@@ -151,16 +149,15 @@ const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
   }
 })
 
-export const SparqlUserConfig: any = (depth: number = 2) => {
+export const SparqlUserConfig: any = (depth: number = 3) => {
   return {
     query: (user: string) => {
-      console.log("URI user:", user)
       return SparqlBuilder.defaultPrefixes().build(`
       SELECT
         ?firstName
         ?lastName
         ?email
-        ?phone
+        ?phoneNumber
         ?gender
         ?location
         ?status
@@ -170,12 +167,12 @@ export const SparqlUserConfig: any = (depth: number = 2) => {
         (GROUP_CONCAT(DISTINCT ?connection; separator=",") as ?connections)
       WHERE {
         <${user}> a lr:User ;
-        lr:hasFirstName ?firstName ;
-        lr:hasLastName ?lastName ;
-        lr:hasEmail ?email .
+          lr:hasFirstName ?firstName ;
+          lr:hasLastName ?lastName ;
+          lr:hasEmail ?email ;
+          lr:hasPhoneNumber ?phoneNumber .
         <${user}> lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
-        OPTIONAL { <${user}> lr:hasPhoneNumber ?phone . }
         OPTIONAL { <${user}> lr:hasGender ?gender . }
         OPTIONAL { <${user}> lr:hasLocation ?location . }
         OPTIONAL { <${user}> lr:hasEducation ?education . }
@@ -183,13 +180,13 @@ export const SparqlUserConfig: any = (depth: number = 2) => {
         OPTIONAL { <${user}> lr:hasExperience ?experience . }
         OPTIONAL { <${user}> lr:knows ?connection . }
       }
-      GROUP BY ?firstName ?lastName ?email ?status ?phone ?gender ?location
+      GROUP BY ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
     `)
     },
     fields: {
       firstName: { type: StringType },
       lastName: { type: StringType },
-      phoneNumber: { type: OptionalType(StringType) },
+      phoneNumber: { type: StringType },
       webPage: { type: OptionalType(StringType) },
       status: { type: StringType },
       location: { type: OptionalType(StringType) },

@@ -4,6 +4,7 @@ import { Validation } from "../../../validation";
 import { ApolloContext } from "../../../apollo_server";
 import { AuthPayload, AuthPayloadType, EmployerAuth, EmployerAuthPayloadType, UserAuth, UserAuthPayloadType } from "./types";
 import { EmployerInputType, EmployerLoginInputType } from "../employer/types";
+import { Role } from "../role/types";
 
 export const userLoginMutation: GraphQLFieldConfig<any, any> = {
   type: UserAuthPayloadType,
@@ -14,7 +15,7 @@ export const userLoginMutation: GraphQLFieldConfig<any, any> = {
     try {
       const user = await context.api.authenticationService.user_login(args.input);
       context.userId = user.id;
-      const tokens = await context.jwt.generateTokens({id: user.id});
+      const tokens = await context.jwt.generateTokens({id: user.id, role: Role.USER});
       return {
         user: user,
         ...tokens
@@ -34,7 +35,7 @@ export const userRegisterMutation: GraphQLFieldConfig<any, any> = {
     try {
       const user =  await context.api.userService.createUser(args.input);
       context.userId = user.id;
-      const tokens = await context.jwt.generateTokens({id: user.id});
+      const tokens = await context.jwt.generateTokens({id: user.id, role: Role.USER});
       return {
         user: user,
         ...tokens
@@ -54,7 +55,7 @@ export const employerLoginMutation: GraphQLFieldConfig<any, any> = {
     try {
       const employer = await context.api.authenticationService.employer_login(args.input);
       context.userId = employer.id;
-      const tokens = await context.jwt.generateTokens({id: employer.id});
+      const tokens = await context.jwt.generateTokens({id: employer.id, role: Role.EMPLOYER});
       return {
         employer: employer,
         ...tokens
@@ -74,7 +75,7 @@ export const employerRegisterMutation: GraphQLFieldConfig<any, any> = {
     try {
       const employer = await context.api.employerService.create_employer(args.input);
       context.userId = employer.id;
-      const tokens = await context.jwt.generateTokens({id: employer.id});
+      const tokens = await context.jwt.generateTokens({id: employer.id, role: Role.EMPLOYER});
       return {
         employer: employer,
         ...tokens

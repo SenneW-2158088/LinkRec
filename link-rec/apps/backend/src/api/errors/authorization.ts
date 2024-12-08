@@ -15,7 +15,17 @@ class UnAuthorizedFieldError extends LinkRecError {
   }
 }
 
+class InvalidRoleError extends LinkRecError {
+  constructor(fields: Record<any, string>) {
+    super(
+      "This field requires the correct role",
+      fields
+    );
+  }
+}
+
 export {
   InvalidCredentialsError,
-  UnAuthorizedFieldError
+  UnAuthorizedFieldError,
+  InvalidRoleError,
 }

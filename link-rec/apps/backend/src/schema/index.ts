@@ -1,6 +1,7 @@
 import { GraphQLFieldConfig, GraphQLObjectType, GraphQLSchema } from "graphql";
 import { userDirective } from "./directives";
 import { GQLTypes } from "./types";
+import { roleDirective } from "./directives/roleDirective";
 
 export function createRootQueryType(fields: Record<string, GraphQLFieldConfig<any, any>>) {
   return new GraphQLObjectType({
@@ -42,6 +43,7 @@ export const linkRecSchema = new GraphQLSchema({
     query: rootQuery,
     mutation: rootMutation,
     directives: [
+      roleDirective,
       userDirective,
     ]
 });

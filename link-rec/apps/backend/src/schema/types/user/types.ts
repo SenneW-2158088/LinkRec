@@ -51,15 +51,22 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
     },
     education: {
       type: new GraphQLList(Education.Education),
-      resolve: (parent) => {
-        // Implement education resolver
-
+      resolve: async (parent: User, _args, context: ApolloContext, _info) => {
+        try {
+          return context.api.userService.getUserEducations(parent.id);
+        } catch(error) {
+          throw context.api.handleError(error)
+        }
       }
     },
     experiences: {
       type: new GraphQLList(Experience.Experience),
-      resolve: (parent) => {
-
+      resolve: async (parent: User, _args, context: ApolloContext, _info) => {
+        try {
+          return context.api.userService.getUserExperiences(parent.id);
+        } catch(error) {
+          throw context.api.handleError(error)
+        }
       }
     },
     connections: {

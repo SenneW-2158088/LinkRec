@@ -97,7 +97,7 @@ export interface SparqlJob {
 //   OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
 // }
 
-const SparqlEducationsType = (userId: string) => ObjectListType<SparqlEducation>({
+export const SparqlEducationsType = (userId: string) => ObjectListType<SparqlEducation>({
   query: () => {
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT ?institution ?title ?degree

@@ -40,6 +40,7 @@ export class SparqlBuilder {
 }
 
 export class SparqlFieldBuilder {
+  private separator = " ;\n"
   constructor(private fields: string[]) {
 
   }
@@ -60,7 +61,12 @@ export class SparqlFieldBuilder {
   }
 
   public build() {
-    return this.fields.join(" ;\n") + "."
+    return this.fields.join(this.separator) + "."
+  }
+
+  public setSeparator(separator: string) {
+    this.separator = separator
+    return this
   }
 }
 

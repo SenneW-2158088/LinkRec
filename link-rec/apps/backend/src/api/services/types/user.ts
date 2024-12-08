@@ -1,6 +1,6 @@
 import { SparqlJob } from "../../sparql/parsers/job";
 import { SparqlBuilder } from "../../sparql/sparql_builder"
-import { IntegerType, ListType, ObjectListType, ObjectType, OptionalType, StringType } from "../../sparql/sparql_parser"
+import { BooleanType, IntegerType, ListType, ObjectListType, ObjectType, OptionalType, StringType } from "../../sparql/sparql_parser"
 
 export interface SparqlUser {
   id: string;
@@ -279,3 +279,34 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
       languages: { type: ListType(StringType) },
     }
   })
+
+export type MatchingRequirementIds = {
+  ids: string[]
+}
+
+export const MatchingJobsType = (userId: string) => ObjectListType<SparqlJob>({
+  query: () => {
+    return SparqlBuilder.defaultPrefixes().build(`
+      SELECT
+        ?id
+        ?title
+        ?location
+        ?isActive
+      WHERE {
+        user:${userId} a lr:User ;
+          lr:matchesRequirement ?requirement .
+        ?job lr:hasRequirement ?requirement ;
+          lr:hasId ?id ;
+          lr:hasTitle ?title ;
+          lr:hasLocation ?location ;
+          lr:isActive ?isActive .
+      }
+    `)
+  },
+  fields: {
+   id: { type: StringType },
+   title: { type: StringType },
+   location: { type: StringType },
+   active: { type: BooleanType },
+  }
+})

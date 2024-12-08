@@ -2,7 +2,6 @@ import { uuid } from "drizzle-orm/pg-core";
 import { Context } from "..";
 import { Database } from "../../db/database";
 import { eq } from "drizzle-orm";
-import { nanoid } from "nanoid"
 
 import { userTable } from "../../db/schema/userSchema";
 import { SparqlBuilder, SparqlFieldBuilder, SparqlParser } from "../sparql/sparql_builder";
@@ -12,10 +11,11 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
+import { MatchingJobsType, SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
 import { statusFromString, UserInput, UserUpdate } from "../../schema/types/user/types";
 import { EducationUpdate } from "../../schema/types/education/types";
 import { ExperienceUpdate } from "../../schema/types/experience/types";
+import { v4 as UUID } from "uuid";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -27,24 +27,15 @@ export class UserService{
   constructor(private context: Context) { this.db = context.db.db; }
 
   async getUsers() : Promise<User[]> {
-    const user = await this.db
-      .select()
-      .from(this.TABLE)
+    // TODO: SparqlUsersType
+    const result = await this.context.sparql.resolve(SparqlUserType("user"))
+    return result as any
+  }
 
-    return user.flatMap((u): User.Type  => {
-      return {
-        id: u.id,
-        email: u.email,
-        firstName: "",
-        lastName: "",
-        status: Status.NOT_LOOKING,
-        phoneNumber: "asdfadfas",
-        languages: [],
-        experiences: [],
-        educations: [],
-        connections: [],
-      };
-    })
+  async getMatchingJobs(userId: string) {
+    const result = await this.context.sparql.resolve(MatchingJobsType(userId))
+    console.log(result)
+    return result
   }
 
   async getUser(id: string): Promise<User> {
@@ -144,56 +135,56 @@ export class UserService{
 
   private async updateRdfUser(id: string, update: UserUpdate) {
     console.log("udpate:", update)
-    const deleteBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
-    const queryBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
+    const deleteBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
+    const queryBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const whereBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
 
     // Check and build delete and insert fields for each property
     if (update.firstName) {
-        deleteBuilder.field(`lr:hasFirstName ?firstName`);
-        queryBuilder.field(`lr:hasFirstName "${update.firstName}"`);
+        deleteBuilder.field(`user:${id} lr:hasFirstName ?firstName`);
+        queryBuilder.field(`user:${id} lr:hasFirstName "${update.firstName}"`);
         whereBuilder.field(`lr:hasFirstName ?firstName`);
     }
 
     if (update.lastName) {
-        deleteBuilder.field(`lr:hasLastName ?lastName`);
-        queryBuilder.field(`lr:hasLastName "${update.lastName}"`);
+        deleteBuilder.field(`user:${id} lr:hasLastName ?lastName`);
+        queryBuilder.field(`user:${id} lr:hasLastName "${update.lastName}"`);
         whereBuilder.field(`lr:hasLastName ?lastName`);
     }
 
     if (update.email) {
-        deleteBuilder.field(`lr:hasEmail ?email`);
-        queryBuilder.field(`lr:hasEmail "${update.email}"`);
+        deleteBuilder.field(`user:${id} lr:hasEmail ?email`);
+        queryBuilder.field(`user:${id} lr:hasEmail "${update.email}"`);
         whereBuilder.field(`lr:hasEmail ?email`);
     }
 
     if (update.phoneNumber) {
-        deleteBuilder.field(`lr:hasPhoneNumber ?phoneNumber`);
-        queryBuilder.field(`lr:hasPhoneNumber "${update.phoneNumber}"`);
+        deleteBuilder.field(`user:${id} lr:hasPhoneNumber ?phoneNumber`);
+        queryBuilder.field(`user:${id} lr:hasPhoneNumber "${update.phoneNumber}"`);
         whereBuilder.field(`lr:hasPhoneNumber ?phoneNumber`);
     }
 
     if (update.webPage) {
-        deleteBuilder.field(`lr:hasWebPage ?webPage`);
-        queryBuilder.field(`lr:hasWebPage "${update.webPage}"`);
+        deleteBuilder.field(`user:${id} lr:hasWebPage ?webPage`);
+        queryBuilder.field(`user:${id} lr:hasWebPage "${update.webPage}"`);
         whereBuilder.field(`lr:hasWebPage ?webPage`);
     }
 
     if (update.location) {
-        deleteBuilder.field(`lr:hasLocation ?location`);
-        queryBuilder.field(`lr:hasLocation "${update.location}"`);
+        deleteBuilder.field(`user:${id} lr:hasLocation ?location`);
+        queryBuilder.field(`user:${id} lr:hasLocation "${update.location}"`);
         whereBuilder.field(`lr:hasLocation ?location`);
     }
 
     if (update.bio) {
-        deleteBuilder.field(`lr:hasBio ?bio`); // Assuming lr:hasBio is defined in your ontology
-        queryBuilder.field(`lr:hasBio "${update.bio}"`);
+        deleteBuilder.field(`user:${id} lr:hasBio ?bio`); // Assuming lr:hasBio is defined in your ontology
+        queryBuilder.field(`user:${id} lr:hasBio "${update.bio}"`);
         whereBuilder.field(`lr:hasBio ?bio`);
     }
 
     if (update.status) {
-        deleteBuilder.field(`lr:hasJobSeekingStatus ?status`);
-        queryBuilder.field(`lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
+        deleteBuilder.field(`user:${id} lr:hasJobSeekingStatus ?status`);
+        queryBuilder.field(`user:${id} lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
         whereBuilder.field(`lr:hasJobSeekingStatus ?status`);
     }
 
@@ -203,6 +194,8 @@ export class UserService{
     const whereQuery = whereBuilder.hasFields() ? `WHERE { ${whereBuilder.build()} }` : '';
 
     const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
+
+    console.log("FINAL QUERY:", finalQuery)
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(finalQuery))
 
@@ -237,7 +230,7 @@ export class UserService{
     let fields = ``
 
     for (const education of educations) {
-      const educationId = nanoid()
+      const educationId = UUID()
       fields += `
         user:${userId} lr:hasEducation education:${educationId} .
         education:${educationId} a lr:Education ;
@@ -273,7 +266,7 @@ export class UserService{
     let fields = ``
 
     for (const experience of experiences) {
-      const experienceId = nanoid()
+      const experienceId = UUID()
       fields += `
         user:${userId} lr:hasExperience experience:${experienceId} .
         experience:${experienceId} a lr:Experience;

@@ -1,7 +1,7 @@
 import { Education } from "../education";
 import { JobSeekingStatus } from "../jobseeking";
 import { RequestConnectionInputType as RequestConnectionInputType, LoginInputType, UserInputType, UserType } from "./types";
-import { AllUserQuery, UserQuery } from "./queries";
+import { AllUserQuery, MatchingJobsQuery, UserQuery } from "./queries";
 import { User as IType} from "./types";
 import { updateUserMutation } from "./mutations";
 
@@ -22,6 +22,7 @@ export namespace User {
   export const queries = {
     "user": UserQuery,
     "users": AllUserQuery,
+    "matchingJobs": MatchingJobsQuery
   }
 
   export const mutations = {

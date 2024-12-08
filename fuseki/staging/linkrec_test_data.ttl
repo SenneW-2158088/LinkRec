@@ -91,7 +91,7 @@ job:Job2 a lr:Job ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .
 
-job:Job2 a lr:Job ;
+job:Job3 a lr:Job ;
     lr:hasTitle "Software Engineer" ;
     lr:hasRequirement requirement:Requirement3 ;
     lr:hasLocation "Hasselt" ;

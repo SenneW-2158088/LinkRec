@@ -70,7 +70,7 @@ requirement:Requirement1 a lr:Requirement ;
     lr:requiredYears 2 .
 
     requirement:Requirement2 a lr:Requirement ;
-    lr:hasEducationTitle "master in diplomacy" .
+    lr:hasEducationTitle "Master of Science in Software Engineering" .
 
     requirement:Requirement3 a lr:Requirement ;
     lr:hasLanguage "English" .
@@ -79,7 +79,7 @@ requirement:Requirement1 a lr:Requirement ;
 job:Job1 a lr:Job ;
     lr:hasTitle "Software Developer" ;
     lr:hasRequirement requirement:Requirement1 ;
-    lr:hasLocation "Hasselt" ;
+    lr:hasLocation "Flanders" ;
     lr:isActive true .
 
 job:Job2 a lr:Job ;

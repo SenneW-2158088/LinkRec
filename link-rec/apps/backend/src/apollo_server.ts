@@ -12,6 +12,8 @@ import { sign as signJwt, verify as verifyJwt } from "jsonwebtoken";
 import { jwtMiddleware } from "./middleware/jwtMiddleware";
 import JwtService from "./jwt";
 import { GQLTypes } from "./schema/types";
+import { roleDirectiveTransformer } from "./schema/transformers/roleDirectiveTransformer";
+import { Role } from "./schema/types/role/types";
 
 const dbConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -26,19 +28,22 @@ const dbConfig: DatabaseConfig = {
 const db = new Database(dbConfig);
 
 export interface JwtPayload {
-  id: string
+  id: string;
+  role: Role
 }
 
 export interface ApolloContext {
   api: LinkRecAPI,
   jwt: JwtService<JwtPayload>,
   userId?: string | null,
+  userRole?: Role | null,
 }
 
 export function createApolloServer() {
 
   const schema = schemaTransform(linkRecSchema, [
-    userDirectiveTransformer
+    userDirectiveTransformer,
+    roleDirectiveTransformer,
   ]);
 
 

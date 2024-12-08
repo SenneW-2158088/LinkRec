@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "link-rec",
   "version": "1.0.0",
   "description": "A LinkedIn ripoff",
@@ -16,4 +17,9 @@
     "apps/backend",
     "apps/frontend"
   ]
+=======
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  }
+>>>>>>> docker-fuseki
 }

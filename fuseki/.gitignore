@@ -4,3 +4,7 @@ system
 logs
 backups
 databases
+fuseki-data
+
+wikidata_subsets.ttl
+geonames_subsets.ttl

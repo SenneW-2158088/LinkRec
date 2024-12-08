@@ -16,7 +16,7 @@
 
 set -e
 
-if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
+# if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
   # First time
   echo "###################################"
   echo "Initializing Apache Jena Fuseki"
@@ -30,11 +30,19 @@ if [ ! -f "$FUSEKI_BASE/shiro.ini" ] ; then
   fi
   echo ""
   echo "###################################"
-fi
+# fi
 
 if [ -d "/fuseki-extra" ] && [ ! -d "$FUSEKI_BASE/extra" ] ; then
   ln -s "/fuseki-extra" "$FUSEKI_BASE/extra"
 fi
+
+# if [ ! -f "$FUSEKI_BASE/config.ttl" ] ; then
+    echo "###################################"
+    echo "Initializing Config file"
+    cp "$FUSEKI_HOME/config.ttl" "$FUSEKI_BASE/config.ttl"
+# fi
+
+cp -r "$FUSEKI_HOME/reasoner_rules" "$FUSEKI_BASE/"
 
 # $ADMIN_PASSWORD only modifies if ${ADMIN_PASSWORD}
 # is in shiro.ini
@@ -66,7 +74,10 @@ printenv | egrep "^FUSEKI_DATASET_" | while read env_var
 do
     dataset=$(echo $env_var | egrep -o "=.*$" | sed 's/^=//g')
     echo "Creating dataset $dataset"
+<<<<<<< HEAD
     # ./load.sh ${dataset}
+=======
+>>>>>>> docker-fuseki
     curl -s 'http://localhost:3030/$/datasets'\
          -u admin:${ADMIN_PASSWORD}\
          -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'\

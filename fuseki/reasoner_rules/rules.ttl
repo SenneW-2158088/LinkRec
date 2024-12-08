@@ -1,0 +1,156 @@
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix wd:   <http://www.wikidata.org/entity/> .
+@prefix gn:   <https://www.geonames.org/ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+@prefix lr: <http://linkrec:8080/ontology/> .
+@prefix user: <http://linkrec:8080/user/> .
+@prefix experience:  <http://linkrec:8080/experience/> .
+@prefix requirement: <http://linkrec:8080/requirement/> .
+@prefix education:   <http://linkrec:8080/education/> .
+@prefix job:  <http://linkrec:8080/job/> .
+@prefix employer: <http://linkrec:8080/employer/> .
+
+
+# OWL inferencing
+[owlSameAsInference:
+    (?x owl:sameAs ?y)
+    (?s ?y ?o)
+    ->
+    (?s ?x ?o)
+]
+
+# connection inferencing
+[connectionsInference:
+    (?user1 rdf:type lr:User)
+    (?user1 lr:knows ?user2)
+    (?user2 lr:knows ?user1)
+    ->
+    (?user1 lr:hasConnection ?user2)
+    (?user2 lr:hasConnection ?user1)
+]
+
+[requestInference:
+    (?user1 rdf:type lr:User)
+    (?user1 lr:knows ?user2)
+    noValue(?user2, lr:knows, ?user1)
+    ->
+    (?user1 lr:hasPending ?user2)
+    (?user2 lr:hasReceiving ?user1)
+]
+
+[locationInference:
+    (?user rdf:type lr:User)
+    (?user lr:hasInferredLocation ?locationID)
+    (?locationID lr:isPartOf ?parentLocationID)
+    ->
+    (?user lr:hasInferredLocation ?parentLocationID)
+]
+
+[locationNameInference:
+    (?subject lr:hasLocation ?locationName)
+    (?location lr:hasGeoName ?locationName)
+    ->
+    (?subject lr:hasInferredLocation ?location)
+]
+
+[languageInference:
+    (?subject lr:hasLanguage ?languageName)
+    (?language rdfs:label ?languageName)
+    ->
+    (?subject lr:hasInferredLanguage ?language)
+]
+
+[educationInference:
+    (?subject rdf:type lr:Education)
+    (?subject lr:hasTitle ?educationName)
+    (?education rdfs:label ?educationName)
+    ->
+    (?subject lr:hasInferredTitle ?education)
+]
+
+# Experience level inference
+[experienceLevelInference:
+    (?experience lr:hasYears ?years)
+    (?level lr:hasMinYears ?min)
+    (?level lr:hasMaxYears ?max)
+    ge(?years, ?min)
+    lessThan(?years, ?max)
+    ->
+    (?experience lr:hasExperienceLevel ?level)
+]
+
+# Profession hierarchy inference
+# Example: If a Web Developer is a subProfessionOf a Software Developer,
+# and a Software Developer is a subProfessionOf a Developer,
+# then a Web Developer is a subProfessionOf a Developer
+#
+# We can now find all users that have a profession which is
+# a subProfessionOf developer (even Web Developer)
+[professionInference:
+    (?experience lr:hasProfession ?experienceProfession)
+    (?experienceProfession lr:subProfessionOf ?profession)
+    ->
+    (?experience lr:hasInferredProfession ?profession)
+]
+
+
+
+[requirementProfessionInference:
+    (?requirement lr:hasProfession ?requirementProfession)
+    (?profession rdfs:label ?requirementProfession)
+    ->
+    (?requirement lr:hasInferredProfession ?profession)
+]
+
+[requirementExperienceLevelInference:
+    (?requirement lr:requiredYears ?years)
+    (?level lr:hasMinYears ?min)
+    (?level lr:hasMaxYears ?max)
+    ge(?years, ?min)
+    lessThan(?years, ?max)
+    ->
+    (?requirement lr:hasExperienceLevel ?level)
+]
+
+# TODO: don't inference if job is closed or if user is not looking for a job
+[userJobMatchingProfessionInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
+
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?reqYears)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?reqYears)
+    (?experience lr:hasProfession ?profession)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+[userJobMatchingLanguageInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
+
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasInferredLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+[userJobMatchingEducationInference:
+    (?user lr:hasInferredLocation ?userLocation)
+    (?job lr:hasInferredLocation ?jobLocation)
+
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]

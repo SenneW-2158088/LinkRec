@@ -1,0 +1,109 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix wd:   <http://www.wikidata.org/entity/> .
+@prefix gn:   <https://www.geonames.org/ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+@prefix lr: <http://linkrec:8080/ontology/> .
+@prefix user: <http://linkrec:8080/user/> .
+@prefix experience: <http://linkrec:8080/experience/> .
+@prefix requirement: <http://linkrec:8080/requirement/> .
+@prefix education: <http://linkrec:8080/education/> .
+@prefix job:  <http://linkrec:8080/job/> .
+@prefix employer: <http://linkrec:8080/employer/> .
+
+# Users
+user:JohnDoe a lr:User ;
+    lr:hasId "JohnDoe" ;
+    lr:hasFirstName "John" ;
+    lr:hasLastName "Doe" ;
+    lr:hasEmail "mailto:johndoe@example.com" ;
+    lr:hasPhoneNumber "+1234567890" ;
+    lr:hasLocation "Hasselt" ;
+    lr:hasExperience experience:Experience1 ;
+    lr:hasEducation education:Education1 ;
+    lr:hasEducation education:Education2 ;
+    lr:hasLanguage "English" ;
+    lr:hasJobSeekingStatus lr:ActivelyLooking ;
+    lr:knows user:JaneSmith .
+
+user:JaneSmith a lr:User ;
+    lr:hasId "JaneSmith" ;
+    lr:hasFirstName "Jane" ;
+    lr:hasLastName "Smith" ;
+    lr:hasEmail "mailto:janesmith@example.com" ;
+    lr:hasPhoneNumber "+0987654321" ;
+    lr:hasLocation "Antwerpen" ;
+    lr:hasExperience experience:Experience2 ;
+    lr:hasEducation education:Education2 ;
+    lr:hasLanguage "Spanish" ;
+    lr:hasJobSeekingStatus lr:ActivelyLooking ;
+    lr:knows user:JohnDoe .
+
+# Employers
+employer:TechCorp a lr:Employer ;
+    lr:hasName "Tech Corp" ;
+    lr:hasEmail "mailto:contact@techcorp.com" ;
+    lr:hasPhoneNumber "+1122334455" ;
+    lr:hasWebPage <http://www.techcorp.com> ;
+    lr:hasJob job:Job1 .
+
+# Experiences
+experience:Experience1 a lr:Experience ;
+    lr:hasTitle "Web Developer at Web Solutions Inc." ;
+    lr:hasProfession "Web Developer" ;
+    lr:hasDescription "Developed web applications." ;
+    lr:hasYears 3 ;
+    lr:hasCompany "Web Solutions Inc." .
+
+experience:Experience2 a lr:Experience ;
+    lr:hasTitle "Software Developer at Mobile Innovations LLC." ;
+    lr:hasProfession "Software Developer" ;
+    lr:hasDescription "Worked on mobile applications." ;
+    lr:hasYears 1 ;
+    lr:hasCompany "Mobile Innovations LLC" .
+
+# Requirements
+requirement:Requirement1 a lr:Requirement ;
+    lr:hasProfession "Software Developer" ;
+    lr:hasDescription "Looking for a skilled software developer." ;
+    lr:requiredYears 2 .
+
+requirement:Requirement2 a lr:Requirement ;
+    lr:hasEducationTitle "Master of Science in Software Engineering" ;
+    lr:hasDegree "Master" .
+
+requirement:Requirement3 a lr:Requirement ;
+    lr:hasLanguage "English" .
+
+# Jobs
+job:Job1 a lr:Job ;
+    lr:hasTitle "Software Developer" ;
+    lr:hasRequirement requirement:Requirement1 ;
+    lr:hasLocation "Flanders" ;
+    lr:isActive true .
+
+job:Job2 a lr:Job ;
+    lr:hasTitle "Software Engineer" ;
+    lr:hasRequirement requirement:Requirement2 ;
+    lr:hasLocation "Hasselt" ;
+    lr:isActive true .
+
+job:Job3 a lr:Job ;
+    lr:hasTitle "Software Engineer" ;
+    lr:hasRequirement requirement:Requirement3 ;
+    lr:hasLocation "Hasselt" ;
+    lr:isActive true .
+
+# Education
+education:Education1 a lr:Education ;
+    lr:hasTitle "Bachelor of Science in Computer Science" ;
+    lr:hasInstitution "University of Technology" ;
+    lr:hasDegree "Bachelor" .
+
+education:Education2 a lr:Education ;
+    lr:hasTitle "Master of Science in Software Engineering" ;
+    lr:hasInstitution "Institute of Advanced Studies" ;
+    lr:hasDegree "Master" .

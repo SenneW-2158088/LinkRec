@@ -2,19 +2,49 @@ x-environment: &environment
   environment:
     # NODE_ENV: development
     BACKEND_PORT: 8080
+    DATABASE_URL: "postgres://admin:admin@db:5432/linkrec_database"
+
+x-postgres: &base-postgres
+  image: postgres:latest
+  container_name: linkrec_postgres
+  environment:
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: admin
+    POSTGRES_DB: linkrec_database
+  volumes:
+    - pgdata:/var/lib/postgresql/data # Persist data
+  networks:
+    - internal
 
 x-fuseki: &base-fuseki
   build:
     context: ./fuseki
   volumes:
     - ./fuseki/staging:/staging
+<<<<<<< HEAD
     # - fuseki_data:/jena-fuseki/databases
+=======
+    - ./fuseki/fuseki-data:/fuseki
+    # - fuseki-data:/jena-fuseki/databases
+    # - ./jena-fuseki/configuration:/fuseki/configuration
+    # - ./jena-fuseki/shiro.ini:/fuseki/shiro.ini
+    # - ./jena-fuseki/config.ttl:/fuseki/config.ttl
+>>>>>>> docker-fuseki
   user: root:root
   networks:
     - internal
   environment:
     - ADMIN_PASSWORD=admin
+<<<<<<< HEAD
     - FUSEKI_DATASET_1=linkrec
+=======
+    # - FUSEKI_DATASET_1=linkrec
+    # - FUSEKI_DATASET_2=test
+  command: bash -c "
+    ./load.sh linkrec
+    && /jena-fuseki/fuseki-server
+    "
+>>>>>>> docker-fuseki
 
 x-backend: &base-backend
   networks:
@@ -27,22 +57,31 @@ services:
     <<: *base-fuseki
     ports:
       - 3030:3030
-  fuseki-prod:
-    <<: *base-fuseki
+
+  db:
+    <<: *base-postgres
+    ports:
+      - "5432:5432"
 
   backend-dev:
     <<: [*base-backend, *environment]
     build:
-      context: ./link-rec/apps/backend
+      context: ./link-rec
       target: development
+    depends_on:
+      - db
+      - fuseki-dev
     volumes:
-      - ./link-rec/apps/backend/src:/app/src
+      - ./link-rec/apps/backend/src:/app/apps/backend/src
       - /app/node_modules
+
+  fuseki-prod:
+    <<: *base-fuseki
 
   backend-prod:
     <<: [*base-backend, *environment]
     build:
-      context: ./link-rec/apps/backend
+      context: ./link-rec
       target: production
 
   # frontend:
@@ -61,4 +100,9 @@ networks:
   public: {}
 
 volumes:
+<<<<<<< HEAD
   fuseki_data:
+=======
+  fuseki-data:
+  pgdata:
+>>>>>>> docker-fuseki

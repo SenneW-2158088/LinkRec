@@ -1,24 +1,33 @@
-import { ApolloServer } from "@apollo/server"
-import { GraphQLID, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { UserField } from "./types/user";
-import { linkRecSchema } from "./schema";
-import { env } from "process";
+import express from 'express'
+import { graphqlRouter } from './rest/graphql-router'
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServer } from '@apollo/server'
+import { ApolloContext, createApolloContext, createApolloServer } from './apollo_server'
+import { CONFIG } from "./config/config";
+import jwt from 'jsonwebtoken'
+import { GQLTypes } from './schema/types';
 
-const server = new ApolloServer({
-  schema: linkRecSchema
-})
+const app = express()
 
-const PORT = Number(process.env.BACKEND_PORT)
-
-console.log(PORT)
-
-async function startServer() {
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: PORT }
-  })
-
-  console.log(`🚀  Server ready at: ${url}`);
+function setupRoutes(apolloServer: ApolloServer<ApolloContext>) {
+    app.use("/user", graphqlRouter(apolloServer))
 }
 
-startServer()
+app.listen(CONFIG.PORT, async () => {
+  // Note you must call `start()` on the `ApolloServer`
+  // instance before passing the instance to `expressMiddleware`
+  const apolloServer = createApolloServer();
+  await apolloServer.start();
+
+  app.use(
+    '/graphql',
+    express.json(),
+    expressMiddleware(apolloServer, createApolloContext()),
+  )
+
+  setupRoutes(apolloServer)
+
+  console.log(`😳 Server is running on http://localhost:${CONFIG.PORT}`)
+  console.log(`💀 The GraphQL endpoint is http://localhost:${CONFIG.PORT}/graphql`)
+  console.log(`🍆 Enjoy...`)
+})

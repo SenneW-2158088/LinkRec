@@ -1,10 +1,11 @@
 import { Context } from "..";
 import { Database } from "../../db/database";
 import { GQLTypes } from "../../schema/types";
-import { JobInput, jobSchema } from "../../validation/job";
+import { JobInput, jobSchema, JobUpdate } from "../../validation/job";
 import { SparqlAPI } from "../sparql/sparql_api";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { JobQuery } from "../sparql/queries/job";
+import { v4 as uuid } from "uuid";
 
 
 type Employer = GQLTypes.Employer.Type;
@@ -16,15 +17,17 @@ export class JobService{
 
 
   async create(input: JobInput) {
-    jobSchema.parse(input);
+
+    // jobSchema.parse(input);
+    console.log(input)
 
     const query = JobQuery.create(
-      "",
+      uuid(),
       input.title,
       input.location,
-      input.active,
+      input.isActive,
       input.requirements.map(req => ({
-        id: "",
+        id: uuid(),
         ...req
       })),
     )
@@ -33,8 +36,18 @@ export class JobService{
     // const result = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query));
   }
 
-  async update(input: JobInput) {
-    // insert a new rdf job
+  async update(id: string, input: JobUpdate) {
+    const query = JobQuery.update(
+      id,
+      input.title,
+      input.location,
+      input.isActive,
+      input.requirements?.map(req => ({
+        ...req
+      })),
+    )
+
+    console.log(query);
   }
 
   async delete(id: string) {

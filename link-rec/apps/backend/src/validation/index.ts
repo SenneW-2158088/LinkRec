@@ -1,7 +1,7 @@
 import { DegreeInput, EducationInput, educationInputSchema } from "./education"
 import { EmployerLogin, employerloginSchema, EmployerRegister, employerRegisterSchema } from "./employer"
 import { ExperienceInput, experienceSchema } from "./experience"
-import { JobInput, jobSchema } from "./job"
+import { JobInput, jobSchema, JobUpdate } from "./job"
 import { LoginInput, loginInputSchema, RegisterInput, userInputSchema } from "./user"
 
 export namespace Validation {
@@ -34,5 +34,6 @@ export namespace Validation {
   export namespace Job {
     export const createSchema = jobSchema;
     export type Input = JobInput;
+    export type Update = JobUpdate;
   }
 }

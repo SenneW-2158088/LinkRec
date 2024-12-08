@@ -47,8 +47,16 @@ export class SparqlFieldBuilder {
     return new SparqlFieldBuilder(fields)
   }
 
+  static create() {
+    return new SparqlFieldBuilder([]);
+  }
+
   public field(field: string) {
     this.fields.push(field)
+  }
+
+  public hasFields() {
+    return this.fields.length > 0;
   }
 
   public build() {

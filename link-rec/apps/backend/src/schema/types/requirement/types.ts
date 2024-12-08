@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 export interface Requirement {
   id: string,
@@ -32,5 +32,18 @@ export const requirementInputType: GraphQLInputObjectType = new GraphQLInputObje
     education: { type: new GraphQLNonNull(GraphQLString) },
     degree: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: new GraphQLNonNull(GraphQLString) },
+  }
+})
+
+export const requirementUpdateType: GraphQLInputObjectType = new GraphQLInputObjectType({
+  name: "RequirementUpdate",
+  fields: {
+    id: {type: new GraphQLNonNull(GraphQLID) },
+    profession: { type: GraphQLString },
+    years: { type: GraphQLInt },
+    language: { type: GraphQLString },
+    education: { type: GraphQLString },
+    degree: { type: GraphQLString },
+    description: { type: GraphQLString },
   }
 })

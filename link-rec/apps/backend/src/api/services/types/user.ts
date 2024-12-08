@@ -1,3 +1,4 @@
+import { SparqlJob } from "../../sparql/parsers/job";
 import { SparqlBuilder } from "../../sparql/sparql_builder"
 import { IntegerType, ListType, ObjectListType, ObjectType, OptionalType, StringType } from "../../sparql/sparql_parser"
 
@@ -50,21 +51,6 @@ export interface SparqlExperience {
   level: string
 }
 
-export interface SparqlRequirement {
-  profession: string,
-  years: number,
-  language: string,
-  education: string,
-  degree: string,
-  description: string,
-}
-
-export interface SparqlJob {
-  title: string,
-  requirements: SparqlRequirement[],
-  location: string
-  active: boolean,
-}
 
 // SELECT
 //   ?firstName

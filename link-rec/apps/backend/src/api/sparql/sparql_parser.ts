@@ -22,6 +22,15 @@ export const StringType: ParserType<string> = {
   }
 };
 
+export const BooleanType: ParserType<boolean> = {
+  resolve: async (_context: ResolverContext, term: Term) => {
+    if (term.termType === "Literal") {
+      return Boolean(term.value);
+    }
+    throw Error("Term is not a Literal");
+  }
+};
+
 export const IntegerType: ParserType<number> = {
   resolve: async (_context: ResolverContext, term: Term) => {
     if (term.termType === "Literal") {

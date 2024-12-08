@@ -1,4 +1,5 @@
 import { Term } from "@rdfjs/types";
+import { resolve } from "node:path/posix";
 import { ResultRow } from "sparql-http-client/ResultParser";
 
 // Context passed through the structure
@@ -29,6 +30,7 @@ export const IntegerType: ParserType<number> = {
     throw Error("Term is not a Literal");
   }
 };
+
 
 // List type wrapper
 export const ListType = <T>(itemType: ParserType<T>): ParserType<T[]> => ({
@@ -73,10 +75,8 @@ export function ObjectType<T>(config: ObjectTypeConfig<T>): ParserType<T> {
 
       for (const [fieldName, field] of entries) {
         console.log("fieldname", fieldName)
-        const term = row[fieldName as string];
-        if (term) {
-          result[fieldName] = await field.type.resolve(context, term);
-        }
+        const term = row[fieldName as string] || null;
+        result[fieldName] = await field.type.resolve(context, term);
       }
 
       return result;
@@ -84,23 +84,32 @@ export function ObjectType<T>(config: ObjectTypeConfig<T>): ParserType<T> {
   };
 }
 
+export const OptionalType = <T>(parser: ParserType<T>): ParserType<T | null> => ({
+  async resolve(context: ResolverContext, term: Term | null) {
+    if (term) {
+      return await parser.resolve(context, term);
+    }
+    return null
+  }
+})
+
 export function ObjectListType<T>(config: ObjectTypeConfig<T>): ParserType<T[]> {
   return {
     resolve: async (context: ResolverContext, _term: any) => {
       const rows = await context.query(config.query)
       const results: T[] = []
 
+      const entries = Object.entries(config.fields) as [keyof T, ObjectTypeField<T[keyof T]>][];
+
       for (const row of rows) {
         const result = {} as T;
 
-        const entries = Object.entries(config.fields) as [keyof T, ObjectTypeField<T[keyof T]>][];
-
         for (const [fieldName, field] of entries) {
-          const term = row[fieldName as string];
-          if (term) {
-            result[fieldName] = await field.type.resolve(context, term);
-          }
+          const term = row[fieldName as string] || null;
+          console.log(fieldName, "term", term)
+          result[fieldName] = await field.type.resolve(context, term);
         }
+        results.push(result)
       }
 
       return results;

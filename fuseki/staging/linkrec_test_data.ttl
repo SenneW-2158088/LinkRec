@@ -23,7 +23,7 @@ user:JohnDoe a lr:User ;
     lr:hasLocation "Hasselt" ;
     lr:hasExperience experience:Experience1 ;
     lr:hasEducation education:Education1 ;
-    lr:hasEducation education:Education2
+    lr:hasEducation education:Education2 ;
     lr:hasLanguage "English" ;
     lr:hasJobSeekingStatus lr:ActivelyLooking .
 
@@ -48,12 +48,14 @@ employer:TechCorp a lr:Employer ;
 
 # Experiences
 experience:Experience1 a lr:Experience ;
+    lr:hasTitle "Web Developer at Web Solutions Inc." ;
     lr:hasProfession "Web Developer" ;
     lr:hasDescription "Developed web applications." ;
     lr:hasYears 3 ;
     lr:hasCompany "Web Solutions Inc." .
 
-    experience:Experience2 a lr:Experience ;
+experience:Experience2 a lr:Experience ;
+    lr:hasTitle "Software Developer at Mobile Innovations LLC." ;
     lr:hasProfession "Software Developer" ;
     lr:hasDescription "Worked on mobile applications." ;
     lr:hasYears 4 ;
@@ -86,11 +88,11 @@ job:Job2 a lr:Job ;
 
 # Education
 education:Education1 a lr:Education ;
-    lr:hasDegree "Bachelor of Science in Computer Science" ;
+    lr:hasTitle "Bachelor of Science in Computer Science" ;
     lr:hasInstitution "University of Technology" ;
     lr:hasDegree "Bachelor" .
 
 education:Education2 a lr:Education ;
-    lr:hasDegree "Master of Science in Software Engineering" ;
+    lr:hasTitle "Master of Science in Software Engineering" ;
     lr:hasInstitution "Institute of Advanced Studies" ;
     lr:hasDegree "Master" .

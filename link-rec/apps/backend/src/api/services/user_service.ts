@@ -89,7 +89,7 @@ export class UserService{
   }
 
   private async queryRdfUser(user: { id: string }) {
-    const result = await this.context.sparql.resolve(SparqlUserType(user.id))
+    const result = await this.context.sparql.resolve(SparqlUserType())
     console.log("RESULLTTTTTT!!!!:", result)
 
     return result

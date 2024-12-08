@@ -24,7 +24,9 @@ export const StringType: ParserType<string> = {
 
 export const BooleanType: ParserType<boolean> = {
   resolve: async (_context: ResolverContext, term: Term) => {
+    console.log("reading bool")
     if (term.termType === "Literal") {
+      console.log("reading bool done")
       return Boolean(term.value);
     }
     throw Error("Term is not a Literal");

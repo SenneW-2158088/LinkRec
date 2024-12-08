@@ -76,23 +76,25 @@ requirement:Requirement2 a lr:Requirement ;
     lr:hasDegree "Master" .
 
 requirement:Requirement3 a lr:Requirement ;
-    lr:hasLanguage "English" .
+    lr:hasLanguage "english" .
 
 # Jobs
 job:Job1 a lr:Job ;
-    lr:hasTitle "Software Developer" ;
+    lr:hasTitle "software developer" ;
     lr:hasRequirement requirement:Requirement1 ;
     lr:hasLocation "Flanders" ;
     lr:isActive true .
 
 job:Job2 a lr:Job ;
     lr:hasTitle "Software Engineer" ;
+    lr:hasId "Job2" ;
     lr:hasRequirement requirement:Requirement2 ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .
 
 job:Job3 a lr:Job ;
     lr:hasTitle "Software Engineer" ;
+    lr:hasId "Job2" ;
     lr:hasRequirement requirement:Requirement3 ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .

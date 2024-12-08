@@ -124,12 +124,12 @@
     (?job lr:hasInferredLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
-    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:hasInferredProfession ?profession)
     (?requirement lr:requiredYears ?reqYears)
     (?user lr:hasExperience ?experience)
     (?experience lr:hasYears ?expYears)
     ge(?expYears, ?reqYears)
-    (?experience lr:hasProfession ?profession)
+    (?experience lr:hasInferredProfession ?profession)
     ->
     (?user lr:matchesRequirement ?requirement)
 ]

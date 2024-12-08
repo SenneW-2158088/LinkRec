@@ -143,49 +143,41 @@ export class UserService{
     if (update.firstName) {
         deleteBuilder.field(`user:${id} lr:hasFirstName ?firstName`);
         queryBuilder.field(`user:${id} lr:hasFirstName "${update.firstName}"`);
-        whereBuilder.field(`lr:hasFirstName ?firstName`);
     }
 
     if (update.lastName) {
         deleteBuilder.field(`user:${id} lr:hasLastName ?lastName`);
         queryBuilder.field(`user:${id} lr:hasLastName "${update.lastName}"`);
-        whereBuilder.field(`lr:hasLastName ?lastName`);
     }
 
     if (update.email) {
         deleteBuilder.field(`user:${id} lr:hasEmail ?email`);
         queryBuilder.field(`user:${id} lr:hasEmail "${update.email}"`);
-        whereBuilder.field(`lr:hasEmail ?email`);
     }
 
     if (update.phoneNumber) {
         deleteBuilder.field(`user:${id} lr:hasPhoneNumber ?phoneNumber`);
         queryBuilder.field(`user:${id} lr:hasPhoneNumber "${update.phoneNumber}"`);
-        whereBuilder.field(`lr:hasPhoneNumber ?phoneNumber`);
     }
 
     if (update.webPage) {
         deleteBuilder.field(`user:${id} lr:hasWebPage ?webPage`);
         queryBuilder.field(`user:${id} lr:hasWebPage "${update.webPage}"`);
-        whereBuilder.field(`lr:hasWebPage ?webPage`);
     }
 
     if (update.location) {
         deleteBuilder.field(`user:${id} lr:hasLocation ?location`);
         queryBuilder.field(`user:${id} lr:hasLocation "${update.location}"`);
-        whereBuilder.field(`lr:hasLocation ?location`);
     }
 
     if (update.bio) {
         deleteBuilder.field(`user:${id} lr:hasBio ?bio`); // Assuming lr:hasBio is defined in your ontology
         queryBuilder.field(`user:${id} lr:hasBio "${update.bio}"`);
-        whereBuilder.field(`lr:hasBio ?bio`);
     }
 
     if (update.status) {
         deleteBuilder.field(`user:${id} lr:hasJobSeekingStatus ?status`);
         queryBuilder.field(`user:${id} lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
-        whereBuilder.field(`lr:hasJobSeekingStatus ?status`);
     }
 
     // Build the final SPARQL update query

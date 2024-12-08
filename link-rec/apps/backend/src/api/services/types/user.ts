@@ -310,7 +310,7 @@ export const MatchingJobsType = (userId: string) => ObjectListType<SparqlJob>({
         ?id
         ?title
         ?location
-        ?isActive
+        ?active
       WHERE {
         user:${userId} a lr:User ;
           lr:matchesRequirement ?requirement .
@@ -318,7 +318,7 @@ export const MatchingJobsType = (userId: string) => ObjectListType<SparqlJob>({
           lr:hasId ?id ;
           lr:hasTitle ?title ;
           lr:hasLocation ?location ;
-          lr:isActive ?isActive .
+          lr:isActive ?active .
       }
     `)
   },

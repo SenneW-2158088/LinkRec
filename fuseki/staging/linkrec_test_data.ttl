@@ -60,7 +60,7 @@ experience:Experience2 a lr:Experience ;
     lr:hasTitle "Software Developer at Mobile Innovations LLC." ;
     lr:hasProfession "Software Developer" ;
     lr:hasDescription "Worked on mobile applications." ;
-    lr:hasYears 4 ;
+    lr:hasYears 1 ;
     lr:hasCompany "Mobile Innovations LLC" .
 
 # Requirements
@@ -69,10 +69,10 @@ requirement:Requirement1 a lr:Requirement ;
     lr:hasDescription "Looking for a skilled software developer." ;
     lr:requiredYears 2 .
 
-    requirement:Requirement2 a lr:Requirement ;
+requirement:Requirement2 a lr:Requirement ;
     lr:hasEducationTitle "Master of Science in Software Engineering" .
 
-    requirement:Requirement3 a lr:Requirement ;
+requirement:Requirement3 a lr:Requirement ;
     lr:hasLanguage "English" .
 
 # Jobs

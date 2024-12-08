@@ -97,7 +97,7 @@
     (?level lr:hasMinYears ?min)
     (?level lr:hasMaxYears ?max)
     ge(?years, ?min)
-    le(?years, ?max)
+    lessThan(?years, ?max)
     ->
     (?experience lr:hasExperienceLevel ?level)
 ]
@@ -107,7 +107,7 @@
     (?level lr:hasMinYears ?min)
     (?level lr:hasMaxYears ?max)
     ge(?years, ?min)
-    le(?years, ?max)
+    lessThan(?years, ?max)
     ->
     (?requirement lr:hasExperienceLevel ?level)
 ]
@@ -118,7 +118,10 @@
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?reqYears)
     (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?reqYears)
     (?experience lr:hasProfession ?profession)
     ->
     (?user lr:matchesRequirement ?requirement)

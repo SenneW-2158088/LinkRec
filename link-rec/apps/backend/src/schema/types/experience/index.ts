@@ -1,4 +1,4 @@
-import { Experience as IExperience, Level as ILevel, ExperienceInputType, ExperienceLevelType, ExperienceType } from "./types"
+import { Experience as IExperience, Level as ILevel, ExperienceInputType, ExperienceLevelType, ExperienceType, ExperienceUpdateType } from "./types"
 
 export namespace Experience {
 
@@ -11,6 +11,8 @@ export namespace Experience {
   export const Experience = ExperienceType
 
   export const Create = ExperienceInputType
+
+  export const Update = ExperienceUpdateType
 
   export const queries = {};
 

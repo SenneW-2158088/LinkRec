@@ -43,3 +43,18 @@ export type EducationInput = {
   title: string,
   degree: string,
 }
+
+export const EducationUpdateType: GraphQLInputObjectType  = new GraphQLInputObjectType({
+  name: "EducationUpdate",
+  fields: () => ({
+    institution: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    degree: { type: new GraphQLNonNull(DegreeType) },
+  })
+})
+
+export type EducationUpdate = {
+  institution: string,
+  title: string,
+  degree: Degree,
+}

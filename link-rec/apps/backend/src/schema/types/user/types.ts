@@ -4,7 +4,8 @@ import { Education } from "../education";
 import { JobSeekingStatus, JobSeekingStatusType } from "../jobseeking/types";
 import { Experience } from "../experience";
 import { GQLTypes } from "..";
-import { EducationInput } from "../education/types";
+import { EducationInput, EducationUpdate } from "../education/types";
+import { ExperienceInput, ExperienceUpdate } from "../experience/types";
 
 export interface User {
   id: string;
@@ -166,7 +167,7 @@ export const UserInputType = new GraphQLInputObjectType({
     experiences: { type: new GraphQLList(Experience.Create) },
     languages: { type: new GraphQLList(GraphQLString) },
   },
-});
+})
 
 export type UserInput = {
   firstName: string,
@@ -180,6 +181,39 @@ export type UserInput = {
   status: string,
   education: EducationInput[],
   languages: string[],
+}
+
+export const UserUpdateType = new GraphQLInputObjectType({
+  name: 'UserUpdate',
+  fields: {
+    firstName: { type: GraphQLString },
+    lastName: { type: GraphQLString },
+    email: { type: GraphQLString },
+    password: { type: GraphQLString },
+    phoneNumber: { type: GraphQLString },
+    webPage: { type: GraphQLString },
+    location: { type: GraphQLString },
+    bio: { type: GraphQLString },
+    status: { type: GraphQLString },
+    education: { type: new GraphQLList(Education.Update) },
+    experiences: { type: new GraphQLList(Experience.Update) },
+    languages: { type: new GraphQLList(GraphQLString) },
+  },
+});
+
+export type UserUpdate = {
+  firstName: string | null,
+  lastName: string | null,
+  email: string | null,
+  password: string | null,
+  phoneNumber: string | null,
+  webPage: string | null,
+  location: string | null,
+  bio: string | null,
+  status: string | null,
+  education: EducationUpdate[] | null,
+  experiences: ExperienceUpdate[] | null,
+  languages: string[] | null,
 }
 
 export type RequestConnectionInput = {

@@ -1,26 +1,27 @@
-import { IntegerType, ObjectType, StringType } from "../sparql_parser";
+import { JobQuery } from "../queries/job";
+import { RequirementQuery } from "../queries/requirement";
+import { SparqlBuilder } from "../sparql_builder";
+import { IntegerType, ObjectListType, ObjectType, OptionalType, StringType } from "../sparql_parser";
 
 export interface SparqlRequirement {
   id: string,
-  profession: string,
-  years: number,
-  language: string,
-  education: string,
-  degree: string,
-  description: string,
+  profession: string | null,
+  years: number | null,
+  language: string | null,
+  education: string | null,
+  degree: string | null,
 }
 
-export const SparqlRequirementType = (jobid: string) => ObjectType<SparqlRequirement>({
+export const SparqlJobRequirementsType = (id: string) => ObjectListType<SparqlRequirement>({
   query: () => {
-    return ""
+    return SparqlBuilder.defaultPrefixes().build(RequirementQuery.forJob(id));
   },
   fields: {
     id: { type: StringType },
-    profession: { type: StringType },
-    years: { type: IntegerType },
-    language: { type: StringType },
-    education: { type: StringType },
-    degree: { type: StringType },
-    description: { type: StringType },
+    profession: { type: OptionalType(StringType) },
+    years: { type: OptionalType(IntegerType) },
+    language: { type: OptionalType(StringType) },
+    education: { type: OptionalType(StringType) },
+    degree: { type: OptionalType(StringType) },
   }
 })

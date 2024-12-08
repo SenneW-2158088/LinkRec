@@ -2,12 +2,11 @@ import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonN
 
 export interface Requirement {
   id: string,
-  profession: string,
-  years: number,
-  language: string,
-  education: string,
-  degree: string,
-  description: string,
+  profession: string | null,
+  years: number | null,
+  language: string | null,
+  education: string | null,
+  degree: string | null,
 }
 
 export const requirementType: GraphQLObjectType = new GraphQLObjectType({
@@ -19,7 +18,6 @@ export const requirementType: GraphQLObjectType = new GraphQLObjectType({
     language: { type: new GraphQLNonNull(GraphQLString) },
     education: { type: new GraphQLNonNull(GraphQLString) },
     degree: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: new GraphQLNonNull(GraphQLString) },
   }
 })
 
@@ -31,7 +29,6 @@ export const requirementInputType: GraphQLInputObjectType = new GraphQLInputObje
     language: { type: new GraphQLNonNull(GraphQLString) },
     education: { type: new GraphQLNonNull(GraphQLString) },
     degree: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: new GraphQLNonNull(GraphQLString) },
   }
 })
 
@@ -44,6 +41,5 @@ export const requirementUpdateType: GraphQLInputObjectType = new GraphQLInputObj
     language: { type: GraphQLString },
     education: { type: GraphQLString },
     degree: { type: GraphQLString },
-    description: { type: GraphQLString },
   }
 })

@@ -1,5 +1,5 @@
 import { createJobMutation, updateJobMutation } from "./mutations";
-import { jobQuery } from "./queries";
+import { allJobsQuery, jobQuery } from "./queries";
 import { Job as IJob, JobInputType, JobType } from "./types";
 
 export namespace Job {
@@ -11,7 +11,8 @@ export namespace Job {
   export const Create = JobInputType;
 
   export const queries = {
-    "job": jobQuery
+    "job": jobQuery,
+    "allJobs": allJobsQuery,
   }
 
   export const mutations = {

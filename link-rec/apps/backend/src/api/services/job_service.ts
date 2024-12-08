@@ -6,6 +6,12 @@ import { SparqlAPI } from "../sparql/sparql_api";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { JobQuery } from "../sparql/queries/job";
 import { v4 as uuid } from "uuid";
+import { SparqlAllJobType, SparqlJobType } from "../sparql/parsers/job";
+import { Job } from "../../schema/types/job/types";
+import { Experience } from "../../schema/types/experience/types";
+import { Requirement } from "../../schema/types/requirement/types";
+import { RequirementQuery } from "../sparql/queries/requirement";
+import { SparqlJobRequirementsType } from "../sparql/parsers/requirement";
 
 
 type Employer = GQLTypes.Employer.Type;
@@ -16,13 +22,14 @@ export class JobService{
   constructor(private context: Context) { }
 
 
-  async create(input: JobInput) {
+  async create(input: JobInput) : Promise<Job> {
 
-    // jobSchema.parse(input);
-    console.log(input)
+    jobSchema.parse(input);
 
-    const query = JobQuery.create(
-      uuid(),
+    // Create query
+    const jobId = uuid();
+    const insert = JobQuery.create(
+      jobId,
       input.title,
       input.location,
       input.isActive,
@@ -32,8 +39,16 @@ export class JobService{
       })),
     )
 
-    console.log(query);
-    // const result = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query));
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
+    const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
+
+    return {
+      id: queryResult.id,
+      active: queryResult.active,
+      location: queryResult.location,
+      title: queryResult.title,
+      requirements: [],
+    }
   }
 
   async update(id: string, input: JobUpdate) {
@@ -55,7 +70,19 @@ export class JobService{
 
   }
 
-  async all() {
+  async all() : Promise<Job[]> {
+    const jobs = await this.context.sparql.resolve(SparqlAllJobType());
+    return jobs.map((job) => ({
+      ...job,
+      requirements: []
+    }))
+  }
 
+  async getRequirementsFor(jobId: string) : Promise<Requirement[]> {
+    const queryResult = await this.context.sparql.resolve(SparqlJobRequirementsType(jobId));
+
+    return queryResult.map((res) => ({
+      ...res
+    }));
   }
 }

@@ -102,6 +102,7 @@
 [requirementInferenceProfession:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     (?requirement lr:hasProfession ?profession)
     (?requirement lr:requiredYears ?years)
     (?user lr:hasExperience ?experience)
@@ -118,6 +119,7 @@
 [requirementInferenceLanguage:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     noValue(?requirement, lr:hasProfession)
     (?requirement lr:hasLanguage ?language)
     (?user lr:hasInferredLanguage ?language)
@@ -131,6 +133,7 @@
 [requirementInferenceEducation:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     noValue(?requirement, lr:hasProfession)
     (?experience lr:hasProfession ?profession)
     noValue(?requirement, lr:hasLanguage)
@@ -146,6 +149,7 @@
 [requirementInferenceProfessionLanguage:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     (?requirement lr:hasProfession ?profession)
     (?requirement lr:requiredYears ?years)
     (?user lr:hasExperience ?experience)
@@ -163,6 +167,7 @@
 [requirementInferenceLanguageEducation:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     noValue(?requirement, lr:hasProfession)
     (?experience lr:hasProfession ?profession)
     (?requirement lr:hasLanguage ?language)
@@ -179,6 +184,7 @@
 [requirementInferenceProfessionEducation:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     (?requirement lr:hasProfession ?profession)
     (?requirement lr:requiredYears ?years)
     (?user lr:hasExperience ?experience)
@@ -197,6 +203,129 @@
 [requirementInferenceProfessionLanguageEducation:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?years)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?years)
+    (?experience lr:hasProfession ?profession)
+    (?requirement lr:hasLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    (?requirement lr:hasDegree ?degree)
+    (?userEducation, lr:hasDegree ?degree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceProfession:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?years)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?years)
+    (?experience lr:hasProfession ?profession)
+    noValue(?requirement, lr:hasLanguage)
+    noValue(?requirement, lr:hasEducationTitle)
+    noValue(?requirement, lr:hasDegree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceLanguage:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    noValue(?requirement, lr:hasProfession)
+    (?requirement lr:hasLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    noValue(?requirement, lr:hasLanguage)
+    noValue(?requirement, lr:hasEducationTitle)
+    noValue(?requirement, lr:hasDegree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceEducation:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    noValue(?requirement, lr:hasProfession)
+    (?experience lr:hasProfession ?profession)
+    noValue(?requirement, lr:hasLanguage)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    (?requirement lr:hasDegree ?degree)
+    (?userEducation, lr:hasDegree ?degree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceProfessionLanguage:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?years)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?years)
+    (?experience lr:hasProfession ?profession)
+    (?requirement lr:hasLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    noValue(?requirement, lr:hasEducationTitle)
+    noValue(?requirement, lr:hasDegree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceLanguageEducation:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    noValue(?requirement, lr:hasProfession)
+    (?experience lr:hasProfession ?profession)
+    (?requirement lr:hasLanguage ?language)
+    (?user lr:hasInferredLanguage ?language)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    (?requirement lr:hasDegree ?degree)
+    (?userEducation, lr:hasDegree ?degree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceProfessionEducation:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?years)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?years)
+    (?experience lr:hasProfession ?profession)
+    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?user lr:hasEducation ?userEducation)
+    (?userEducation lr:hasTitle ?educationTitle)
+    (?requirement lr:hasDegree ?degree)
+    (?userEducation, lr:hasDegree ?degree)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[requirementInferenceProfessionLanguageEducation:
+    (?user lr:hasJobSeekingStatus lr:OpenToOffers)
+    (?job lr:hasRequirement ?requirement)
+    (?job lr:isActive true)
     (?requirement lr:hasProfession ?profession)
     (?requirement lr:requiredYears ?years)
     (?user lr:hasExperience ?experience)

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { EmployerService } from "./services/employer_service";
 import { LinkRecError } from "./errors";
 import { ValidationError } from "./errors/validation";
+import { JobService } from "./services/job_service";
 
 export * from "./services"
 
@@ -26,6 +27,7 @@ export class LinkRecAPI {
   public userService: UserService;
   public employerService: EmployerService;
   public authenticationService: AuthenticationService;
+  public jobService: JobService;
 
   constructor(config: ApiConfig) {
     this.context = {
@@ -36,6 +38,7 @@ export class LinkRecAPI {
     this.userService = new UserService(this.context)
     this.employerService = new EmployerService(this.context)
     this.authenticationService = new AuthenticationService(this.context)
+    this.jobService = new JobService(this.context);
   }
 
   public handleError(error: unknown): GraphQLError {

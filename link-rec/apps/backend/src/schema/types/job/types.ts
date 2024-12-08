@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { Requirement } from "../requirement";
+import { Requirement, requirementInputType, requirementType } from "../requirement/types";
 
 export const enum Level {
   ENTRY,
@@ -11,22 +11,22 @@ export const enum Level {
 export interface Job {
   id: string,
   title: string,
-  requirements: Requirement.Type[],
   location: string
   active: boolean,
+  requirements: Requirement[],
 };
 
 export const JobType: GraphQLObjectType = new GraphQLObjectType({
-  name: "JobInput",
+  name: "Job",
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
     employer: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
-    requirements: { type: new GraphQLNonNull(
-      new GraphQLList(Requirement.Requirement)
-    ) },
+    requirements: {
+      type: new GraphQLList(new GraphQLNonNull(requirementType))
+    },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },
     isActive: { type: new GraphQLNonNull(GraphQLBoolean) },
@@ -34,15 +34,15 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
 })
 
 export const JobInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
-  name: "Job",
+  name: "JobInput",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
     employer: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
-    requirements: { type: new GraphQLNonNull(
-      new GraphQLList(GraphQLString)
-    ) },
+    requirements: {
+      type: new GraphQLList(new GraphQLNonNull(requirementInputType))
+    },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },
     isActive: { type: new GraphQLNonNull(GraphQLBoolean) },

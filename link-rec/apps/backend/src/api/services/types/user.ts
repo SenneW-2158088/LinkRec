@@ -154,7 +154,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
 
 export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
     query: () => {
-      return SparqlBuilder.defaultPrefixes().build(`
+      const query = SparqlBuilder.defaultPrefixes().build(`
       SELECT
         ?id
         ?email
@@ -182,6 +182,8 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
       }
       GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
     `)
+      console.log("QUERY", query)
+      return query
     },
     fields: {
       id: { type: StringType },
@@ -199,7 +201,7 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
 
 export const SparqlConnectionType = (userId: string) => ObjectListType<SparqlUser>({
     query: () => {
-      return SparqlBuilder.defaultPrefixes().build(`
+      const query = SparqlBuilder.defaultPrefixes().build(`
       SELECT
         ?id
         ?email
@@ -229,6 +231,8 @@ export const SparqlConnectionType = (userId: string) => ObjectListType<SparqlUse
       }
       GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
     `)
+      console.log("QUER:", query)
+      return query
     },
     fields: {
       id: { type: StringType },

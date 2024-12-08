@@ -72,7 +72,8 @@ requirement:Requirement1 a lr:Requirement ;
     lr:requiredYears 2 .
 
 requirement:Requirement2 a lr:Requirement ;
-    lr:hasEducationTitle "Master of Science in Software Engineering" .
+    lr:hasEducationTitle "Master of Science in Software Engineering" ;
+    lr:hasDegree "Master" .
 
 requirement:Requirement3 a lr:Requirement ;
     lr:hasLanguage "English" .
@@ -87,6 +88,12 @@ job:Job1 a lr:Job ;
 job:Job2 a lr:Job ;
     lr:hasTitle "Software Engineer" ;
     lr:hasRequirement requirement:Requirement2 ;
+    lr:hasLocation "Hasselt" ;
+    lr:isActive true .
+
+job:Job2 a lr:Job ;
+    lr:hasTitle "Software Engineer" ;
+    lr:hasRequirement requirement:Requirement3 ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .
 

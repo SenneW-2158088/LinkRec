@@ -2,6 +2,8 @@ import { SparqlBuilder } from "../../sparql/sparql_builder"
 import { IntegerType, ListType, ObjectListType, ObjectType, OptionalType, StringType } from "../../sparql/sparql_parser"
 
 export interface SparqlUser {
+  id: string;
+  email: string;
   firstName: string;
   lastName: string;
   phoneNumber?: string | null;
@@ -10,9 +12,6 @@ export interface SparqlUser {
   location?: string | null;
   bio?: string | null;
   languages: string[];
-  educations: SparqlEducation[],
-  experiences: SparqlExperience[],
-  connections?: SparqlUser[]
 }
 
 export interface SparqlConnection {
@@ -98,12 +97,14 @@ export interface SparqlJob {
 //   OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
 // }
 
-const SparqlEducationsType = () => ObjectListType<SparqlEducation>({
-  query: (education) => {
+const SparqlEducationsType = (userId: string) => ObjectListType<SparqlEducation>({
+  query: () => {
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT ?institution ?title ?degree
     WHERE {
-      <${education}> a lr:Education ;
+      user:${userId} a lr:User ;
+        lr:hasEducation ?education .
+      ?education a lr:Education ;
         lr:hasInstitution ?institution ;
         lr:hasTitle ?title ;
         lr:hasDegree ?degree .
@@ -117,8 +118,8 @@ const SparqlEducationsType = () => ObjectListType<SparqlEducation>({
   }
 })
 
-const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
-  query: (experience) => {
+export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExperience>({
+  query: () => {
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT
       ?title
@@ -128,7 +129,9 @@ const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
       ?level
       ?profession
     WHERE {
-      <${experience}> a lr:Experience ;
+      user:${userId} a lr:User ;
+        lr:hasExperience ?experience .
+      ?experience a lr:Experience ;
         lr:hasProfession ?profession ;
         lr:hasTitle ?title ;
         lr:hasCompany ?company ;
@@ -149,11 +152,12 @@ const SparqlExperienceType = () => ObjectListType<SparqlExperience>({
   }
 })
 
-export const SparqlUserConfig: any = (depth: number = 3) => {
-  return {
-    query: (user: string) => {
+export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
+    query: () => {
       return SparqlBuilder.defaultPrefixes().build(`
       SELECT
+        ?id
+        ?email
         ?firstName
         ?lastName
         ?email
@@ -161,29 +165,27 @@ export const SparqlUserConfig: any = (depth: number = 3) => {
         ?gender
         ?location
         ?status
-        (GROUP_CONCAT(DISTINCT ?education; separator=",") as ?educations)
         (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
-        (GROUP_CONCAT(DISTINCT ?experience; separator=",") as ?experiences)
-        (GROUP_CONCAT(DISTINCT ?connection; separator=",") as ?connections)
       WHERE {
-        <${user}> a lr:User ;
+        user:${userId} a lr:User ;
+          lr:hasId ?id ;
+          lr:hasEmail ?email ;
           lr:hasFirstName ?firstName ;
           lr:hasLastName ?lastName ;
           lr:hasEmail ?email ;
           lr:hasPhoneNumber ?phoneNumber .
-        <${user}> lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+        user:${userId} lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
-        OPTIONAL { <${user}> lr:hasGender ?gender . }
-        OPTIONAL { <${user}> lr:hasLocation ?location . }
-        OPTIONAL { <${user}> lr:hasEducation ?education . }
-        OPTIONAL { <${user}> lr:hasLanguage ?language . }
-        OPTIONAL { <${user}> lr:hasExperience ?experience . }
-        OPTIONAL { <${user}> lr:knows ?connection . }
+        OPTIONAL { user:${userId} lr:hasGender ?gender . }
+        OPTIONAL { user:${userId} lr:hasLocation ?location . }
+        OPTIONAL { user:${userId} lr:hasLanguage ?language . }
       }
-      GROUP BY ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
     `)
     },
     fields: {
+      id: { type: StringType },
+      email: { type: StringType },
       firstName: { type: StringType },
       lastName: { type: StringType },
       phoneNumber: { type: StringType },
@@ -191,18 +193,53 @@ export const SparqlUserConfig: any = (depth: number = 3) => {
       status: { type: StringType },
       location: { type: OptionalType(StringType) },
       bio: { type: OptionalType(StringType) },
-      languages: { type: ListType(StringType) },
-      educations: {
-        type: SparqlEducationsType()
-      },
-      experiences: {
-        type: SparqlExperienceType()
-      },
-      connections: depth > 0 ? {
-        type: ObjectListType(SparqlUserConfig(depth - 1))
-      } : undefined
+      languages: { type: ListType(StringType) }
     }
-  }
-}
+  })
 
-export const SparqlUserType = ObjectType<SparqlUser>(SparqlUserConfig())
+export const SparqlConnectionType = (userId: string) => ObjectListType<SparqlUser>({
+    query: () => {
+      return SparqlBuilder.defaultPrefixes().build(`
+      SELECT
+        ?id
+        ?email
+        ?firstName
+        ?lastName
+        ?email
+        ?phoneNumber
+        ?gender
+        ?location
+        ?status
+        (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
+      WHERE {
+        user:${userId} a lr:User ;
+          lr:knows ?user .
+        ?user a lr:User ;
+          lr:hasId ?id ;
+          lr:hasEmail ?email ;
+          lr:hasFirstName ?firstName ;
+          lr:hasLastName ?lastName ;
+          lr:hasEmail ?email ;
+          lr:hasPhoneNumber ?phoneNumber .
+        ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+        ?jobSeekingStatusResource rdfs:label ?status .
+        OPTIONAL { ?user lr:hasGender ?gender . }
+        OPTIONAL { ?user lr:hasLocation ?location . }
+        OPTIONAL { ?user lr:hasLanguage ?language . }
+      }
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
+    `)
+    },
+    fields: {
+      id: { type: StringType },
+      email: { type: StringType },
+      firstName: { type: StringType },
+      lastName: { type: StringType },
+      phoneNumber: { type: StringType },
+      webPage: { type: OptionalType(StringType) },
+      status: { type: StringType },
+      location: { type: OptionalType(StringType) },
+      bio: { type: OptionalType(StringType) },
+      languages: { type: ListType(StringType) }
+    }
+  })

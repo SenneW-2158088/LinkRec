@@ -31,14 +31,6 @@ export class SparqlAPI {
       query: this.query.bind(this)
     }
 
-    const node: Term = {
-      termType: "NamedNode",
-      value: `http://linkrec:8080/user/JohnDoe`,
-      equals(other: Term) {
-        return false;
-      }
-    }
-
-    return await object.resolve(context, node)
+    return await object.resolve(context, null)
   }
 }

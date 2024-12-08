@@ -16,6 +16,7 @@
 
 # Users
 user:JohnDoe a lr:User ;
+    lr:hasId "JohnDoe" ;
     lr:hasFirstName "John" ;
     lr:hasLastName "Doe" ;
     lr:hasEmail "mailto:johndoe@example.com" ;
@@ -28,6 +29,7 @@ user:JohnDoe a lr:User ;
     lr:hasJobSeekingStatus lr:ActivelyLooking .
 
 user:JaneSmith a lr:User ;
+    lr:hasId "JaneSmith" ;
     lr:hasFirstName "Jane" ;
     lr:hasLastName "Smith" ;
     lr:hasEmail "mailto:janesmith@example.com" ;

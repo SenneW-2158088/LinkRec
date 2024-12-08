@@ -9,8 +9,9 @@ import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
-import { JobSeekingStatus, jobSeekingStatusFromString, jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
+import { jobSeekingStatusToString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
+import { SparqlUserType } from "./types/user";
 
 type User = GQLTypes.User.Type
 const Status = GQLTypes.JobSeekingStatus.StatusType
@@ -88,94 +89,10 @@ export class UserService{
   }
 
   private async queryRdfUser(user: { id: string }) {
-    const result = await this.context.sparql.query(SparqlBuilder.defaultPrefixes()
-      .build(`
-        SELECT ?firstName ?lastName ?email ?phone ?gender ?location ?jobSeekingStatus ?language ?experience ?education ?title ?degree
-        WHERE {
-          user:JohnDoe2 a lr:User ;
-            lr:hasFirstName ?firstName ;
-            lr:hasLastName ?lastName ;
-            lr:hasEmail ?email .
-          user:JohnDoe2 lr:hasJobSeekingStatus ?jobSeekingStatusResource .
-          ?jobSeekingStatusResource rdfs:label ?jobSeekingStatus .
+    const result = await this.context.sparql.resolve(SparqlUserType(user.id))
+    console.log("RESULLTTTTTT!!!!:", result)
 
-          OPTIONAL { user:JohnDoe2 lr:hasPhoneNumber ?phone . }
-          OPTIONAL { user:JohnDoe2 lr:hasGender ?gender . }
-          OPTIONAL { user:JohnDoe2 lr:hasLocation ?location . }
-          OPTIONAL { user:JohnDoe2 lr:hasLanguage ?language . }
-          OPTIONAL { user:JohnDoe2 lr:hasExperience ?experience . }
-          OPTIONAL {
-        		user:JohnDoe2 lr:hasEducation ?education .
-        		?education lr:hasDegree ?degree ;
-        		lr:hasTitle ?title .
-      		}
-        }
-      `))
-
-    console.log("ASJKLFJKLASDJFL")
-
-    if (result.length === 0) throw Error("No user found")
-
-    const foundUser: User = {
-        id: user.id,
-        email: "",
-        firstName: "",
-        lastName: "",
-        status: Status.ACTIVELY_LOOKING,
-        languages: [],
-        educations: [],
-        experiences: [],
-        connections: [],
-    }
-
-    console.log(SparqlParser.create(result)
-      .parse())
-    for (const row of result) {
-      const { firstName, lastName, email, phone, location, jobSeekingStatus, language, experience } = row
-      if (!foundUser.firstName) {
-        if (firstName.termType === "Literal") {
-          foundUser.firstName = firstName.value;
-        }
-      }
-
-      if (!foundUser.lastName) {
-        if (lastName.termType === "Literal") {
-          foundUser.lastName = lastName.value;
-        }
-      }
-
-      if (!foundUser.email) {
-        if (email.termType === "Literal") {
-          foundUser.email = email.value;
-        }
-      }
-
-      if (!foundUser.phoneNumber) {
-        if (phone.termType === "Literal") {
-          foundUser.phoneNumber = phone.value;
-        }
-      }
-
-      if (!foundUser.location) {
-        if (location.termType === "Literal") {
-          foundUser.location = location.value;
-        }
-      }
-
-      if (!foundUser.status) {
-        if (jobSeekingStatus.termType === "Literal") {
-          foundUser.status = jobSeekingStatusFromString(jobSeekingStatus.value);
-        }
-      }
-
-      if (language.termType === "Literal") {
-        foundUser.languages.push(language.value)
-      }
-
-      if (experience.termType === "Literal") {
-      }
-    }
-    return foundUser
+    return result
   }
 
   private async updateRdfUser(user: User) {

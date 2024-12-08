@@ -1,4 +1,5 @@
 import { ResultRow } from "sparql-http-client/ResultParser"
+import { Term } from "@rdfjs/types";
 
 export class SparqlBuilder {
   private prefixes: string[] = []
@@ -55,13 +56,84 @@ export class SparqlFieldBuilder {
   }
 }
 
+type ParserType = {
+  resolve: (terms: Term[]) => any
+}
+
+
+// Object(ResultRow[]) {
+
+// }
+// userResolver
+// {
+//   firstname -> StringType(ResultRow[])
+//   lastname
+//   educations: [] -> Own type
+// }
+// [
+//
+// StringType("firstname")
+// Builder({
+//  firstName: StringType
+// })
+// backend-dev-1  |   {
+// backend-dev-1  |     firstName: Literal { value: 'bugo', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     lastName: Literal { value: 'janssen', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     email: Literal { value: 'asdfadsf', language: '', datatype: [NamedNode] }
+// backend-dev-1  |     education: NamedNode { value: 'asdfadsf', language: '', datatype: [NamedNode] }
+// backend-dev-1  |   },
+// backend-dev-1  |   {
+// backend-dev-1  |     firstName: Literal { value: 'bugo', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     lastName: Literal { value: 'janssen', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     email: Literal {
+// backend-dev-1  |       value: 'asdddddddf',
+// backend-dev-1  |       language: '',
+// backend-dev-1  |       datatype: [NamedNode]
+// backend-dev-1  |     }
+// backend-dev-1  |   },
+// backend-dev-1  |   {
+// backend-dev-1  |     firstName: Literal { value: 'bugo', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     lastName: Literal { value: 'janssen', language: '', datatype: [NamedNode] },
+// backend-dev-1  |     email: Literal { value: 'ddddd', language: '', datatype: [NamedNode] }
+// backend-dev-1  |   }
+// backend-dev-1  | ]
+
+const StringType: ParserType = {
+  resolve: (terms: Term[]) => {
+    if (terms.length === 0) {
+      throw Error("Not enough terms to make string")
+    }
+    const term = terms[0]
+    if (term.termType === "Literal") {
+      return term.value
+    }
+  }
+}
+const ListType: ParserType = {
+  resolve: (terms: Term[]) => {
+    const resolved = []
+    for (const term of terms) {
+      if (term.termType === "Literal") {
+        resolved.push(term.value)
+      }
+    }
+    return resolved
+  }
+}
+
+
+
+
+const ObjectType = (resolve) : ParserType => ({
+  resolve
+})
 
 export class SparqlParser<T extends Object> {
   private values: {
     [key: string]: Set<unknown>
   } = {}
 
-  private constructor(private rows: ResultRow[]) {
+  constructor(private rows: ResultRow[], ) {
     for (const row of rows) {
       this.parseRow(row)
     }
@@ -79,10 +151,6 @@ export class SparqlParser<T extends Object> {
         }
       }
     }
-  }
-
-  static create<T extends object>(response: ResultRow[]): SparqlParser<T> {
-    return new SparqlParser(response)
   }
 
   public parse(): T {

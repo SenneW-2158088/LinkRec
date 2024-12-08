@@ -22,7 +22,8 @@ user:JohnDoe a lr:User ;
     lr:hasPhoneNumber "+1234567890" ;
     lr:hasLocation "Hasselt" ;
     lr:hasExperience experience:Experience1 ;
-    lr:hasEducation "master in diplomacy" ;
+    lr:hasEducation education:Education1 ;
+    lr:hasEducation education:Education2
     lr:hasLanguage "English" ;
     lr:hasJobSeekingStatus lr:ActivelyLooking .
 

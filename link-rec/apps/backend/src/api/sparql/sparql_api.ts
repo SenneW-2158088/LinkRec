@@ -1,4 +1,5 @@
 import { ParsingClient, SimpleClient } from "sparql-http-client"
+import { ParserType, ResolverContext } from "./sparql_parser"
 
 export type SparqlConfig = {
   updateUrl: string,
@@ -22,5 +23,12 @@ export class SparqlAPI {
 
   async update(query: string) {
     await this.parser.query.update(query)
+  }
+
+  async resolve<T>(object: ParserType<T>): Promise<T> {
+    const context: ResolverContext = {
+      query: this.query.bind(this)
+    }
+    return await object.resolve(context, {})
   }
 }

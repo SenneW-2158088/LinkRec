@@ -140,6 +140,8 @@ lr:hasGeoName a rdf:Property ;
     owl:sameAs gn:name .
 lr:hasAlternateGeoName a rdf:Property ;
     owl:sameAs gn:alternateName .
+lr:isPartOf a rdf:Property ;
+    owl:sameAs gn:parentFeature .
 
 # JOB/VACANCY POST
 lr:Job a rdf:Class .

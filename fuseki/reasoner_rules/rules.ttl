@@ -26,19 +26,33 @@
 ]
 
 [locationInference:
-    (?job lr:hasLocation ?locationName)
+    (?subject lr:hasLocation ?locationID)
+    (?locationID lr:isPartOf ?parentLocationID)
+    ->
+    (?subject lr:hasLocation ?parentLocationID)
+]
+
+[locationNameInference:
+    (?subject lr:hasLocation ?locationName)
     (?location lr:hasGeoName ?locationName)
     ->
-    (?job lr:hasInferredLocation ?location)
+    (?subject lr:hasLocation ?location)
 ]
 
+# [locationInference:
+#     (?job lr:hasLocation ?locationName)
+#     (?location lr:hasGeoName ?locationName)
+#     ->
+#     (?job lr:hasLocation ?location)
+# ]
 
-[alternateLocationInference:
-    (?subject lr:hasLocation ?locationName)
-    (?location lr:hasAlternateGeoName ?locationName)
-    ->
-    (?subject lr:hasInferredLocation ?location)
-]
+
+# [alternateLocationInference:
+#     (?subject lr:hasLocation ?locationName)
+#     (?location lr:hasAlternateGeoName ?locationName)
+#     ->
+#     (?subject lr:hasLocation ?location)
+# ]
 
 [languageInference:
     (?subject lr:hasLanguage ?languageName)
@@ -98,8 +112,8 @@
 ]
 
 [userJobMatchingProfessionInference:
-    (?user lr:hasInferredLocation ?userLocation)
-    (?job lr:hasInferredLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasProfession ?profession)
@@ -109,8 +123,8 @@
     (?user lr:matchesRequirement ?requirement)
 ]
 [userJobMatchingLanguageInference:
-    (?user lr:hasInferredLocation ?userLocation)
-    (?job lr:hasInferredLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
@@ -119,8 +133,8 @@
     (?user lr:matchesRequirement ?requirement)
 ]
 [usrJobMatchingEducationInference:
-    (?user lr:hasInferredLocation ?userLocation)
-    (?job lr:hasInferredLocation ?jobLocation)
+    (?user lr:hasLocation ?userLocation)
+    (?job lr:hasLocation ?jobLocation)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasEducationTitle ?educationTitle)

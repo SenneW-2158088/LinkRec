@@ -14,6 +14,9 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID },
   },
+  extensions: {
+    directives: { user: {} }
+  },
   resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
     try {
       console.log("executing")

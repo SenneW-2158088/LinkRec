@@ -21,10 +21,11 @@ export const userDirectiveTransformer = (schema: GraphQLSchema) => {
       if(directive) {
 
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
-          if (typeName != "User") return fieldConfig;
           if(!context.userId){
             throw new UnAuthorizedFieldError( { field: fieldName } );
           }
+
+          if (typeName != "User") return await defaultResolver(source, args, context, info);
 
           const result = await defaultResolver(source, args, context, info);
 

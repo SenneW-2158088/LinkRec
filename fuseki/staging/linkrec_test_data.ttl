@@ -53,21 +53,21 @@ employer:TechCorp a lr:Employer ;
 # Experiences
 experience:Experience1 a lr:Experience ;
     lr:hasTitle "Web Developer at Web Solutions Inc." ;
-    lr:hasProfession "Web Developer" ;
+    lr:hasProfession "web developer" ;
     lr:hasDescription "Developed web applications." ;
     lr:hasYears 3 ;
     lr:hasCompany "Web Solutions Inc." .
 
 experience:Experience2 a lr:Experience ;
     lr:hasTitle "Software Developer at Mobile Innovations LLC." ;
-    lr:hasProfession "Software Developer" ;
+    lr:hasProfession "software developer" ;
     lr:hasDescription "Worked on mobile applications." ;
     lr:hasYears 1 ;
     lr:hasCompany "Mobile Innovations LLC" .
 
 # Requirements
 requirement:Requirement1 a lr:Requirement ;
-    lr:hasProfession "Software Developer" ;
+    lr:hasProfession "software developer" ;
     lr:hasDescription "Looking for a skilled software developer." ;
     lr:requiredYears 2 .
 

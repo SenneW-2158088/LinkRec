@@ -54,7 +54,7 @@ class Dataset:
         """
         labels = query_wd(profession_labels_query)
         for item in labels:
-            self.dataset += f"<{item['profession']['value']}> rdfs:label \"{item['professionLabel']['value']}\".\n"
+            self.dataset += f"<{item['profession']['value']}> rdfs:label \"{item['professionLabel']['value'].lower()}\".\n"
 
     def master_degrees(self):
         master_degrees_query = """
@@ -69,7 +69,7 @@ class Dataset:
         master_degrees = query_wd(master_degrees_query)
         for item in master_degrees:
             self.dataset += f"<{item['degree']['value']}> wd:P31 wd:Q183816 ;\n"
-            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value']}\".\n"
+            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value'].lower()}\".\n"
 
     def bachelor_degrees(self):
         bachelor_degrees_query = """
@@ -84,7 +84,7 @@ class Dataset:
         bachelor_degrees = query_wd(bachelor_degrees_query)
         for item in bachelor_degrees:
             self.dataset += f"<{item['degree']['value']}> wd:P31 wd:Q253440 ;\n"
-            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value']}\".\n"
+            self.dataset += f"  rdfs:label \"{item['degreeLabel']['value'].lower()}\".\n"
 
     def languages(self):
         languages_query = """
@@ -99,7 +99,7 @@ class Dataset:
         languages = query_wd(languages_query)
         for item in languages:
             self.dataset += f"<{item['language']['value']}> rdf:type lr:Language ;\n"
-            self.dataset += f"  rdfs:label \"{item['languageLabel']['value']}\".\n"
+            self.dataset += f"  rdfs:label \"{item['languageLabel']['value'].lower()}\".\n"
 
 
 with open("wikidata_subsets.ttl", "w") as file:

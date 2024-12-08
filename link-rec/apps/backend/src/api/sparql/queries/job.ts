@@ -1,4 +1,4 @@
-import { SparqlFieldBuilder } from "../sparql_builder"
+import { SparqlBuilder, SparqlFieldBuilder } from "../sparql_builder"
 
 export namespace JobQuery {
 
@@ -6,11 +6,18 @@ export namespace JobQuery {
 
     const jobFields = SparqlFieldBuilder.fromFields(
       `job:${id} a lr:Job`,
-      `lr:hasId "${id}"`,
-      `lr:hasTitle "${title}"`,
-      `lr:hasLocation "${location}"`,
-      `lr:isActive ${active}`,
+      `lr:hasId ?id`,
+      `lr:hasTitle ?title`,
+      `lr:hasLocation ?location`,
+      `lr:isActive ?active`,
     );
+
+    return `
+SELECT ?id ?title ?location ?active
+WHERE {
+  ${jobFields.build()}
+}
+    `
   }
 
   export const create = (
@@ -40,13 +47,13 @@ export namespace JobQuery {
     const requirementFields: string[] = [];
 
     requirements.forEach(req => {
-      jobFields.field(`lr:hasRequirement req:${req.id}`);
+      jobFields.field(`lr:hasRequirement requirement:${req.id}`);
 
       const reqTriples = SparqlFieldBuilder.fromFields(
         `requirement:${req.id} a lr:Requirement`,
         `lr:hasId "${req.id}"`,
         `lr:hasProfession "${req.profession}"`,
-        `lr:hasYearsExperience "${req.years}"`,
+        `lr:requiredYears "${req.years}"`,
         `lr:hasLanguage "${req.language}"`,
         `lr:hasEducation "${req.education}"`,
         `lr:hasDegree "${req.degree}"`,

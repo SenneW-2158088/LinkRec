@@ -18,11 +18,11 @@ export const createJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
         id: "1",
         title: "",
         location: "",
-        requirements: [],
-        active: false
+        active: false,
+        requirements: []
       }
     }catch(error) {
-      context.api.handleError(error);
+      throw context.api.handleError(error);
     }
   }
 }

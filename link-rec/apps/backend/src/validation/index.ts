@@ -3,6 +3,7 @@ import { EmployerLogin, employerloginSchema, EmployerRegister, employerRegisterS
 import { ExperienceInput, experienceSchema } from "./experience"
 import { JobInput, jobSchema, JobUpdate } from "./job"
 import { LoginInput, loginInputSchema, RegisterInput, userInputSchema } from "./user"
+import { RequirementInput, RequirementUpdate } from "./requirement"
 
 export namespace Validation {
 
@@ -23,6 +24,11 @@ export namespace Validation {
     export const registerSchema = userInputSchema
     export type Login = LoginInput
     export type Register = RegisterInput
+  }
+
+  export namespace Requirement {
+    export type Input = RequirementInput;
+    export type Update = RequirementUpdate;
   }
 
   export namespace Education {

@@ -6,6 +6,7 @@ import { SparqlAPI } from "../sparql/sparql_api";
 import { SparqlBuilder } from "../sparql/sparql_builder";
 import { JobQuery } from "../sparql/queries/job";
 import { v4 as uuid } from "uuid";
+import { SparqlJobType } from "../sparql/parsers/job";
 
 
 type Employer = GQLTypes.Employer.Type;
@@ -21,8 +22,10 @@ export class JobService{
     // jobSchema.parse(input);
     console.log(input)
 
-    const query = JobQuery.create(
-      uuid(),
+    // Create query
+    const jobId = uuid();
+    const insert = JobQuery.create(
+      jobId,
       input.title,
       input.location,
       input.isActive,
@@ -32,8 +35,16 @@ export class JobService{
       })),
     )
 
-    console.log(query);
-    // const result = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(query));
+    console.log(insert)
+    const insertResult = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
+    console.log(insertResult);
+
+    // const query = JobQuery.get(jobId)
+    // console.log(query)
+
+    const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
+    console.log("JOB: ", queryResult);
+    // Fetch query
   }
 
   async update(id: string, input: JobUpdate) {

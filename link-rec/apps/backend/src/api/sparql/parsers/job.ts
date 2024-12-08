@@ -1,3 +1,5 @@
+import { JobQuery } from "../queries/job";
+import { SparqlBuilder } from "../sparql_builder";
 import { BooleanType, ListType, ObjectListType, ObjectType, StringType } from "../sparql_parser";
 import { SparqlJobRequirementsType, SparqlRequirement } from "./requirement";
 
@@ -11,7 +13,7 @@ export interface SparqlJob {
 
 export const SparqlJobType = (id: string) => ObjectType<SparqlJob>({
   query: () => {
-    return "";
+    return SparqlBuilder.defaultPrefixes().build(JobQuery.get(id));
   },
   fields: {
     id: { type: StringType },

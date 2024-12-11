@@ -9,7 +9,7 @@ export const createJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   args: {
     input: { type: new GraphQLNonNull(JobInputType) }
   },
-  // extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
+  extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
   resolve: async (_source, args: { input: Validation.Job.Input }, context, _info) : Promise<Job> => {
     try {
       console.log(context.userId)
@@ -25,7 +25,7 @@ export const deleteJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) }
   },
-  // extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
+  extensions: { directives: { role: { role: Role.EMPLOYER }, }, },
   resolve: async (_source, args: { id: string }, context, _info) : Promise<Job> => {
     try {
       return await context.api.employerService.removeJob(context.userId!, args.id);
@@ -41,12 +41,12 @@ export const updateJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
     id: { type: new GraphQLNonNull(GraphQLID) },
     input: { type: new GraphQLNonNull(JobUpdateType) }
   },
-  // extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
-  resolve: async (_source, args: { id: string, input: Validation.Job.Update }, context, _info) : Promise<void> => {
+  extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
+  resolve: async (_source, args: { id: string, input: Validation.Job.Update }, context, _info) : Promise<Job> => {
     try {
-      return await context.api.jobService.update(args.id, args.input)
+      return await context.api.jobService.update(args.id, args.input);
     }catch(error) {
-      context.api.handleError(error);
+      throw context.api.handleError(error);
     }
   }
 }

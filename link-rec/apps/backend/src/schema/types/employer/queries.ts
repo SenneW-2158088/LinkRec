@@ -33,9 +33,7 @@ export const allEmployerQuery: GraphQLFieldConfig<any, ApolloContext> = {
 
 export const employerMatchesQuery: GraphQLFieldConfig<any, ApolloContext> = {
   type: new GraphQLList(EmployerType),
-  extensions: {
-    directives: { role: { role: Role.EMPLOYER }}
-  },
+  extensions: { directives: { role: { role: Role.EMPLOYER }} },
   resolve: async (_source, _args, context, _info) : Promise<User[]> => {
     try {
       return await context.api.employerService.matches(context.userId!);

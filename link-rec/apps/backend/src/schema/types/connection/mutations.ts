@@ -14,9 +14,7 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID },
   },
-  extensions: {
-    directives: { user: {} }
-  },
+  extensions: { directives: { user: {} } },
   resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
     try {
       return context.api.userService.createConnection(context.userId!, args.id)
@@ -31,9 +29,7 @@ export const deleteConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   args: {
     id: { type: GraphQLID },
   },
-  extensions: {
-    directives: { user: {} }
-  },
+  extensions: { directives: { user: {} } },
   resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
     try {
       return context.api.userService.deleteConnection(context.userId!, args.id)

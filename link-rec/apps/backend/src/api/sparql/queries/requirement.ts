@@ -11,7 +11,7 @@ export namespace RequirementQuery {
   );
 
   return `
-SELECT ?requirement ?id ?education ?years ?language ?degree
+SELECT ?requirement ?id ?education ?years ?language ?degree ?profession
 WHERE {
   ${jobField.build()}
 

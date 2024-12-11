@@ -69,12 +69,22 @@ WHERE {
       const reqTriples = SparqlFieldBuilder.fromFields(
         `requirement:${req.id} a lr:Requirement`,
         `lr:hasId "${req.id}"`,
-        `lr:hasProfession "${req.profession}"`,
-        `lr:requiredYears "${req.years}"`,
-        `lr:hasLanguage "${req.language}"`,
-        `lr:hasEducation "${req.education}"`,
-        `lr:hasDegree "${req.degree}"`,
       );
+      if (req.profession){
+        reqTriples.field(`lr:hasProfession "${req.profession}"`)
+      }
+      if (req.years){
+        reqTriples.field(`lr:requiredYears "${req.years}"`)
+      }
+      if (req.language){
+        reqTriples.field(`lr:hasLanguage "${req.language}"`)
+      }
+      if (req.education){
+        reqTriples.field(`lr:hasEducation "${req.education}"`)
+      }
+      if (req.degree){
+        reqTriples.field(`lr:hasDegree "${req.degree}"`)
+      }
 
       requirementFields.push(reqTriples.build());
     });

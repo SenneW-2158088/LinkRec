@@ -43,7 +43,6 @@ export const JobInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: "JobInput",
   fields: () => ({
     title: { type: new GraphQLNonNull(GraphQLString) },
-    employer: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
     requirements: {
       type: new GraphQLList(new GraphQLNonNull(requirementInputType))

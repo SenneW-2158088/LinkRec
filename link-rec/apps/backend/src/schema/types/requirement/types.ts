@@ -24,11 +24,11 @@ export const requirementType: GraphQLObjectType = new GraphQLObjectType({
 export const requirementInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: "RequirementInput",
   fields: {
-    profession: { type: new GraphQLNonNull(GraphQLString) },
-    years: { type: new GraphQLNonNull(GraphQLInt) },
-    language: { type: new GraphQLNonNull(GraphQLString) },
-    education: { type: new GraphQLNonNull(GraphQLString) },
-    degree: { type: new GraphQLNonNull(GraphQLString) },
+    profession: { type: GraphQLString },
+    years: { type: GraphQLInt },
+    language: { type: GraphQLString },
+    education: { type: GraphQLString },
+    degree: { type: GraphQLString },
   }
 })
 

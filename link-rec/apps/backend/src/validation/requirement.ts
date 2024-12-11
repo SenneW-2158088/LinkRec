@@ -5,25 +5,30 @@ export const requirementInputScheme = z.object({
   profession: z.string()
     .min(2, 'Profession must be at least 2 characters')
     .max(100, 'Profession cannot exceed 100 characters')
-    .trim(),
+    .trim()
+    .optional(),
 
   years: z.number()
     .int('Years must be a whole number')
     .min(0, 'Years cannot be negative')
-    .max(50, 'Years of experience cannot exceed 50'),
+    .max(50, 'Years of experience cannot exceed 50')
+    .optional(),
 
   language: z.string()
     .min(2, 'Language must be at least 2 characters')
     .max(50, 'Language cannot exceed 50 characters')
-    .trim(),
+    .trim()
+    .optional(),
   education: z.string()
     .min(2, 'Education must be at least 2 characters')
     .max(50, 'Education cannot exceed 50 characters')
-    .trim(),
+    .trim()
+    .optional(),
   degree: z.string()
     .min(2, 'Education must be at least 2 characters')
     .max(50, 'Education cannot exceed 50 characters')
-    .trim(),
+    .trim()
+    .optional(),
 
 })
 

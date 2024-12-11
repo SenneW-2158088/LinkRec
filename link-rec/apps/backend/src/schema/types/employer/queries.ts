@@ -1,7 +1,7 @@
 import { GraphQLFieldConfig, GraphQLID, GraphQLList } from "graphql"
 import { Employer, EmployerType } from "./types"
 import { ApolloContext } from "../../../apollo_server"
-import { User } from "../user/types"
+import { User, UserType } from "../user/types"
 import { Role } from "../role/types"
 
 export const employerQuery: GraphQLFieldConfig<any, any> = {
@@ -32,7 +32,7 @@ export const allEmployerQuery: GraphQLFieldConfig<any, ApolloContext> = {
 }
 
 export const employerMatchesQuery: GraphQLFieldConfig<any, ApolloContext> = {
-  type: new GraphQLList(EmployerType),
+  type: new GraphQLList(UserType),
   extensions: { directives: { role: { role: Role.EMPLOYER }} },
   resolve: async (_source, _args, context, _info) : Promise<User[]> => {
     try {

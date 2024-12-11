@@ -20,11 +20,15 @@ export const roleDirectiveTransformer = (schema: GraphQLSchema) => {
         const { role } = directive;
 
         fieldConfig.resolve = async function (source, args, context: ApolloContext, info) {
+          console.log("DIRECTIVE", context.userRole, role)
+
           if(context.userRole != role) {
             throw new InvalidRoleError({
               required: role.toString()
             });
           }
+
+          return await defaultResolver(source, args, context, info);
         }
         return fieldConfig;
       }

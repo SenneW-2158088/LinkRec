@@ -33,7 +33,7 @@ export class JobService{
       jobId,
       input.title,
       input.location,
-      input.isActive,
+      input.active,
       input.requirements.map(req => ({
         id: uuid(),
         ...req
@@ -43,13 +43,15 @@ export class JobService{
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
     const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
 
+    console.log(queryResult)
+
     return {
       id: queryResult.id,
       active: queryResult.active,
       location: queryResult.location,
       title: queryResult.title,
       requirements: [],
-    }
+    } as Job
   }
 
   async update(id: string, input: JobUpdate) {
@@ -57,7 +59,7 @@ export class JobService{
       id,
       input.title,
       input.location,
-      input.isActive,
+      input.active,
       input.requirements?.map(req => ({
         ...req
       })),

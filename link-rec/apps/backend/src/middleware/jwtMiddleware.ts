@@ -8,7 +8,8 @@ export const jwtMiddleware = async (context: ApolloContext, req: Request): Promi
   let token = req.headers.authorization
   if(!token) return
   try {
-    const { id, role } = verify(token, CONFIG.JWT_SECRET) as { id: string, role: Role };
+    const result = await context.jwt.verify(token);
+    const { id, role } = result as { id: string, role: Role };
     context.userId = id
     context.userRole = role
   } catch(error) {

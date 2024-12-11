@@ -24,7 +24,6 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
     id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: GraphQLString },
     requirements: {
       type: new GraphQLList(new GraphQLNonNull(requirementType)),
       resolve: async (source, args, context: ApolloContext, _info) : Promise<Requirement[]>  => {
@@ -36,7 +35,7 @@ export const JobType: GraphQLObjectType = new GraphQLObjectType({
         }
       }
     },
-    isActive: { type: new GraphQLNonNull(GraphQLBoolean) },
+    active: { type: new GraphQLNonNull(GraphQLBoolean) },
   })
 })
 
@@ -46,13 +45,12 @@ export const JobInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
     title: { type: new GraphQLNonNull(GraphQLString) },
     employer: { type: new GraphQLNonNull(GraphQLString) },
     location: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: GraphQLString },
     requirements: {
       type: new GraphQLList(new GraphQLNonNull(requirementInputType))
     },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },
-    isActive: { type: new GraphQLNonNull(GraphQLBoolean) },
+    active: { type: new GraphQLNonNull(GraphQLBoolean) },
   })
 })
 
@@ -68,6 +66,6 @@ export const JobUpdateType: GraphQLInputObjectType = new GraphQLInputObjectType(
     },
     startDate: { type: GraphQLString },
     endDate: { type: GraphQLString },
-    isActive: { type: GraphQLBoolean },
+    active: { type: GraphQLBoolean },
   })
 })

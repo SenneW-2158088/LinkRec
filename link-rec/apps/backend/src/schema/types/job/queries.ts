@@ -8,13 +8,10 @@ export const jobQuery: GraphQLFieldConfig<any, ApolloContext> = {
     id: { type: GraphQLID }
   },
   resolve: async (_source, args: { id: Job["id"] }, context, _info) : Promise<Job> => {
-
-    return {
-      id: "1",
-      title: "",
-      location: "",
-      requirements: [],
-      active: false
+    try {
+      return await context.api.jobService.get(args.id);
+    } catch(error) {
+      throw context.api.handleError(error)
     }
   }
 }

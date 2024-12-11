@@ -47,27 +47,28 @@ WHERE {
       jobField.field(`job:${id} lr:hasRequirement requirement:${requirement_id}`)
 
       let fields = SparqlFieldBuilder.fromFields(
-        `requirement:${requirement_id} a lr:requirement`,
+        `requirement:${requirement_id} a lr:Requirement`,
+        `requirement:${requirement_id} lr:hasId "${requirement_id}"`,
       ).setSeparator(". \n");
 
       if(requirement.education){
-        fields.field(`OPTIONAL { requirement:${requirement_id} lr:hasEducation "${requirement.education}"}`)
+        fields.field(`requirement:${requirement_id} lr:hasEducation "${requirement.education}"`)
       }
 
       if(requirement.profession){
-        fields.field(`OPTIONAL { requirement:${requirement_id} lr:hasProfession "${requirement.profession}"}`)
+        fields.field(`requirement:${requirement_id} lr:hasProfession "${requirement.profession}"`)
       }
 
       if(requirement.years){
-        fields.field(`OPTIONAL { requirement:${requirement_id} lr:requiredYears ${requirement.years}}`)
+        fields.field(`requirement:${requirement_id} lr:requiredYears ${requirement.years}`)
       }
 
       if(requirement.language){
-        fields.field(`OPTIONAL { requirement:${requirement_id} lr:hasLanguage "${requirement.language}}"`)
+        fields.field(`requirement:${requirement_id} lr:hasLanguage "${requirement.language}"`)
       }
 
       if(requirement.degree){
-        fields.field(`OPTIONAL { requirement:${requirement_id} lr:hasDegree "${requirement.degree}"}`)
+        fields.field(`requirement:${requirement_id} lr:hasDegree "${requirement.degree}"`)
       }
 
       requirementsFields.push(fields);
@@ -76,7 +77,7 @@ WHERE {
     return `
     INSERT DATA {
       ${jobField.build()}
-      ${requirementsFields.forEach(field => (field.build() + "\n"))}
+      ${requirementsFields.map(field => (field.build() + "\n"))}
     }
     `
   }

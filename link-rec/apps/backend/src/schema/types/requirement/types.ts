@@ -12,12 +12,12 @@ export interface Requirement {
 export const requirementType: GraphQLObjectType = new GraphQLObjectType({
   name: "Requirement",
   fields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-    profession: { type: new GraphQLNonNull(GraphQLString) },
-    years: { type: new GraphQLNonNull(GraphQLInt) },
-    language: { type: new GraphQLNonNull(GraphQLString) },
-    education: { type: new GraphQLNonNull(GraphQLString) },
-    degree: { type: new GraphQLNonNull(GraphQLString) },
+    id: { type: GraphQLID },
+    profession: { type: GraphQLString },
+    years: { type: GraphQLInt },
+    language: { type: GraphQLString },
+    education: { type: GraphQLString },
+    degree: { type: GraphQLString },
   }
 })
 

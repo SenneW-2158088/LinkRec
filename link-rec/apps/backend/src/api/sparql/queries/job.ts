@@ -79,6 +79,8 @@ WHERE {
       requirementFields.push(reqTriples.build());
     });
 
+    console.log("LKDFJSKLJFLKSDLJ", requirements)
+
     return `
 INSERT DATA {
   ${jobFields.build()}

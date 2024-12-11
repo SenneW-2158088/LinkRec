@@ -147,6 +147,30 @@ INSERT DATA {
       `.trim();
     };
 
+  export const forEmployer = (employerId: string) : string => {
+
+    const employerFields = SparqlFieldBuilder.fromFields(
+      `employer:${employerId} a lr:Employer`,
+      `lr:hasJob ?job`
+    );
+
+    const jobFields = SparqlFieldBuilder.fromFields(
+      `?job a lr:Job`,
+      `lr:hasId ?id`,
+      `lr:hasTitle ?title`,
+      `lr:hasLocation ?location`,
+      `lr:isActive ?active`,
+    );
+
+    return `
+      SELECT ?id ?title ?location ?active
+      WHERE {
+        ${employerFields.build()}
+        ${jobFields.build()}
+      }
+      `
+  }
+
     export const remove = (jobId: string): string => {
       return `
         DELETE {

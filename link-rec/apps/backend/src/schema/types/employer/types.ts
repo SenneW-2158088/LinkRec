@@ -22,12 +22,11 @@ export const EmployerType: GraphQLObjectType = new GraphQLObjectType({
     webPage: { type: GraphQLString },
     jobs: {
       type: new GraphQLList(JobType),
-      resolve: async (root, args, context: ApolloContext, fields) : Promise<Job.Type[]> => {
+      resolve: async (root: Employer, args, context: ApolloContext, fields) : Promise<Job.Type[]> => {
         try {
-          // context.api.employerService.
-          return []
+          return await context.api.employerService.getJobFor(root.id);
         }catch(error) {
-          context.api.handleError(error);
+          throw context.api.handleError(error);
         }
       }
     }

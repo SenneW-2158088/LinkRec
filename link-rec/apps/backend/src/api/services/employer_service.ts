@@ -14,6 +14,7 @@ import { UserNotFoundError } from "../errors/user";
 import { JobInput } from "../../validation/job";
 import { JobService } from "./job_service";
 import { SparqlMatchesUserType } from "./types/user";
+import { SparqlEmployerJobType } from "../sparql/parsers/job";
 
 type Employer = GQLTypes.Employer.Type;
 type User = GQLTypes.User.Type;
@@ -120,6 +121,14 @@ export class EmployerService{
     ));
 
     return result;
+  }
+
+  async getJobFor(employerId: string) : Promise<Job[]> {
+    const jobs = await this.context.sparql.resolve(SparqlEmployerJobType(employerId));
+    return jobs.map(job => ({
+      ...job,
+      requirements: []
+    }))
   }
 
   async matches(employerId: string) : Promise<User[]> {

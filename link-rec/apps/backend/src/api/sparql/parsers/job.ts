@@ -33,3 +33,15 @@ export const SparqlAllJobType = () => ObjectListType<SparqlJob>({
     active: { type: BooleanType },
   }
 })
+
+export const SparqlEmployerJobType = (employerId: string) => ObjectListType<SparqlJob>({
+  query: () => {
+    return SparqlBuilder.defaultPrefixes().build(JobQuery.forEmployer(employerId));
+  },
+  fields: {
+    id: { type: StringType },
+    title: { type: StringType },
+    location: { type: StringType },
+    active: { type: BooleanType },
+  }
+})

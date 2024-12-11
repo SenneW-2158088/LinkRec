@@ -134,7 +134,6 @@ export class UserService{
   }
 
   private async updateRdfUser(id: string, update: UserUpdate) {
-    console.log("udpate:", update)
     const deleteBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const queryBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const whereBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");

@@ -122,8 +122,10 @@ INSERT DATA {
 
       if (location !== undefined) {
         deleteBuilder.field(`job:${jobId} lr:hasLocation ?oldLocation`);
+        deleteBuilder.field(`job:${jobId} lr:hasInferredLocation ?oldInferredLocation`);
         insertBuilder.field(`job:${jobId} lr:hasLocation "${location}"`);
         whereBuilder.field(`OPTIONAL { job:${jobId} lr:hasLocation ?oldLocation }`);
+        whereBuilder.field(`OPTIONAL { job:${jobId} lr:hasInferredLocation ?oldInferredLocation }`);
       }
 
       if (active !== undefined) {

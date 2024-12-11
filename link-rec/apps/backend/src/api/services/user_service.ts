@@ -9,7 +9,7 @@ import { hash } from "bcrypt";
 import { RegisterInput, userInputSchema } from "../../validation/user";
 import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
-import { jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
+import { jobSeekingStatusFromString, jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
 import { MatchingJobsType, SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
 import { statusFromString, UserInput, UserUpdate } from "../../schema/types/user/types";
@@ -171,10 +171,10 @@ export class UserService{
 
     if (update.location) {
         deleteBuilder.field(`user:${id} lr:hasLocation ?location`);
-        deleteBuilder.field(`user:${id} lr:hasInferredLocation ?location`);
+        deleteBuilder.field(`user:${id} lr:hasInferredLocation ?inferredLocation`);
         queryBuilder.field(`user:${id} lr:hasLocation "${update.location}"`);
         whereBuilder.field(`OPTIONAL { user:${id} lr:hasLocation ?location }`);
-        whereBuilder.field(`OPTIONAL { user:${id} lr:hasInferredLocation ?location }`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasInferredLocation ?inferredLocation }`);
     }
 
     if (update.bio) {
@@ -185,7 +185,7 @@ export class UserService{
 
     if (update.status) {
         deleteBuilder.field(`user:${id} lr:hasJobSeekingStatus ?status`);
-        queryBuilder.field(`user:${id} lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
+        queryBuilder.field(`user:${id} lr:hasJobSeekingStatus lr:${jobSeekingStatusToUriString(jobSeekingStatusFromString(update.status))}`); // Assuming status is a string
         whereBuilder.field(`OPTIONAL { user:${id} lr:hasJobSeekingStatus ?status }`);
     }
 

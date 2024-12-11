@@ -135,8 +135,15 @@ export namespace EmployerQuery {
       employer:${employerId} a lr:Employer ;
         lr:hasJob ?job .
 
-      ?job lr:hasRequirement ?requirement .
+
+      ?job lr:hasRequirement ?requirement;
+        lr:hasId ?id ;
+        lr:hasTitle ?title ;
+        lr:hasLocation ?location ;
+        lr:isActive ?active .
+
       ?user lr:matchesRequirement ?requirement .
+
     }
     GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location`
   }

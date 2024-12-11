@@ -9,13 +9,11 @@ export const employerQuery: GraphQLFieldConfig<any, any> = {
   args: {
     id: { type: GraphQLID }
   },
-  resolve: async (_source, args: { id: Employer["id"] }, _context, _info) : Promise<Employer> => {
-    return {
-      id: "1",
-      name: "name",
-      phoneNumber: "",
-      email: "",
-      jobs: [],
+  resolve: async (_source, args: { id: Employer["id"] }, context: ApolloContext, _info) : Promise<Employer> => {
+    try {
+      return context.api.employerService.get(args.id);
+    } catch(error) {
+      throw context.api.handleError(error)
     }
   }
 }

@@ -28,7 +28,6 @@ export const requirementInputScheme = z.object({
 })
 
 export const requirementUpdateInputScheme = z.object({
-  id: z.string(),
   profession: z.string()
     .min(2, 'Profession must be at least 2 characters')
     .max(100, 'Profession cannot exceed 100 characters')

@@ -18,5 +18,6 @@ export namespace Job {
   export const mutations = {
     "createJob": createJobMutation,
     "deleteJob": deleteJobMutation,
+    "updateJob": updateJobMutation,
   }
 }

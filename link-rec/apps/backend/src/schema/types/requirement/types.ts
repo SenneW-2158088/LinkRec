@@ -35,7 +35,6 @@ export const requirementInputType: GraphQLInputObjectType = new GraphQLInputObje
 export const requirementUpdateType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: "RequirementUpdate",
   fields: {
-    id: {type: new GraphQLNonNull(GraphQLID) },
     profession: { type: GraphQLString },
     years: { type: GraphQLInt },
     language: { type: GraphQLString },

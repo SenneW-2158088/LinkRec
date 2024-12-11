@@ -54,16 +54,25 @@ export class JobService{
     } as Job
   }
 
-  async update(id: string, input: JobUpdate) {
-    const query = JobQuery.update(
+  async update(id: string, input: JobUpdate) : Promise<Job> {
+    const jobUpdateQuery = JobQuery.update(
       id,
       input.title,
       input.location,
       input.active,
-      input.requirements?.map(req => ({
-        ...req
-      })),
     )
+
+
+    const result = await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(jobUpdateQuery));
+
+    if(input.requirements) {
+      const requirementsDeleteQuery = RequirementQuery.deleteRequirementsForJob(id);
+      await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(requirementsDeleteQuery));
+      const requirementsUpdateQuery = RequirementQuery.addRequirementsForJob(id, input.requirements);
+      await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(requirementsUpdateQuery));
+    }
+
+    return await this.get(id);
   }
 
   async get(id: string) : Promise<Job> {
@@ -77,10 +86,17 @@ export class JobService{
   async delete(id: string) : Promise<Job> {
     const job = await this.get(id);
     if(!job) throw new LinkRecError("Job not found")
-    console.log(job)
+
+    // Delete job
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
       JobQuery.remove(id)
     ));
+
+    // Delete requirements
+    await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
+      RequirementQuery.deleteRequirementsForJob(id)
+    ));
+
     return job;
   }
 

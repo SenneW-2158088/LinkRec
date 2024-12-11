@@ -44,7 +44,7 @@ export const updateJobMutation: GraphQLFieldConfig<any, ApolloContext> = {
   // extensions: { directives: { role: { role: Role.EMPLOYER}, }, },
   resolve: async (_source, args: { id: string, input: Validation.Job.Update }, context, _info) : Promise<void> => {
     try {
-      await context.api.jobService.update(args.id, args.input)
+      return await context.api.jobService.update(args.id, args.input)
     }catch(error) {
       context.api.handleError(error);
     }

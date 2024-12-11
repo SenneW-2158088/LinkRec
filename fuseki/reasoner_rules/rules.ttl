@@ -94,7 +94,8 @@
 # We can now find all users that have a profession which is
 # a subProfessionOf developer (even Web Developer)
 [professionInference:
-    (?experience lr:hasProfession ?experienceProfession)
+    (?experience rdf:type lr:Experience)
+    (?experience lr:hasInferredProfession ?experienceProfession)
     (?experienceProfession lr:subProfessionOf ?profession)
     ->
     (?experience lr:hasInferredProfession ?profession)

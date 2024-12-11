@@ -131,7 +131,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
 
 export const SparqlMatchesUserType = (employerId: string) => ObjectListType<SparqlUser>({
     query: () => {
-      return EmployerQuery.matches(employerId);
+      return SparqlBuilder.defaultPrefixes().build(EmployerQuery.matches(employerId));
     },
     fields: {
       id: { type: StringType },

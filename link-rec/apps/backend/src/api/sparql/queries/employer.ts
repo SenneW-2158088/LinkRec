@@ -136,7 +136,7 @@ export namespace EmployerQuery {
         lr:hasJob ?job .
 
       ?job lr:hasRequirement ?requirement .
-      ?requirement lr:hasInferredProfession ?inferredProfession .
+      ?user lr:matchesRequirement ?requirement .
     }
     GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location`
   }

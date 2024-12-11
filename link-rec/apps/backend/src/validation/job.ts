@@ -9,7 +9,7 @@ export const jobSchema = z.object({
   location: z.string()
     .min(2, 'Locattion must be at least 2 characters')
     .max(100, 'Location cannot exceed 100 characters'),
-  isActive:
+  active:
     z.boolean(),
   requirements:
     z.array(requirementInputScheme),
@@ -27,7 +27,7 @@ export const jobUpdateSchema = z.object({
     .max(100, 'Location cannot exceed 100 characters')
     .optional()
   ,
-  isActive: z
+  active: z
     .boolean()
     .optional()
     ,

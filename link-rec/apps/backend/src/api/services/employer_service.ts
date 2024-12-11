@@ -103,7 +103,7 @@ export class EmployerService{
   ) : Promise<Job> {
 
     const result = await this.jobservice.create(input);
-    console.log("ADDED JOB")
+    console.log("ADDED JOB", result)
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
       EmployerQuery.addJob(employerId, result.id)
@@ -129,20 +129,20 @@ export class EmployerService{
 
   async matches(employerId: string) : Promise<User[]> {
     const matches = await this.context.sparql.resolve(SparqlMatchesUserType(employerId));
+    console.log("MATCHES", matches)
     return matches.flatMap((u)  => {
       return {
         id: u.id,
         email: u.email,
-        firstName: "",
-        lastName: "",
-        status: Status.NOT_LOOKING,
-        phoneNumber: "asdfadfas",
-        languages: [],
+        firstName: u.firstName,
+        lastName: u.lastName,
+        status: u.status,
+        phoneNumber: u.phoneNumber,
+        languages: u.languages,
         experiences: [],
         educations: [],
         connections: [],
-      };
+      } as User;
     })
   }
-
 }

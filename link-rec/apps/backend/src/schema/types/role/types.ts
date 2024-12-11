@@ -1,8 +1,8 @@
 import { GraphQLEnumType } from "graphql";
 
 export const enum Role {
-  USER,
-  EMPLOYER,
+  USER = 0,
+  EMPLOYER = 1,
 }
 
 export const RoleType: GraphQLEnumType = new GraphQLEnumType({

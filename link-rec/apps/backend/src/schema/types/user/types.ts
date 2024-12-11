@@ -31,7 +31,6 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
       firstName: { type: new GraphQLNonNull(GraphQLString), },
       lastName: {
         type: new GraphQLNonNull(GraphQLString),
-        extensions: { directives: { user: {}, }, },
       },
       email: {
         type: new GraphQLNonNull(GraphQLString),
@@ -46,7 +45,7 @@ export const UserType: GraphQLObjectType = new GraphQLObjectType({
       },
       location: {
         type: GraphQLString,
-        // extensions: { directives: { user: {} } },
+        extensions: { directives: { user: {} } },
       },
       bio: { type: GraphQLString },
       status: { type: new GraphQLNonNull(JobSeekingStatusType) },

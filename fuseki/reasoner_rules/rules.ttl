@@ -2,6 +2,7 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xml:  <http://www.w3.org/2001/XMLSchema#> .
 
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix wd:   <http://www.wikidata.org/entity/> .
@@ -123,7 +124,7 @@
     (?user lr:hasInferredLocation ?userLocation)
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
-    (?job lr:isActive true)
+    (?job lr:isActive "true"^^xml:boolean)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredProfession ?profession)
@@ -139,7 +140,7 @@
     (?user lr:hasInferredLocation ?userLocation)
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
-    (?job lr:isActive true)
+    (?job lr:isActive "true"^^xml:boolean)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
@@ -151,7 +152,7 @@
     (?user lr:hasInferredLocation ?userLocation)
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
-    (?job lr:isActive true)
+    (?job lr:isActive "true"^^xml:boolean)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasEducationTitle ?educationTitle)

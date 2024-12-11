@@ -2,8 +2,6 @@ import axios, { Axios } from "axios";
 import { Formula, parse } from "rdflib";
 // import { Parser } from "sparqljs";
 
-console.log("hello friend");
-
 class FuzzAPI {
   readonly _base: Axios;
 

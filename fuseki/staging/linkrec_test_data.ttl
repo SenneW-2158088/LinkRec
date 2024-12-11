@@ -80,21 +80,22 @@ requirement:Requirement3 a lr:Requirement ;
 
 # Jobs
 job:Job1 a lr:Job ;
-    lr:hasTitle "software developer" ;
+    lr:hasTitle "Software Developer" ;
+    lr:hasId "Job1" ;
     lr:hasRequirement requirement:Requirement1 ;
     lr:hasLocation "Flanders" ;
     lr:isActive true .
 
 job:Job2 a lr:Job ;
-    lr:hasTitle "Software Engineer" ;
+    lr:hasTitle "Computer Science Master" ;
     lr:hasId "Job2" ;
     lr:hasRequirement requirement:Requirement2 ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .
 
 job:Job3 a lr:Job ;
-    lr:hasTitle "Software Engineer" ;
-    lr:hasId "Job2" ;
+    lr:hasTitle "English Speaker" ;
+    lr:hasId "Job3" ;
     lr:hasRequirement requirement:Requirement3 ;
     lr:hasLocation "Hasselt" ;
     lr:isActive true .

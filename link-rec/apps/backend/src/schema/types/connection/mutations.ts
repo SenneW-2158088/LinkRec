@@ -19,7 +19,6 @@ export const createConnectionMutation: GraphQLFieldConfig<any, ApolloContext> = 
   },
   resolve: async (_source, args, context: ApolloContext, info): Promise<Connection> => {
     try {
-      console.log("executing")
       return context.api.userService.createConnection(context.userId!, args.id)
     } catch(error) {
       throw context.api.handleError(error);

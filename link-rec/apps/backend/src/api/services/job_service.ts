@@ -40,9 +40,7 @@ export class JobService{
       })),
     )
 
-    console.log("update")
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
-    console.log("result")
     const queryResult = await this.context.sparql.resolve(SparqlJobType(jobId))
 
     return {
@@ -64,8 +62,6 @@ export class JobService{
         ...req
       })),
     )
-
-    console.log(query);
   }
 
   async get(id: string) : Promise<Job> {

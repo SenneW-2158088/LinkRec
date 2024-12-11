@@ -34,7 +34,6 @@ export class UserService{
 
   async getMatchingJobs(userId: string) {
     const result = await this.context.sparql.resolve(MatchingJobsType(userId))
-    console.log(result)
     return result
   }
 
@@ -62,13 +61,11 @@ export class UserService{
 
   async getUserEducations(id: string): Promise<GQLTypes.Education.Type[]> {
     const educations = await this.context.sparql.resolve(SparqlEducationsType(id))
-    console.log("educations:", educations)
     return educations as any
   }
 
   async getUserExperiences(id: string): Promise<GQLTypes.Education.Type[]> {
     const experiences = await this.context.sparql.resolve(SparqlExperienceType(id))
-    console.log("experiences:", experiences)
     return experiences as any
   }
 
@@ -134,7 +131,6 @@ export class UserService{
   }
 
   private async updateRdfUser(id: string, update: UserUpdate) {
-    console.log("udpate:", update)
     const deleteBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const queryBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const whereBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
@@ -200,8 +196,6 @@ export class UserService{
 
     const finalQuery = `${deleteQuery} ${insertQuery} ${whereQuery}`;
 
-    console.log("FINAL QUERY:", finalQuery)
-
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(finalQuery))
 
     if (update.education) {
@@ -216,7 +210,6 @@ export class UserService{
   }
 
   private async updateEducations(userId: string, educations: EducationUpdate[]) {
-    console.log("querying delete")
     const query = `
       DELETE {
         user:${userId} lr:hasEducation ?education .
@@ -256,6 +249,8 @@ export class UserService{
           lr:hasProfession ?profession ;
           lr:hasInferredProfession ?profession ;
           lr:hasDescription ?description ;
+          lr:hasYears ?years ;
+          lr:hasExperienceLevel ?experienceLevel ;
           lr:hasCompany ?company .
       }
       WHERE {
@@ -279,11 +274,10 @@ export class UserService{
           lr:hasProfession "${experience.profession}" ;
           lr:hasDescription "${experience.description}" ;
           lr:hasCompany "${experience.company}" ;
-          lr:hasYears "${experience.years}" .
+          lr:hasYears ${experience.years} .
       `
     }
 
-    console.log("adding experiiences:", fields)
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(`INSERT DATA { ${fields} }`))
   }
@@ -304,7 +298,6 @@ export class UserService{
     let fields = ``
 
     for (const language of languages) {
-      console.log("adding language", language)
       fields += `
         user:${userId} lr:hasLanguage "${language}" .
       `

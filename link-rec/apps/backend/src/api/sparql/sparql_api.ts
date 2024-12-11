@@ -19,10 +19,16 @@ export class SparqlAPI {
   }
 
   async query(query: string) {
+    console.log("====      query     ====")
+    console.log(query)
+    console.log("==== query finished ====")
     return await this.parser.query.select(query)
   }
 
   async update(query: string) {
+    console.log("====      update     ====")
+    console.log(query)
+    console.log("==== update finished ====")
     await this.parser.query.update(query)
   }
 

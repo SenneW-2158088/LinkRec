@@ -27,8 +27,6 @@ async function getAll() {
   const client = new SimpleClient({endpointUrl: fusekiEndpoint})
 
   const parsingClient = new ParsingClient(client)
-
-  console.log("result:", await parsingClient.query.select(query));
 }
 
 async function getConnections() {

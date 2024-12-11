@@ -36,11 +36,8 @@ export class EmployerService{
 
 
     const insert = EmployerQuery.create(inserted.id, input)
-    console.log(insert)
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(insert));
-    console.log("before")
     const queryResult = await this.context.sparql.resolve(SparqlEmployerType(inserted.id));
-    console.log("after")
 
     const employer: Employer = {
       id: inserted.id,
@@ -103,12 +100,10 @@ export class EmployerService{
   ) : Promise<Job> {
 
     const result = await this.jobservice.create(input);
-    console.log("ADDED JOB")
 
     await this.context.sparql.update(SparqlBuilder.defaultPrefixes().build(
       EmployerQuery.addJob(employerId, result.id)
     ));
-    console.log("ADDED RELATION")
 
     return result;
   }

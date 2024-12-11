@@ -156,7 +156,7 @@ export class UserService{
     if (update.lastName) {
         deleteBuilder.field(`user:${id} lr:hasLastName ?lastName`);
         queryBuilder.field(`user:${id} lr:hasLastName "${update.lastName}"`);
-        whereBuilder.field(`OPTIONAL { user:${id} lr:hasFirstName ?lastName }`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasLastName ?lastName }`);
     }
 
     if (update.email) {

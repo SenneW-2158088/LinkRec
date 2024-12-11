@@ -116,6 +116,7 @@ export namespace EmployerQuery {
       ?gender
       ?location
       ?status
+      ?bio
       (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
     WHERE {
       ?user a lr:User ;
@@ -124,27 +125,21 @@ export namespace EmployerQuery {
         lr:hasFirstName ?firstName ;
         lr:hasLastName ?lastName ;
         lr:hasEmail ?email ;
-        lr:hasInferredProfession ?inferredProfession ;
         lr:hasPhoneNumber ?phoneNumber .
       ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
       ?jobSeekingStatusResource rdfs:label ?status .
       OPTIONAL { ?user lr:hasGender ?gender . }
       OPTIONAL { ?user lr:hasLocation ?location . }
       OPTIONAL { ?user lr:hasLanguage ?language . }
+      OPTIONAL { ?user lr:hasBio ?bio . }
 
       employer:${employerId} a lr:Employer ;
         lr:hasJob ?job .
 
-
-      ?job lr:hasRequirement ?requirement;
-        lr:hasId ?id ;
-        lr:hasTitle ?title ;
-        lr:hasLocation ?location ;
-        lr:isActive ?active .
+      ?job lr:hasRequirement ?requirement .
 
       ?user lr:matchesRequirement ?requirement .
-
     }
-    GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location`
+    GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?bio`
   }
 }

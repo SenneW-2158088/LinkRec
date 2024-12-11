@@ -137,51 +137,64 @@ export class UserService{
     console.log("udpate:", update)
     const deleteBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
     const queryBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
-    const whereBuilder = SparqlFieldBuilder.fromFields(`user:${id} a lr:User`);
+    const whereBuilder = SparqlFieldBuilder.fromFields().setSeparator(". \n");
+
+    deleteBuilder.field(`user:${id} lr:matchesRequirement ?requirement`);
+    whereBuilder.field(`OPTIONAL { user:${id} lr:matchesRequirement ?requirement }`);
 
     // Check and build delete and insert fields for each property
     if (update.firstName) {
         deleteBuilder.field(`user:${id} lr:hasFirstName ?firstName`);
         queryBuilder.field(`user:${id} lr:hasFirstName "${update.firstName}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasFirstName ?firstName }`);
     }
 
     if (update.lastName) {
         deleteBuilder.field(`user:${id} lr:hasLastName ?lastName`);
         queryBuilder.field(`user:${id} lr:hasLastName "${update.lastName}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasFirstName ?lastName }`);
     }
 
     if (update.email) {
         deleteBuilder.field(`user:${id} lr:hasEmail ?email`);
         queryBuilder.field(`user:${id} lr:hasEmail "${update.email}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasEmail ?emai }l`)
     }
 
     if (update.phoneNumber) {
         deleteBuilder.field(`user:${id} lr:hasPhoneNumber ?phoneNumber`);
         queryBuilder.field(`user:${id} lr:hasPhoneNumber "${update.phoneNumber}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasPhoneNumber ?phoneNumber }`);
     }
 
     if (update.webPage) {
         deleteBuilder.field(`user:${id} lr:hasWebPage ?webPage`);
         queryBuilder.field(`user:${id} lr:hasWebPage "${update.webPage}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasWebPage ?webPage }`);
     }
 
     if (update.location) {
         deleteBuilder.field(`user:${id} lr:hasLocation ?location`);
+        deleteBuilder.field(`user:${id} lr:hasInferredLocation ?location`);
         queryBuilder.field(`user:${id} lr:hasLocation "${update.location}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasLocation ?location }`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasInferredLocation ?location }`);
     }
 
     if (update.bio) {
         deleteBuilder.field(`user:${id} lr:hasBio ?bio`); // Assuming lr:hasBio is defined in your ontology
         queryBuilder.field(`user:${id} lr:hasBio "${update.bio}"`);
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasBio ?bio }`);
     }
 
     if (update.status) {
         deleteBuilder.field(`user:${id} lr:hasJobSeekingStatus ?status`);
         queryBuilder.field(`user:${id} lr:hasJobSeekingStatus "${update.status}"`); // Assuming status is a string
+        whereBuilder.field(`OPTIONAL { user:${id} lr:hasJobSeekingStatus ?status }`);
     }
 
     // Build the final SPARQL update query
-    const deleteQuery = deleteBuilder.hasFields() ? `DELETE { ${deleteBuilder.build()} }` : '';
+    const deleteQuery = deleteBuilder.hasFields() ? `DELETE { ${deleteBuilder.build()} } ` : '';
     const insertQuery = queryBuilder.hasFields() ? `INSERT { ${queryBuilder.build()} } ` : '';
     const whereQuery = whereBuilder.hasFields() ? `WHERE { ${whereBuilder.build()} }` : '';
 

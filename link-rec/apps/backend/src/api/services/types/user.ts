@@ -160,6 +160,7 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
         ?gender
         ?location
         ?status
+        ?bio
         (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
       WHERE {
         user:${userId} a lr:User ;
@@ -174,8 +175,9 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
         OPTIONAL { user:${userId} lr:hasGender ?gender . }
         OPTIONAL { user:${userId} lr:hasLocation ?location . }
         OPTIONAL { user:${userId} lr:hasLanguage ?language . }
+        OPTIONAL { user:${userId} lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?bio
     `)
       console.log("QUERY", query)
       return query
@@ -208,6 +210,7 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
         ?location
         ?status
         ?connectionStatus
+        ?bio
         (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
       WHERE {
         user:${userId} a lr:User ;
@@ -226,8 +229,9 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
         OPTIONAL { ?user lr:hasGender ?gender . }
         OPTIONAL { ?user lr:hasLocation ?location . }
         OPTIONAL { ?user lr:hasLanguage ?language . }
+        OPTIONAL { ?user lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
     `)
       console.log("QUER:", query)
       return query
@@ -261,6 +265,7 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
         ?location
         ?status
         ?connectionStatus
+        ?bio
         (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
       WHERE {
         user:${userId} a lr:User ;
@@ -279,8 +284,9 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
         OPTIONAL { user:${peerId} lr:hasGender ?gender . }
         OPTIONAL { user:${peerId} lr:hasLocation ?location . }
         OPTIONAL { user:${peerId} lr:hasLanguage ?language . }
+        OPTIONAL { user:${peerId} lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
     `)
       return query
     },

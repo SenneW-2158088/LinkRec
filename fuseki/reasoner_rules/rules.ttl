@@ -121,7 +121,9 @@
 # TODO: don't inference if job is closed or if user is not looking for a job
 [userJobMatchingProfessionInference:
     (?user lr:hasInferredLocation ?userLocation)
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
+    (?job lr:isActive true)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredProfession ?profession)
@@ -135,7 +137,9 @@
 ]
 [userJobMatchingLanguageInference:
     (?user lr:hasInferredLocation ?userLocation)
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
+    (?job lr:isActive true)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
@@ -145,7 +149,9 @@
 ]
 [userJobMatchingEducationInference:
     (?user lr:hasInferredLocation ?userLocation)
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?jobLocation)
+    (?job lr:isActive true)
 
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasEducationTitle ?educationTitle)

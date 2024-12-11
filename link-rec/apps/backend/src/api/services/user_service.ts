@@ -137,6 +137,14 @@ export class UserService{
 
     deleteBuilder.field(`user:${id} lr:matchesRequirement ?requirement`);
     whereBuilder.field(`OPTIONAL { user:${id} lr:matchesRequirement ?requirement }`);
+    deleteBuilder.field(`user:${id} lr:matchesLanguage ?requirement`);
+    whereBuilder.field(`OPTIONAL { user:${id} lr:matchesLanguage ?requirement }`);
+    deleteBuilder.field(`user:${id} lr:matchesLocation ?requirement`);
+    whereBuilder.field(`OPTIONAL { user:${id} lr:matchesLocation ?requirement }`);
+    deleteBuilder.field(`user:${id} lr:matchesEducation ?requirement`);
+    whereBuilder.field(`OPTIONAL { user:${id} lr:matchesEducation ?requirement }`);
+    deleteBuilder.field(`user:${id} lr:matchesProfession ?requirement`);
+    whereBuilder.field(`OPTIONAL { user:${id} lr:matchesProfession ?requirement }`);
 
     // Check and build delete and insert fields for each property
     if (update.firstName) {

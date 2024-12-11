@@ -121,73 +121,82 @@
 ]
 
 # TODO: don't inference if job is closed or if user is not looking for a job
-[userJobMatchingLanguageAndProfessionInference:
+[matchesLocationInference:
     (?user lr:hasInferredLocation ?location)
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
     (?job lr:hasInferredLocation ?location)
-    (?job lr:isActive "true"^^xml:boolean)
+    ->
+    (?user lr:matchesLocation ?job)
+]
 
+[matchesLanguageInference:
+    (?user lr:hasInferredLanguage ?language)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasInferredLanguage ?language)
+    ->
+    (?user lr:matchesLanguage ?requirement)
+]
+
+[matchesProfessionInference:
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasInferredProfession ?profession)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredProfession ?profession)
     (?requirement lr:requiredYears ?reqYears)
-    (?user lr:hasExperience ?experience)
     (?experience lr:hasYears ?expYears)
     ge(?expYears, ?reqYears)
-    (?experience lr:hasInferredProfession ?profession)
-
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
     ->
-    (?user lr:matchesRequirement ?requirement)
+    (?user lr:matchesProfession ?requirement)
 ]
-[userJobMatchingLanguageAndEducationInference:
-    (?user lr:hasInferredLocation ?location)
-    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasInferredLocation ?location)
-    (?job lr:isActive "true"^^xml:boolean)
 
+[matchesEducationInference:
+    (?user lr:hasEducation ?education)
+    (?education lr:hasTitle ?educationTitle)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
+    ->
+    (?user lr:matchesEducation ?requirement)
+]
 
-    (?requirement lr:hasInferredLanguage ?language)
-    (?user lr:hasInferredLanguage ?language)
+[matchesRequirementLanguageAndProfessionInference:
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
+    (?job lr:isActive "true"^^xml:boolean)
+    (?job lr:hasRequirement ?requirement)
+    (?user lr:matchesLocation ?job)
+    (?user lr:matchesLanguage ?requirement)
+    (?user lr:matchesProfession ?requirement)
     ->
     (?user lr:matchesRequirement ?requirement)
 ]
 
-[userJobMatchingProfessionInference:
-    (?user lr:hasInferredLocation ?location)
+[matchesRequirementLanguageAndEducationInference:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasInferredLocation ?location)
     (?job lr:isActive "true"^^xml:boolean)
-
     (?job lr:hasRequirement ?requirement)
-    (?requirement lr:hasInferredProfession ?profession)
-    (?requirement lr:requiredYears ?reqYears)
-    (?user lr:hasExperience ?experience)
-    (?experience lr:hasYears ?expYears)
-    ge(?expYears, ?reqYears)
-    (?experience lr:hasInferredProfession ?profession)
-
-    noValue(?requirement lr:hasInferredLanguage ?language)
+    (?user lr:matchesLocation ?job)
+    (?user lr:matchesLanguage ?requirement)
+    (?user lr:matchesEducation ?requirement)
     ->
     (?user lr:matchesRequirement ?requirement)
 ]
 
-[userJobMatchingEducationInference:
-    (?user lr:hasInferredLocation ?location)
+[matchesRequirementProfessionInference:
     (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
-    (?job lr:hasInferredLocation ?location)
     (?job lr:isActive "true"^^xml:boolean)
-
     (?job lr:hasRequirement ?requirement)
-    (?requirement lr:hasEducationTitle ?educationTitle)
-    (?user lr:hasEducation ?userEducation)
-    (?userEducation lr:hasTitle ?educationTitle)
+    (?user lr:matchesLocation ?job)
+    (?user lr:matchesProfession ?requirement)
+    noValue(?requirement lr:hasLanguage ?language)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
 
-    noValue(?requirement lr:hasInferredLanguage ?language)
+[matchesRequirementEducationInference:
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
+    (?job lr:isActive "true"^^xml:boolean)
+    (?job lr:hasRequirement ?requirement)
+    (?user lr:matchesLocation ?job)
+    (?user lr:matchesEducation ?requirement)
+    noValue(?requirement lr:hasLanguage ?language)
     ->
     (?user lr:matchesRequirement ?requirement)
 ]

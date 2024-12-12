@@ -11,7 +11,7 @@ import { UserNotFoundError } from "../errors/user";
 import { GQLTypes } from "../../schema/types";
 import { jobSeekingStatusFromString, jobSeekingStatusToUriString } from "../../schema/types/jobseeking/types";
 import { User } from "../../schema/types/user";
-import { MatchingJobsType, SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
+import { MatchingJobsType, SparqlAllUserType, SparqlConnectionsType, SparqlConnectionType, SparqlEducationsType, SparqlExperienceType, SparqlUserType } from "./types/user";
 import { statusFromString, UserInput, UserUpdate } from "../../schema/types/user/types";
 import { EducationUpdate } from "../../schema/types/education/types";
 import { ExperienceUpdate } from "../../schema/types/experience/types";
@@ -27,9 +27,8 @@ export class UserService{
   constructor(private context: Context) { this.db = context.db.db; }
 
   async getUsers() : Promise<User[]> {
-    // TODO: SparqlUsersType
-    const result = await this.context.sparql.resolve(SparqlUserType("user"))
-    return result as any
+    const result = await this.context.sparql.resolve(SparqlAllUserType())
+    return result as any;
   }
 
   async getMatchingJobs(userId: string) {

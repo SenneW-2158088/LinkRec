@@ -146,6 +146,54 @@ export const SparqlMatchesUserType = (employerId: string) => ObjectListType<Spar
       languages: { type: ListType(StringType) }
     }
   })
+export const SparqlAllUserType = () => ObjectListType<SparqlUser>({
+    query: () => {
+      const query = SparqlBuilder.defaultPrefixes().build(`
+      SELECT
+        ?id
+        ?email
+        ?firstName
+        ?lastName
+        ?email
+        ?phoneNumber
+        ?gender
+        ?location
+        ?status
+        ?bio
+        (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
+      WHERE {
+        ?user a lr:User ;
+          lr:hasId ?id ;
+          lr:hasEmail ?email ;
+          lr:hasFirstName ?firstName ;
+          lr:hasLastName ?lastName ;
+          lr:hasEmail ?email ;
+          lr:hasPhoneNumber ?phoneNumber .
+        ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
+        ?jobSeekingStatusResource rdfs:label ?status .
+        OPTIONAL { ?user lr:hasGender ?gender . }
+        OPTIONAL { ?user lr:hasLocation ?location . }
+        OPTIONAL { ?user lr:hasLanguage ?language . }
+        OPTIONAL { ?user lr:hasBio ?bio . }
+      }
+      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?bio
+    `)
+      console.log("QUERY", query)
+      return query
+    },
+    fields: {
+      id: { type: StringType },
+      email: { type: StringType },
+      firstName: { type: StringType },
+      lastName: { type: StringType },
+      phoneNumber: { type: StringType },
+      webPage: { type: OptionalType(StringType) },
+      status: { type: StringType },
+      location: { type: OptionalType(StringType) },
+      bio: { type: OptionalType(StringType) },
+      languages: { type: ListType(StringType) }
+    }
+  })
 
 export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
     query: () => {

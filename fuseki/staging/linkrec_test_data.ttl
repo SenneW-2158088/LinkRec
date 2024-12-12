@@ -48,7 +48,9 @@ employer:TechCorp a lr:Employer ;
     lr:hasEmail "mailto:contact@techcorp.com" ;
     lr:hasPhoneNumber "+1122334455" ;
     lr:hasWebPage <http://www.techcorp.com> ;
-    lr:hasJob job:Job1 .
+    lr:hasJob job:Job1 ;
+    lr:hasJob job:Job2 ;
+    lr:hasJob job:Job3 .
 
 # Experiences
 experience:Experience1 a lr:Experience ;
@@ -67,15 +69,18 @@ experience:Experience2 a lr:Experience ;
 
 # Requirements
 requirement:Requirement1 a lr:Requirement ;
-    lr:hasProfession "software developer" ;
-    lr:hasDescription "Looking for a skilled software developer." ;
-    lr:requiredYears 2 .
+    lr:hasId "Requirement1" ;
+    lr:hasProfession "developer" ;
+    lr:hasDescription "Looking for a skilled developer." ;
+    lr:requiredYears 4 .
 
 requirement:Requirement2 a lr:Requirement ;
-    lr:hasEducationTitle "Master of Science in Software Engineering" ;
-    lr:hasDegree "Master" .
+    lr:hasId "Requirement2" ;
+    lr:hasTitle "computer science" ;
+    lr:hasDegree "master" .
 
 requirement:Requirement3 a lr:Requirement ;
+    lr:hasId "Requirement3" ;
     lr:hasLanguage "english" .
 
 # Jobs

@@ -75,6 +75,14 @@
     (?subject lr:hasInferredTitle ?education)
 ]
 
+[educationInference:
+    (?subject lr:hasEducationTitle ?educationName)
+    (?education rdfs:label ?educationName)
+    ->
+    (?subject lr:hasInferredEducationTitle ?education)
+]
+
+
 # Experience level inference
 [experienceLevelInference:
     (?experience lr:hasYears ?years)
@@ -156,9 +164,9 @@
 
 [matchesEducationInference:
     (?user lr:hasEducation ?education)
-    (?education lr:hasTitle ?educationTitle)
+    (?education lr:hasInferredTitle ?educationTitle)
     (?job lr:hasRequirement ?requirement)
-    (?requirement lr:hasEducationTitle ?educationTitle)
+    (?requirement lr:hasInferredEducationTitle ?educationTitle)
     ->
     (?user lr:matchesEducation ?requirement)
 ]

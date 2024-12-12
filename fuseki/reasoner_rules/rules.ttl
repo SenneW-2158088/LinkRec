@@ -138,12 +138,31 @@
     (?user lr:matchesLocation ?job)
 ]
 
+[matchesLocationLiteralInference:
+    (?user rdf:type lr:User)
+    (?user lr:hasLocation ?location)
+    (?job rdf:type lr:Job)
+    (?job lr:hasLocation ?location)
+    ->
+    (?user lr:matchesLocation ?job)
+]
+
 [matchesLanguageInference:
     (?user rdf:type lr:User)
     (?user lr:hasInferredLanguage ?language)
     (?job rdf:type lr:Job)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
+    ->
+    (?user lr:matchesLanguage ?requirement)
+]
+
+[matchesLanguageLiteralInference:
+    (?user rdf:type lr:User)
+    (?user lr:hasLanguage ?language)
+    (?job rdf:type lr:Job)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasLanguage ?language)
     ->
     (?user lr:matchesLanguage ?requirement)
 ]
@@ -162,11 +181,34 @@
     (?user lr:matchesProfession ?requirement)
 ]
 
+[matchesProfessionLiteralInference:
+    (?user rdf:type lr:User)
+    (?user lr:hasExperience ?experience)
+    (?experience lr:hasProfession ?profession)
+    (?job rdf:type lr:Job)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasProfession ?profession)
+    (?requirement lr:requiredYears ?reqYears)
+    (?experience lr:hasYears ?expYears)
+    ge(?expYears, ?reqYears)
+    ->
+    (?user lr:matchesProfession ?requirement)
+]
+
 [matchesEducationInference:
     (?user lr:hasEducation ?education)
     (?education lr:hasInferredTitle ?educationTitle)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredEducationTitle ?educationTitle)
+    ->
+    (?user lr:matchesEducation ?requirement)
+]
+
+[matchesEducationLiteralInference:
+    (?user lr:hasEducation ?education)
+    (?education lr:hasTitle ?educationTitle)
+    (?job lr:hasRequirement ?requirement)
+    (?requirement lr:hasEducationTitle ?educationTitle)
     ->
     (?user lr:matchesEducation ?requirement)
 ]

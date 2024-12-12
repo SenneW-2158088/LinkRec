@@ -6,7 +6,6 @@ export interface Experience {
   company: string
   description?: string | null,
   years: number,
-  level: string
 }
 
 export enum Level {
@@ -35,7 +34,6 @@ export const ExperienceType: GraphQLObjectType = new GraphQLObjectType({
     company: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
     years: { type: new GraphQLNonNull(GraphQLInt) },
-    level: { type: new GraphQLNonNull(ExperienceLevelType) }
   })
 });
 

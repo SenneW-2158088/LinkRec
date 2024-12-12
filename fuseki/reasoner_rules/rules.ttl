@@ -122,14 +122,18 @@
 
 # TODO: don't inference if job is closed or if user is not looking for a job
 [matchesLocationInference:
+    (?user rdf:type lr:User)
     (?user lr:hasInferredLocation ?location)
+    (?job rdf:type lr:Job)
     (?job lr:hasInferredLocation ?location)
     ->
     (?user lr:matchesLocation ?job)
 ]
 
 [matchesLanguageInference:
+    (?user rdf:type lr:User)
     (?user lr:hasInferredLanguage ?language)
+    (?job rdf:type lr:Job)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredLanguage ?language)
     ->
@@ -137,8 +141,10 @@
 ]
 
 [matchesProfessionInference:
+    (?user rdf:type lr:User)
     (?user lr:hasExperience ?experience)
     (?experience lr:hasInferredProfession ?profession)
+    (?job rdf:type lr:Job)
     (?job lr:hasRequirement ?requirement)
     (?requirement lr:hasInferredProfession ?profession)
     (?requirement lr:requiredYears ?reqYears)

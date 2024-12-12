@@ -220,6 +220,7 @@ export class UserService{
       DELETE {
         user:${userId} lr:hasEducation ?education .
         ?education lr:hasInstitution ?institution ;
+          lr:hasId ?id ;
           lr:hasDegree ?degree ;
           lr:hasTitle ?title ;
           lr:hasInferredTitle ?inferredTitle .
@@ -238,6 +239,7 @@ export class UserService{
       fields += `
         user:${userId} lr:hasEducation education:${educationId} .
         education:${educationId} a lr:Education ;
+          lr:hasId "${educationId}" ;
           lr:hasInstitution "${education.institution}" ;
           lr:hasDegree "${education.degree}" ;
           lr:hasTitle "${education.title}" .
@@ -252,6 +254,7 @@ export class UserService{
       DELETE {
         user:${userId} lr:hasExperience ?experience .
         ?experience lr:hasTitle ?title ;
+          lr:hasId ?id ;
           lr:hasProfession ?profession ;
           lr:hasInferredProfession ?profession ;
           lr:hasDescription ?description ;
@@ -276,6 +279,7 @@ export class UserService{
       fields += `
         user:${userId} lr:hasExperience experience:${experienceId} .
         experience:${experienceId} a lr:Experience;
+          lr:hasId "${experienceId}" ;
           lr:hasTitle "${experience.title}" ;
           lr:hasProfession "${experience.profession}" ;
           lr:hasDescription "${experience.description}" ;

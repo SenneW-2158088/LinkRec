@@ -38,12 +38,14 @@ export interface SparqlEmployer {
 }
 
 export interface SparqlEducation {
+  id: string,
   institution: string,
   title: string,
   degree: string
 }
 
 export interface SparqlExperience {
+  id: string,
   profession: string,
   title: string,
   company: string
@@ -52,40 +54,15 @@ export interface SparqlExperience {
 }
 
 
-// SELECT
-//   ?firstName
-//   ?lastName
-//   ?email
-//   ?phone
-//   ?gender
-//   ?location
-//   ?jobSeekingStatus
-//   ?language
-//   ?experience
-//   ?education
-// WHERE {
-//   user:${id} a lr:User ;
-//     lr:hasFirstName ?firstName ;
-//     lr:hasLastName ?lastName ;
-//     lr:hasEmail ?email .
-//   user:JohnDoe lr:hasJobSeekingStatus ?jobSeekingStatusResource .
-//   ?jobSeekingStatusResource rdfs:label ?jobSeekingStatus .
-//   OPTIONAL { user:JohnDoe lr:hasPhoneNumber ?phone . }
-//   OPTIONAL { user:JohnDoe lr:hasGender ?gender . }
-//   OPTIONAL { user:JohnDoe lr:hasLocation ?location . }
-//   OPTIONAL { user:JohnDoe lr:hasLanguage ?language . }
-//   OPTIONAL { user:JohnDoe lr:hasExperience ?experience . }
-//   OPTIONAL { user:JohnDoe lr:hasEducation ?education . }
-// }
-
 export const SparqlEducationsType = (userId: string) => ObjectListType<SparqlEducation>({
   query: () => {
     return SparqlBuilder.defaultPrefixes().build(`
-    SELECT ?institution ?title ?degree
+    SELECT ?id ?institution ?title ?degree
     WHERE {
       user:${userId} a lr:User ;
         lr:hasEducation ?education .
       ?education a lr:Education ;
+        lr:hasId ?id ;
         lr:hasInstitution ?institution ;
         lr:hasTitle ?title ;
         lr:hasDegree ?degree .
@@ -93,6 +70,7 @@ export const SparqlEducationsType = (userId: string) => ObjectListType<SparqlEdu
   `)
 },
   fields: {
+    id: { type: StringType },
     title: { type: StringType },
     institution: { type: StringType },
     degree: { type: StringType }
@@ -103,6 +81,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
   query: () => {
     return SparqlBuilder.defaultPrefixes().build(`
     SELECT
+      ?id
       ?title
       ?company
       ?description
@@ -112,6 +91,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
       user:${userId} a lr:User ;
         lr:hasExperience ?experience .
       ?experience a lr:Experience ;
+        lr:hasId ?id ;
         lr:hasProfession ?profession ;
         lr:hasTitle ?title ;
         lr:hasCompany ?company ;
@@ -121,6 +101,7 @@ export const SparqlExperienceType = (userId: string) => ObjectListType<SparqlExp
   `)
 },
   fields: {
+    id: { type: StringType },
     profession: { type: StringType },
     title: { type: StringType },
     company: { type: StringType },
@@ -154,7 +135,6 @@ export const SparqlAllUserType = () => ObjectListType<SparqlUser>({
         ?email
         ?firstName
         ?lastName
-        ?email
         ?phoneNumber
         ?gender
         ?location
@@ -167,7 +147,6 @@ export const SparqlAllUserType = () => ObjectListType<SparqlUser>({
           lr:hasEmail ?email ;
           lr:hasFirstName ?firstName ;
           lr:hasLastName ?lastName ;
-          lr:hasEmail ?email ;
           lr:hasPhoneNumber ?phoneNumber .
         ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
@@ -176,7 +155,7 @@ export const SparqlAllUserType = () => ObjectListType<SparqlUser>({
         OPTIONAL { ?user lr:hasLanguage ?language . }
         OPTIONAL { ?user lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?bio
+      GROUP BY ?id ?email ?firstName ?lastName ?status ?phoneNumber ?gender ?location ?bio
     `)
       console.log("QUERY", query)
       return query
@@ -203,7 +182,6 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
         ?email
         ?firstName
         ?lastName
-        ?email
         ?phoneNumber
         ?gender
         ?location
@@ -216,7 +194,6 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
           lr:hasEmail ?email ;
           lr:hasFirstName ?firstName ;
           lr:hasLastName ?lastName ;
-          lr:hasEmail ?email ;
           lr:hasPhoneNumber ?phoneNumber .
         user:${userId} lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
@@ -225,7 +202,7 @@ export const SparqlUserType = (userId: string) => ObjectType<SparqlUser>({
         OPTIONAL { user:${userId} lr:hasLanguage ?language . }
         OPTIONAL { user:${userId} lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?bio
+      GROUP BY ?id ?email ?firstName ?lastName ?status ?phoneNumber ?gender ?location ?bio
     `)
       console.log("QUERY", query)
       return query
@@ -252,7 +229,6 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
         ?email
         ?firstName
         ?lastName
-        ?email
         ?phoneNumber
         ?gender
         ?location
@@ -262,7 +238,6 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
         (GROUP_CONCAT(DISTINCT ?language; separator=",") as ?languages)
       WHERE {
         user:${userId} a lr:User ;
-          lr:knows ?user ;
           ?connectionRelation ?user .
         ?connectionRelation rdfs:label ?connectionStatus .
         ?user a lr:User ;
@@ -270,7 +245,6 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
           lr:hasEmail ?email ;
           lr:hasFirstName ?firstName ;
           lr:hasLastName ?lastName ;
-          lr:hasEmail ?email ;
           lr:hasPhoneNumber ?phoneNumber .
         ?user lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
@@ -279,7 +253,7 @@ export const SparqlConnectionsType = (userId: string) => ObjectListType<SparqlCo
         OPTIONAL { ?user lr:hasLanguage ?language . }
         OPTIONAL { ?user lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
+      GROUP BY ?id ?email ?firstName ?lastName ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
     `)
       console.log("QUER:", query)
       return query
@@ -307,7 +281,6 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
         ?email
         ?firstName
         ?lastName
-        ?email
         ?phoneNumber
         ?gender
         ?location
@@ -325,7 +298,6 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
           lr:hasEmail ?email ;
           lr:hasFirstName ?firstName ;
           lr:hasLastName ?lastName ;
-          lr:hasEmail ?email ;
           lr:hasPhoneNumber ?phoneNumber .
         user:${peerId} lr:hasJobSeekingStatus ?jobSeekingStatusResource .
         ?jobSeekingStatusResource rdfs:label ?status .
@@ -334,7 +306,7 @@ export const SparqlConnectionType = (userId: string, peerId: string) => ObjectTy
         OPTIONAL { user:${peerId} lr:hasLanguage ?language . }
         OPTIONAL { user:${peerId} lr:hasBio ?bio . }
       }
-      GROUP BY ?id ?email ?firstName ?lastName ?email ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
+      GROUP BY ?id ?email ?firstName ?lastName ?status ?phoneNumber ?gender ?location ?connectionStatus ?bio
     `)
       return query
     },

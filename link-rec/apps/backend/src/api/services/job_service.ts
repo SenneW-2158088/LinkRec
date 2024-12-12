@@ -30,7 +30,6 @@ export class JobService{
     // Create query
     const jobId = uuid();
     const insert = JobQuery.create(
-      employerId,
       jobId,
       input.title,
       input.location,

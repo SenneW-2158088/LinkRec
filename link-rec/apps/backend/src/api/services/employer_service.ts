@@ -45,6 +45,7 @@ export class EmployerService{
       email: inserted.email,
       name: queryResult.name,
       phoneNumber: queryResult.phoneNumber,
+      webPage: queryResult.webPage,
       jobs: []
     };
 

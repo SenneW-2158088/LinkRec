@@ -54,6 +54,7 @@ employer:TechCorp a lr:Employer ;
 
 # Experiences
 experience:Experience1 a lr:Experience ;
+    lr:hasId "Experience1" ;
     lr:hasTitle "Web Developer at Web Solutions Inc." ;
     lr:hasProfession "web developer" ;
     lr:hasDescription "Developed web applications." ;
@@ -61,6 +62,7 @@ experience:Experience1 a lr:Experience ;
     lr:hasCompany "Web Solutions Inc." .
 
 experience:Experience2 a lr:Experience ;
+    lr:hasId "Experience2" ;
     lr:hasTitle "Software Developer at Mobile Innovations LLC." ;
     lr:hasProfession "software developer" ;
     lr:hasDescription "Worked on mobile applications." ;
@@ -107,11 +109,13 @@ job:Job3 a lr:Job ;
 
 # Education
 education:Education1 a lr:Education ;
+    lr:hasId "Education1" ;
     lr:hasTitle "Bachelor of Science in Computer Science" ;
     lr:hasInstitution "University of Technology" ;
     lr:hasDegree "bachelor" .
 
 education:Education2 a lr:Education ;
+    lr:hasId "Education2" ;
     lr:hasTitle "Master of Science in Software Engineering" ;
     lr:hasInstitution "Institute of Advanced Studies" ;
     lr:hasDegree "master" .

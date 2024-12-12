@@ -80,7 +80,7 @@ WHERE {
         reqTriples.field(`lr:hasLanguage "${req.language}"`)
       }
       if (req.education){
-        reqTriples.field(`lr:hasEducation "${req.education}"`)
+        reqTriples.field(`lr:hasEducationTitle "${req.education}"`)
       }
       if (req.degree){
         reqTriples.field(`lr:hasDegree "${req.degree}"`)

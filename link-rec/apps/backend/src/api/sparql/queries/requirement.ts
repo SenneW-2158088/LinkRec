@@ -17,7 +17,7 @@ WHERE {
 
   ?requirement a lr:Requirement ;
   	lr:hasId ?id .
-      OPTIONAL { ?requirement lr:hasEducation ?education } .
+      OPTIONAL { ?requirement lr:hasEducationTitle ?education } .
       OPTIONAL { ?requirement lr:hasProfession ?profession} .
       OPTIONAL { ?requirement lr:requiredYears ?years } .
       OPTIONAL { ?requirement lr:hasLanguage ?language } .
@@ -52,7 +52,7 @@ WHERE {
       ).setSeparator(". \n");
 
       if(requirement.education){
-        fields.field(`requirement:${requirement_id} lr:hasEducation "${requirement.education}"`)
+        fields.field(`requirement:${requirement_id} lr:hasEducationTitle "${requirement.education}"`)
       }
 
       if(requirement.profession){
@@ -87,8 +87,10 @@ WHERE {
     DELETE {
       job:${id} lr:hasRequirement ?requirement .
    	  ?requirement lr:hasId ?id .
-      ?requirement lr:hasEducation ?education .
+      ?requirement lr:hasEducationTitle ?education .
+      ?requirement lr:hasInferredEducationTitle ?inferredEducation .
       ?requirement lr:hasProfession ?profession .
+      ?requirement lr:hasInferredProfession ?inferredProfession .
       ?requirement lr:requiredYears ?years .
       ?requirement lr:hasLanguage ?language .
       ?requirement lr:hasDegree ?degree .
@@ -98,8 +100,10 @@ WHERE {
       job:${id} lr:hasRequirement ?requirement .
       ?requirement a lr:Requirement .
      	?requirement lr:hasId ?id .
-          OPTIONAL { ?requirement lr:hasEducation ?education } .
+          OPTIONAL { ?requirement lr:hasEducationTitle ?education } .
+          OPTIONAL { ?requirement lr:hasInferredEducationTitle ?inferredEducation } .
           OPTIONAL { ?requirement lr:hasProfession ?profession} .
+          OPTIONAL { ?requirement lr:hasInferredProfession ?inferredProfession} .
           OPTIONAL { ?requirement lr:requiredYears ?years } .
           OPTIONAL { ?requirement lr:hasLanguage ?language } .
           OPTIONAL { ?requirement lr:hasDegree ?degree } .

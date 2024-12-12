@@ -75,7 +75,7 @@
     (?subject lr:hasInferredTitle ?education)
 ]
 
-[educationInference:
+[requirementEducationInference:
     (?subject lr:hasEducationTitle ?educationName)
     (?education rdfs:label ?educationName)
     ->
@@ -211,6 +211,18 @@
     (?user lr:matchesLocation ?job)
     (?user lr:matchesEducation ?requirement)
     noValue(?requirement lr:hasLanguage ?language)
+    ->
+    (?user lr:matchesRequirement ?requirement)
+]
+
+[matchesRequirementLanguageInference:
+    (?user lr:hasJobSeekingStatus lr:ActivelyLooking)
+    (?job lr:isActive "true"^^xml:boolean)
+    (?job lr:hasRequirement ?requirement)
+    (?user lr:matchesLocation ?job)
+    (?user lr:matchesLanguage ?requirement)
+    noValue(?requirement lr:hasEducationTitle ?education)
+    noValue(?requirement lr:hasProfession ?profession)
     ->
     (?user lr:matchesRequirement ?requirement)
 ]

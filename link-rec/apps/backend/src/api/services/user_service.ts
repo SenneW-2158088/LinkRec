@@ -84,6 +84,7 @@ export class UserService{
       lastName: input.lastName,
       status: input.status,
       phoneNumber: input.phoneNumber,
+      location: input.location,
       languages: [],
       experiences: [],
       educations: [],
@@ -96,8 +97,6 @@ export class UserService{
   }
 
   private async createRdfUser(user: User) {
-    const queryBuilder = new SparqlFieldBuilder([])
-    const deleteBuilder = new SparqlFieldBuilder([])
     const fields = SparqlFieldBuilder.fromFields(
       `user:${ user.id } a lr:User`,
       `lr:hasId "${user.id}"`,

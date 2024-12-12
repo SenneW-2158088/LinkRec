@@ -23,7 +23,7 @@ export const allEmployerQuery: GraphQLFieldConfig<any, ApolloContext> = {
   resolve: async (_source, _args, context, _info) : Promise<Employer[]> => {
     try {
       return await context.api.employerService.all();
-    }catch(error) {
+    } catch(error) {
       throw context.api.handleError(error)
     }
   }

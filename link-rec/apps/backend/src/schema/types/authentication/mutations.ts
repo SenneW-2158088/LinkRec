@@ -13,7 +13,8 @@ export const userLoginMutation: GraphQLFieldConfig<any, any> = {
   },
   resolve: async (source, args: { input: Validation.User.Login }, context: ApolloContext, info): Promise<UserAuth> => {
     try {
-      const user = await context.api.authenticationService.user_login(args.input);
+      let user = await context.api.authenticationService.user_login(args.input);
+      user = await context.api.userService.getUser(user.id);
       context.userId = user.id;
       const tokens = await context.jwt.generateTokens({id: user.id, role: Role.USER});
       return {
